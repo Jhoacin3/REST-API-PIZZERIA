@@ -1,0 +1,10 @@
+const mysql = require('mysql2/promise');
+
+require('dotenv').config();
+module.exports = {
+    MYSQL_HOST: process.env.DB_HOST,
+    MYSQL_USER: process.env.DB_USER,
+    MYSQL_PASSWORD: process.env.DB_PASSWORD,
+    MYSQL_DATABASE: process.env.DB_NAME,
+    PORT: 3306,
+  };
