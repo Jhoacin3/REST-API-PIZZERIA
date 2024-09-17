@@ -1,25 +1,37 @@
-const connection = require('../db.js');
-const {validateParamsId} = require('../utils/utils.js');
+const connection = require("../db.js");
+const { validateParamsId, validateParamStings, validateRepeatParam,validateNameLength, validatenameRol } = require("../utils/utils.js");
 
-const getRolesService = async (req, res) =>{
-    try {
-        const [result] = await connection.query('SELECT * FROM roles');
-        return result;
-    } catch (error) {
-        throw new Error(error.message); 
-    }
-
-   
-};
-//Método que retorna un rol por ID como parametro.
-const getRolIdService = async (id) =>{
-    await validateParamsId(id)
-    try {
-        const [result] = await connection.query('SELECT * FROM roles WHERE id_roles = ?', [id]);
-        return result;
-    } catch (error) {
-        throw new Error(error.message); 
-    }
+const getRolesService = async () => {
+  const [result] = await connection.query("SELECT * FROM roles");
+  return result;
 };
 
-module.exports = { getRolesService, getRolIdService };
+const getRolIdService = async (id) => {
+  await validateParamsId(id);
+  const [result] = await connection.query(
+    "SELECT * FROM roles WHERE id_roles = ?",
+    [id]
+  );
+  return result;
+};
+
+const createRolService = async (name_role) => {
+  await validateNameLength(name_role);
+  await validateParamStings(name_role);
+  await validatenameRol(name_role);
+
+  const [getRoles] = await connection.query("SELECT * FROM roles");
+  await validateRepeatParam(getRoles,name_role);
+  const [row] = await connection.query(
+    "INSERT INTO roles (name_role) VALUES (?)",
+    [name_role]
+  );
+
+  return (rolcreated = {
+    id: row.insertId,
+    name_role,
+  });
+};
+
+
+module.exports = { getRolesService, getRolIdService, createRolService };

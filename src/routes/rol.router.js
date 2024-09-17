@@ -4,9 +4,11 @@ const router = express.Router();//constructor que retorna un objeto
 
 
 //endpoint que retorna todos los roles
-router.get("/rolesGet", rolController.getRoles);
+router.get("/getRoles", rolController.getRoles);
 //endpoint que retorna rol por id
-router.get('/rolGetId/:id', rolController.getRolId);
+router.get('/getRolId/:id', rolController.getRolId);
+//endpoint para crear un rol
+router.post('/createRol', rolController.createRol);
 
 
 module.exports = router;
