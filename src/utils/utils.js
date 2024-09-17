@@ -61,6 +61,27 @@ const validatesMethodUpdate =async (getRoles, id_role, name_role) => {
   }
  
 };
+const validatesMethodDelete = async (id_role, getRoles, getEmployees) =>{
+  if (!id_role) {
+    throw new Error("No has proporcionado un ID como parametro");
+  }
+  if (isNaN(id_role) || parseInt(id_role) <= 0) {
+    throw new Error("El ID pasado como parámetro no es válido.");
+  }
+  const isExistId = getRoles.some(
+    (role) => Number(role.id_roles) === Number(id_role)
+  );
+  if (!isExistId) {
+    throw new Error("El rol ya no existe");
+  }
+  const isExistInEmployees = getEmployees.some(
+    (roleExist) => Number(roleExist.id_rol) === Number(id_role)
+  )
+  if (isExistInEmployees) {
+    throw new Error("Actualmente existe un trabajador con este rol");
+  }
+
+};
 
 
 const validatenameRol = async (name_rol) => {
@@ -82,5 +103,6 @@ module.exports = {
   validateRepeatParam,
   validatenameRol,
   validateNameLength,
-  validatesMethodUpdate
+  validatesMethodUpdate,
+  validatesMethodDelete
 };

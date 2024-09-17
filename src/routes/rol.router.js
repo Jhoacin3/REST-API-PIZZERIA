@@ -11,6 +11,8 @@ router.get('/getRolId/:id', rolController.getRolId);
 router.post('/createRol', rolController.createRol);
 //endpoint para crear un rol
 router.put('/updateRol/:id', rolController.updateRol);
+//endpoint para eliminar un rol
+router.delete('/deleteRol/:id', rolController.deleteRol);
 
 
 module.exports = router;

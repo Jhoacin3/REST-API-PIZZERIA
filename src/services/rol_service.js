@@ -1,5 +1,5 @@
 const connection = require("../db.js");
-const { validateParamsId, validateParamStings, validateRepeatParam,validateNameLength, validatenameRol, validatesMethodUpdate } = require("../utils/utils.js");
+const { validateParamsId, validateParamStings, validateRepeatParam,validateNameLength, validatenameRol, validatesMethodUpdate, validatesMethodDelete } = require("../utils/utils.js");
 
 const getRolesService = async () => {
   const [result] = await connection.query("SELECT * FROM roles");
@@ -12,7 +12,7 @@ const getRolIdService = async (id) => {
     "SELECT * FROM roles WHERE id_roles = ?",
     [id]
   );
-  return result;
+  // return result;
 };
 
 const createRolService = async (name_role) => {
@@ -46,6 +46,24 @@ await validatesMethodUpdate(getRoles,id_role, name_role);
     name_role,
   });
 };
+const deleteRolService = async (id_role) => {
+  await validateParamsId(id_role);
+  const [getRoles] = await connection.query("SELECT * FROM roles");
+  const [getEmployees] = await connection.query("SELECT * FROM employees");
+  await validatesMethodDelete(id_role, getRoles, getEmployees)
+
+  const [result] = await connection.query(
+    "DELETE FROM roles WHERE id_roles = ?",
+    [id_role]
+  );
+
+  if (result.affectedRows <= 0) {
+    throw new Error("El rol no existe"); 
+
+  }else{
+    return "Eliminado correctamente"
+  };
+};
 
 
-module.exports = { getRolesService, getRolIdService, createRolService, updateRolService };
+module.exports = { getRolesService, getRolIdService, createRolService, updateRolService, deleteRolService };

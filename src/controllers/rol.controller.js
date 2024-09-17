@@ -1,3 +1,4 @@
+const { json } = require('express');
 const connection = require('../db.js');
 const rolService = require('../services/rol_service.js');
 
@@ -38,7 +39,17 @@ const updateRol = async (req, res) => {
   const { name_role } = req.body;
   const { id } = req.params;
   try {
-    const rolCreated = await rolService.updateRolService(id, name_role);
+    const rolUpdated = await rolService.updateRolService(id, name_role);
+    res.status(200).json(rolUpdated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteRol = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const rolCreated = await rolService.deleteRolService(id);
     res.status(200).json(rolCreated);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -46,4 +57,4 @@ const updateRol = async (req, res) => {
 };
 
 
-module.exports = { getRoles, getRolId, createRol, updateRol };
+module.exports = { getRoles, getRolId, createRol, updateRol, deleteRol };
