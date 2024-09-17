@@ -9,6 +9,8 @@ router.get("/getRoles", rolController.getRoles);
 router.get('/getRolId/:id', rolController.getRolId);
 //endpoint para crear un rol
 router.post('/createRol', rolController.createRol);
+//endpoint para crear un rol
+router.put('/updateRol/:id', rolController.updateRol);
 
 
 module.exports = router;

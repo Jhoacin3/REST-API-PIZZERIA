@@ -1,5 +1,5 @@
 const connection = require("../db.js");
-const { validateParamsId, validateParamStings, validateRepeatParam,validateNameLength, validatenameRol } = require("../utils/utils.js");
+const { validateParamsId, validateParamStings, validateRepeatParam,validateNameLength, validatenameRol, validatesMethodUpdate } = require("../utils/utils.js");
 
 const getRolesService = async () => {
   const [result] = await connection.query("SELECT * FROM roles");
@@ -32,6 +32,20 @@ const createRolService = async (name_role) => {
     name_role,
   });
 };
+const updateRolService = async (id_role, name_role) => {
+const [getRoles] = await connection.query("SELECT * FROM roles");
+await validatesMethodUpdate(getRoles,id_role, name_role);
+
+  const [row] = await connection.query(
+    "UPDATE roles SET name_role = ? WHERE id_roles = ?",
+    [name_role, id_role ]
+  );
+
+  return (rolcreated = {
+    id: row.insertId,
+    name_role,
+  });
+};
 
 
-module.exports = { getRolesService, getRolIdService, createRolService };
+module.exports = { getRolesService, getRolIdService, createRolService, updateRolService };

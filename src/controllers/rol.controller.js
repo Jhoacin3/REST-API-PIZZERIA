@@ -34,6 +34,16 @@ const createRol = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const updateRol = async (req, res) => {
+  const { name_role } = req.body;
+  const { id } = req.params;
+  try {
+    const rolCreated = await rolService.updateRolService(id, name_role);
+    res.status(200).json(rolCreated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
-module.exports = { getRoles, getRolId, createRol };
+module.exports = { getRoles, getRolId, createRol, updateRol };
