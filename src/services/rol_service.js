@@ -1,5 +1,5 @@
 const connection = require("../db.js");
-const { validateParamsId, validateParamStings, validateRepeatParam,validateNameLength, validatenameRol, validatesMethodUpdate, validatesMethodDelete } = require("../utils/utils.js");
+const { validateParamsId,validatesMethodCreate, validatesMethodUpdate, validatesMethodDelete } = require("../utils/utils.js");
 
 const getRolesService = async () => {
   const [result] = await connection.query("SELECT * FROM roles");
@@ -12,16 +12,12 @@ const getRolIdService = async (id) => {
     "SELECT * FROM roles WHERE id_roles = ?",
     [id]
   );
-  // return result;
 };
 
 const createRolService = async (name_role) => {
-  await validateNameLength(name_role);
-  await validateParamStings(name_role);
-  await validatenameRol(name_role);
 
   const [getRoles] = await connection.query("SELECT * FROM roles");
-  await validateRepeatParam(getRoles,name_role);
+  await validatesMethodCreate(getRoles,name_role);
   const [row] = await connection.query(
     "INSERT INTO roles (name_role) VALUES (?)",
     [name_role]
