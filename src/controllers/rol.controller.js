@@ -1,5 +1,4 @@
 const { json } = require('express');
-const connection = require('../db.js');
 const rolService = require('../services/rol_service.js');
 
 
