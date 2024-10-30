@@ -12,4 +12,15 @@ const getMenu = async (req, res) =>{
     }
 
 };
-module.exports = { getMenu };
+
+const getFilterCategoryMenu = async (req, res) =>{
+    const {id} = req.params;
+    try {
+        let getFilterMenu = await menuService.getFilterCategoryMenuService(id);
+        res.status(200).json(getFilterMenu);
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+module.exports = { getMenu,getFilterCategoryMenu };
