@@ -1,5 +1,7 @@
 const connection = require("../db.js");
-
+/**
+ * Esta función realiza una consulta a la base de datos para obtener todos los elementos de menú.
+ */
 const getMenuService = async () => {
   const data = [];
   const [getMenu] = await connection.query("SELECT * FROM menu");
