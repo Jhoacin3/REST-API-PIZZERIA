@@ -1,5 +1,5 @@
 const connection = require("../db.js");
-const { validateParamsId } = require("../utils/utils.js");
+const { validateParamsId, validateParamsAddMenu } = require("../utils/utils.js");
 
 /**
  * Esta función realiza una consulta a la base de datos para obtener todos los elementos de menú.
@@ -64,4 +64,27 @@ const getFilterCategoryMenuService = async (id) => {
   return data;
 };
 
-module.exports = { getMenuService, getFilterCategoryMenuService };
+const addMenuService = async (name, description, price, id_category) => {
+  await validateParamsAddMenu(name, description, price, id_category);
+
+  const [getMenu] = await connection.query("SELECT name FROM menu");
+  const isRepeat = getMenu.some(
+    (item) => item.name.toLowerCase() === name.toLowerCase()
+  );
+  if (isRepeat) {
+    throw new Error("El nombre del menu ya existe");
+  }
+ 
+  const [data] = await connection.query("INSERT INTO menu (name, description, price, id_category) VALUES (?, ?, ?, ?)" , [name, description, price, id_category]);
+  
+  return {
+    id: data.insertId,
+    name,
+    description,
+    price,
+    id_category,
+  };
+
+}
+
+module.exports = { getMenuService, getFilterCategoryMenuService,addMenuService,  };

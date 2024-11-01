@@ -87,6 +87,19 @@ const validatesMethodDelete = async (id_role, getRoles, getEmployees) => {
   }
 };
 
+const validateParamsAddMenu = async (name, description, price, id_category) => {
+  if (!name || !description || !price || !id_category || name === null || description === null || price === null || id_category === null) {
+    throw new Error("Es necesario todos los campos");
+  }
+  if (typeof name !== 'string' || typeof description !== 'string' || typeof price !== 'number' || typeof id_category !== 'number') {
+    throw new Error("Todos los campos deben ser del tipo correcto");
+  }
+  if (name.length <= 2 || name.length >= 12) {
+    throw new Error("El nombre del menu debe tener entre 3 y 11 caracteres ");
+  }
+     
+}
+
 //**************************************************
 
 module.exports = {
@@ -94,4 +107,5 @@ module.exports = {
   validatesMethodCreate,
   validatesMethodUpdate,
   validatesMethodDelete,
+  validateParamsAddMenu,
 };

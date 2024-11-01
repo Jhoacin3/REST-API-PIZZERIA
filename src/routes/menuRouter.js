@@ -6,4 +6,6 @@ router.get("/getMenu", menuController.getMenu);
 module.exports = router;
 
 router.get("/filterCategoryMenu/:id", menuController.getFilterCategoryMenu);
+
+router.post("/addMenu", menuController.addMenu);
 module.exports = router;
