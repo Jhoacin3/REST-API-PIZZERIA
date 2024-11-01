@@ -87,4 +87,25 @@ const addMenuService = async (name, description, price, id_category) => {
 
 }
 
-module.exports = { getMenuService, getFilterCategoryMenuService,addMenuService,  };
+const updateMenuService = async (name, description, price, id_category, id) => {
+  await validateParamsAddMenu(name, description, price, id_category);
+  await validateParamsId(id);
+  const [idMenus] = await connection.query("SELECT id_menu FROM menu");
+  const isRepeat = idMenus.some(
+    (item) => Number(item.id_menu) === Number(id) 
+  );
+  if (!isRepeat) {
+    throw new Error("El menu proporcionado no existe");
+  }
+
+  const [getMenu] = await connection.query("UPDATE menu SET name = ?, description = ?, price = ?, id_category = ? WHERE id_menu = ?", [name, description, price, id_category, id]);
+  return {
+    id: getMenu.insertId,
+    name,
+    description,
+    price,
+    id_category,
+  };
+};
+
+module.exports = { getMenuService, getFilterCategoryMenuService,addMenuService,updateMenuService  };

@@ -34,5 +34,21 @@ const addMenu = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const updateMenu = async (req, res) => {
+  const {id} = req.params;
+  const { name, description, price, id_category } = req.body;
+  try {
+   const data = await menuService.updateMenuService(
+     name,
+     description,
+     price,
+     id_category,
+     id
+   ); 
+   res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-module.exports = { getMenu, getFilterCategoryMenu, addMenu };
+module.exports = { getMenu, getFilterCategoryMenu, addMenu, updateMenu };

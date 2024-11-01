@@ -8,4 +8,5 @@ module.exports = router;
 router.get("/filterCategoryMenu/:id", menuController.getFilterCategoryMenu);
 
 router.post("/addMenu", menuController.addMenu);
+router.put("/updateMenu/:id", menuController.updateMenu);
 module.exports = router;
