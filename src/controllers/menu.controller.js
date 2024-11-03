@@ -50,5 +50,14 @@ const updateMenu = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const deleteMenu = async (req, res) =>{
+  const {id} = req.params;
+  try {
+    let data = await menuService.deleteMenuService(id);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-module.exports = { getMenu, getFilterCategoryMenu, addMenu, updateMenu };
+module.exports = { getMenu, getFilterCategoryMenu, addMenu, updateMenu, deleteMenu };

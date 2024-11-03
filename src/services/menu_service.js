@@ -1,5 +1,6 @@
 const connection = require("../db.js");
-const { validateParamsId, validateParamsAddMenu } = require("../utils/utils.js");
+const { validateParamsId, validateParamsAddMenu, verifiedIfExist } = require("../utils/utils.js");
+const {messages} = require("../utils/messages.js")
 
 /**
  * Esta función realiza una consulta a la base de datos para obtener todos los elementos de menú.
@@ -91,12 +92,7 @@ const updateMenuService = async (name, description, price, id_category, id) => {
   await validateParamsAddMenu(name, description, price, id_category);
   await validateParamsId(id);
   const [idMenus] = await connection.query("SELECT id_menu FROM menu");
-  const isRepeat = idMenus.some(
-    (item) => Number(item.id_menu) === Number(id) 
-  );
-  if (!isRepeat) {
-    throw new Error("El menu proporcionado no existe");
-  }
+  await verifiedIfExist(idMenus, id);
 
   const [getMenu] = await connection.query("UPDATE menu SET name = ?, description = ?, price = ?, id_category = ? WHERE id_menu = ?", [name, description, price, id_category, id]);
   return {
@@ -107,5 +103,17 @@ const updateMenuService = async (name, description, price, id_category, id) => {
     id_category,
   };
 };
+const deleteMenuService = async (id) => {
+  await validateParamsId(id);
+  const [idMenus] = await connection.query("SELECT id_menu FROM menu");
+  await verifiedIfExist(idMenus, id);
 
-module.exports = { getMenuService, getFilterCategoryMenuService,addMenuService,updateMenuService  };
+  const [deleteMenu] = await connection.query("DELETE FROM menu WHERE id_menu = ?", [id]);
+
+  return {
+    id: id,
+    success: messages.success.delete
+  };
+}
+
+module.exports = { getMenuService, getFilterCategoryMenuService,addMenuService,updateMenuService, deleteMenuService  };
