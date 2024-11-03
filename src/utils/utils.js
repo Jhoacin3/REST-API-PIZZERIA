@@ -100,6 +100,15 @@ const validateParamsAddMenu = async (name, description, price, id_category) => {
      
 }
 
+const verifiedIfExist = async (arrayObject, id) =>{
+  const isRepeat = arrayObject.some(
+    (item) => Number(item.id_menu) === Number(id) 
+  );
+  if (!isRepeat) {
+    throw new Error("Lo sentimos, ya no existe");
+  }
+}
+
 //**************************************************
 
 module.exports = {
@@ -108,4 +117,5 @@ module.exports = {
   validatesMethodUpdate,
   validatesMethodDelete,
   validateParamsAddMenu,
+  verifiedIfExist
 };
