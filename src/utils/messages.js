@@ -1,11 +1,12 @@
 const messages = {
     success: {
       delete: "Eliminación exitosa",
+      create: "Creación exitosa",
+      update: "Actualización exitosa"
     },
     error: {
-      notFound: "No se pudo eliminar el menú; no se encontró el ID.",
-      invalidParams: "Parámetros inválidos.",
-      // Agrega más mensajes según sea necesario
+      notFound: "No se pudo eliminar",
+      invalidParams: "Parámetros inválidos."
     },
   };
   
