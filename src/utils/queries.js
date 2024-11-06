@@ -71,6 +71,11 @@ const getIdMenu = async () => {
   return idMenus;
 };
 
+const findExistOrderDetail = async (id)=>{
+const [findMenuItem] = await connection.query("SELECT id_menu FROM order_details WHERE id_menu = ?", [id])
+return findMenuItem;
+}
+
 module.exports = {
   getDataMenu,
   getDataMenuById,
@@ -80,4 +85,5 @@ module.exports = {
   getIdMenu,
   updateMenu,
   deleteMenuById,
+  findExistOrderDetail,
 };

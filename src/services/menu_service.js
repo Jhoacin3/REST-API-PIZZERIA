@@ -1,7 +1,7 @@
 const connection = require("../db.js");
 const { validateParamsId, validateParamsAddMenu, verifiedIfExist } = require("../utils/utils.js");
 const {messages} = require("../utils/messages.js")
-const {getDataMenu, getDataMenuById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById} = require("../utils/queries.js")
+const {getDataMenu, getDataMenuById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById, findExistOrderDetail} = require("../utils/queries.js")
 
 /**
  * Esta función realiza una consulta a la base de datos para obtener todos los elementos de menú.
@@ -43,7 +43,16 @@ const getFilterCategoryMenuService = async (id) => {
   }
   return data;
 };
-
+/**
+ * Este método crea un nuevo menú.
+ * 
+ * @param {string} name - El nombre del menú a crear.
+ * @param {string} description - Una descripción detallada del menú.
+ * @param {number} price - El precio del menú.
+ * @param {number} id_category - El ID de la categoría a la que pertenece el menú.
+ * 
+ * @returns {Object} Un objeto con los datos previos
+ */
 const addMenuService = async (name, description, price, id_category) => {
   await validateParamsAddMenu(name, description, price, id_category);
   await getNameByMenu(name);
@@ -59,11 +68,25 @@ const addMenuService = async (name, description, price, id_category) => {
 
 }
 
+/**
+ * Este método actualiza los detalles de un menú existente.
+ * 
+ * @param {string} name - El nuevo nombre del menú.
+ * @param {string} description - La nueva descripción del menú.
+ * @param {number} price - El nuevo precio del menú.
+ * @param {number} id_category - El nuevo ID de la categoría a la que pertenece el menú.
+ * @param {number} id - El ID del menú que se desea actualizar.
+ * 
+ * @returns {Object} Un objeto con los datos previos actualizados
+ */
 const updateMenuService = async (name, description, price, id_category, id) => {
   await validateParamsAddMenu(name, description, price, id_category);
   await validateParamsId(id);
   const idMenus = await getIdMenu();
-  await verifiedIfExist(idMenus, id);
+  let isRepeat=  await verifiedIfExist(idMenus, id);
+  if (!isRepeat) {
+    throw new Error("Lo sentimos, ya no existe");
+  }
 
   const getMenu = await updateMenu(name, description, price, id_category, id);
   return {
@@ -75,12 +98,26 @@ const updateMenuService = async (name, description, price, id_category, id) => {
   };
 };
 
-//validar y mostrar mensaje diciendo que no se puede eliminar un menu si esta asociado a una orden ya realizada por usuario, actualmente se crashea.
+/**
+ * Este método elimina un menú existente, verificando que no haya órdenes asociadas a él.
+ * 
+ * @param {number} id - El ID del menú que se desea eliminar.
+ * 
+ * @returns {Object} Un objeto con la siguiente estructura:
+ *   - {number} id - El ID del menú eliminado.
+ *   - {string} success - Un mensaje de éxito indicando que el menú fue eliminado correctamente.
+ */
 const deleteMenuService = async (id) => {
   await validateParamsId(id);
   const idMenus = await getIdMenu();
-  await verifiedIfExist(idMenus, id);
-
+  let isRepeat= await verifiedIfExist(idMenus, id);
+  if (!isRepeat) {
+    throw new Error("Lo sentimos, ya no existe");
+  }
+  let findExist = await findExistOrderDetail(id);
+  if (findExist.length !== 0) {
+    throw new Error("No se puede borrar un menu donde ya hay ordenes con este menu");
+  }
   await deleteMenuById(id);
 
   return {

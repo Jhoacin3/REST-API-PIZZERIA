@@ -104,9 +104,8 @@ const verifiedIfExist = async (arrayObject, id) =>{
   const isRepeat = arrayObject.some(
     (item) => Number(item.id_menu) === Number(id) 
   );
-  if (!isRepeat) {
-    throw new Error("Lo sentimos, ya no existe");
-  }
+  return isRepeat;
+
 }
 
 //**************************************************
