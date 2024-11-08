@@ -1,7 +1,7 @@
 const connection = require("../db.js");
 const { validateParamsId, validateParamsAddMenu, verifiedIfExist } = require("../utils/utils.js");
 const {messages} = require("../utils/messages.js")
-const {getDataMenu, getDataMenuById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById, findExistOrderDetail} = require("../utils/queries.js")
+const {getDataMenu, findCategoryById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById, findExistOrderDetail} = require("../utils/queries.js")
 
 /**
  * Esta función realiza una consulta a la base de datos para obtener todos los elementos de menú.
@@ -12,7 +12,7 @@ const getMenuService = async () => {
  
   for (let menus of menuItem) {
     const { id_category } = menus;
-    const categoryResult = await getDataMenuById(id_category);
+    const categoryResult = await findCategoryById(id_category);
      // Si no se encuentra la categoría, se ignora y no se añade el campo 'type'
      const type = categoryResult.length
      ? categoryResult[0].type
@@ -33,7 +33,7 @@ const getFilterCategoryMenuService = async (id) => {
   let getFilter = await getFilterById(id);
   for (let menus of getFilter) {
     const { id_category } = menus;
-    const categoryResult = await getDataMenuById(id_category);
+    const categoryResult = await findCategoryById(id_category);
     // Si no se encuentra la categoría, se ignora y no se añade el campo 'type'
     const type = categoryResult.length
       ? categoryResult[0].type

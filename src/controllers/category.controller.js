@@ -9,3 +9,13 @@ exports.getCategories = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getCategoryId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getCategoyId = await categoryService.getCategoyId(id);
+    res.status(200).json(getCategoyId);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

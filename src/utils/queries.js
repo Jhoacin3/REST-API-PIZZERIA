@@ -10,7 +10,7 @@ const getDataMenu = async () => {
   return getMenu;
 };
 
-const getDataMenuById = async (id) => {
+const findCategoryById = async (id) => {
   // Buscar la categoría específica por id_category
   const [categoryResult] = await connection.query(
     "SELECT * FROM category WHERE id_category = ?",
@@ -82,9 +82,10 @@ const getCategory = async () => {
   return getCategories;
 }
 
+
 module.exports = {
   getDataMenu,
-  getDataMenuById,
+  findCategoryById,
   getFilterById,
   getNameByMenu,
   createMenu,
