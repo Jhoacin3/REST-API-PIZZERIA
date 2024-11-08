@@ -1,5 +1,5 @@
 const { json } = require("express");
-const menuService = require("../services/menu_service");
+const menuService = require("../services/menu.service.js");
 
 const getMenu = async (req, res) => {
   try {

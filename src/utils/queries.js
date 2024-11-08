@@ -76,6 +76,12 @@ const [findMenuItem] = await connection.query("SELECT id_menu FROM order_details
 return findMenuItem;
 }
 
+//*************QUERIES PARA CATEGORIA*************
+const getCategory = async () => {
+  const [getCategories] = await connection.query("SELECT * FROM category LIMIT 100")
+  return getCategories;
+}
+
 module.exports = {
   getDataMenu,
   getDataMenuById,
@@ -86,4 +92,5 @@ module.exports = {
   updateMenu,
   deleteMenuById,
   findExistOrderDetail,
+  getCategory,
 };
