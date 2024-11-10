@@ -66,3 +66,19 @@ exports.updateCategory = async (req, res) => {
     });
   }
 };
+
+exports.deleteCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const categoryDeleted = await categoryService.deleteCategory(id);
+    res.json({
+      data: categoryDeleted,
+      success: messages.success.delete,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};

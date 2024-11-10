@@ -106,6 +106,21 @@ const updateCategoryById = async (id, type) => {
   return data;
 };
 
+const findExistCategory = async (id) => {
+  const [findCategoryItem] = await connection.query(
+    "SELECT id_category FROM menu WHERE id_category = ?",
+    [id]
+  );
+  return findCategoryItem;
+};
+
+const deleteCategoryById = async (id) => {
+  const [deleteCategory] = await connection.query(
+    "DELETE FROM category WHERE id_category = ?",
+    [id]
+  );
+};
+
 
 module.exports = {
   getDataMenu,
@@ -120,5 +135,7 @@ module.exports = {
   getCategory,
   getCategoryName,
   createCategory,
-  updateCategoryById
+  updateCategoryById,
+  findExistCategory,
+  deleteCategoryById
 };

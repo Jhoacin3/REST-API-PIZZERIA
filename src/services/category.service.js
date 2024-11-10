@@ -1,4 +1,4 @@
-const {getCategory, findCategoryById, getCategoryName, createCategory, updateCategoryById} = require("../utils/queries.js")
+const {getCategory, findCategoryById, getCategoryName, createCategory, updateCategoryById, findExistCategory, deleteCategoryById} = require("../utils/queries.js")
 const {validateParamsId, validateParamCategory} = require("../utils/utils.js")
 
 exports.getCategoriesService = async () => {
@@ -39,5 +39,21 @@ exports.updateCategory = async (id, type) => {
   let typeUpdated = await updateCategoryById(id, type);
   return {
     type,
+  };
+};
+
+exports.deleteCategory = async (id) => {
+  await validateParamsId(id);
+
+  const findCategory = await findExistCategory(id);
+  if (findCategory.length !== 0) {
+    throw new Error(
+      "No se puede borrar esta categoria por que ya hay insumos de este tipo"
+    );
+  }
+  await deleteCategoryById(id);
+
+  return {
+    id: id,
   };
 };
