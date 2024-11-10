@@ -19,3 +19,24 @@ exports.getCategoryId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.createCategory = async (req, res) => {
+  const {type} = req.body;
+  try {
+    const categoryCreate = await categoryService.createCategory(type);
+    res.status(200).json(categoryCreate);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.updateCategory = async (req, res) => {
+  const {type} = req.body;
+  try {
+    const categoryCreate = await categoryService.createCategory(type);
+    res.status(200).json(categoryCreate);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

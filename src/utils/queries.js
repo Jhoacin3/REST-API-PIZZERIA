@@ -81,6 +81,20 @@ const getCategory = async () => {
   const [getCategories] = await connection.query("SELECT * FROM category LIMIT 100")
   return getCategories;
 }
+const getCategoryName = async () => {
+  const [getCategoryName] = await connection.query("SELECT type FROM category");
+
+  return getCategoryName;
+};
+
+const createCategory = async (type) => {
+  const [data] = await connection.query(
+    "INSERT INTO category (type) VALUES (?)",
+    [type]
+  );
+
+  return data;
+};
 
 
 module.exports = {
@@ -94,4 +108,6 @@ module.exports = {
   deleteMenuById,
   findExistOrderDetail,
   getCategory,
+  getCategoryName,
+  createCategory
 };

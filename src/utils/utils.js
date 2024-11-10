@@ -110,11 +110,27 @@ const verifiedIfExist = async (arrayObject, id) =>{
 
 //**************************************************
 
+const validateParamCategory = async (type, namesCategory) =>{
+  if (!type) {
+    throw new Error("Es obligatorio el nombre de la categoria");
+  }
+  if (typeof type !== 'string' || type.length <= 4 || type.length >= 12) {
+    throw new Error("El nombre debe ser ser de tipo cadena y debe ser mayor a 5 caracteres");
+  }
+  // let typenew = type.toLowerCase();
+  let result = namesCategory.some((names) => names.type === type);
+  if (result) {
+    throw new Error("Ya existe una categoria con ese mismo nombre");
+  }
+  return result;
+}
+
 module.exports = {
   validateParamsId,
   validatesMethodCreate,
   validatesMethodUpdate,
   validatesMethodDelete,
   validateParamsAddMenu,
-  verifiedIfExist
+  verifiedIfExist,
+  validateParamCategory
 };
