@@ -97,6 +97,16 @@ const createCategory = async (type) => {
 };
 
 
+const updateCategoryById = async (id, type) => {
+  const [data] = await connection.query(
+    "UPDATE category SET type = ? WHERE id_category = ?",
+    [type, id]
+  );
+
+  return data;
+};
+
+
 module.exports = {
   getDataMenu,
   findCategoryById,
@@ -109,5 +119,6 @@ module.exports = {
   findExistOrderDetail,
   getCategory,
   getCategoryName,
-  createCategory
+  createCategory,
+  updateCategoryById
 };

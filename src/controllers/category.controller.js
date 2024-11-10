@@ -1,12 +1,20 @@
 const { json } = require("express");
 const categoryService = require("../services/category.service.js");
+const {messages} = require("../utils/messages.js")
+
 
 exports.getCategories = async (req, res) => {
   try {
     const getCategories = await categoryService.getCategoriesService();
-    res.status(200).json(getCategories);
+    res.json({
+      data: getCategories,
+      success: messages.success.get,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
@@ -14,29 +22,47 @@ exports.getCategoryId = async (req, res) => {
   const { id } = req.params;
   try {
     const getCategoyId = await categoryService.getCategoyId(id);
-    res.status(200).json(getCategoyId);
+    res.json({
+      data: getCategoyId,
+      success: messages.success.get,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
 exports.createCategory = async (req, res) => {
-  const {type} = req.body;
+  const { type } = req.body;
   try {
     const categoryCreate = await categoryService.createCategory(type);
-    res.status(200).json(categoryCreate);
+    res.json({
+      data: categoryCreate,
+      success: messages.success.create,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
-
 exports.updateCategory = async (req, res) => {
-  const {type} = req.body;
+  const { id } = req.params;
+  const { type } = req.body;
   try {
-    const categoryCreate = await categoryService.createCategory(type);
-    res.status(200).json(categoryCreate);
+    const categoryUpdated = await categoryService.updateCategory(id, type);
+    res.json({
+      data: categoryUpdated,
+      success: messages.success.update,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
