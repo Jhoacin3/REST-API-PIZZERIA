@@ -1,12 +1,20 @@
 const { json } = require("express");
 const menuService = require("../services/menu.service.js");
+const {messages} = require("../utils/messages.js")
+
 
 const getMenu = async (req, res) => {
   try {
     const getMenu = await menuService.getMenuService();
-    res.status(200).json(getMenu);
+    res.json({
+     data: getMenu,
+     success: messages.success.get
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
@@ -14,9 +22,15 @@ const getFilterCategoryMenu = async (req, res) => {
   const { id } = req.params;
   try {
     let getFilterMenu = await menuService.getFilterCategoryMenuService(id);
-    res.status(200).json(getFilterMenu);
+    res.json({
+     data: getFilterMenu,
+     success: messages.success.get
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
@@ -29,9 +43,15 @@ const addMenu = async (req, res) => {
       price,
       id_category
     );
-    res.status(200).json(data);
+    res.json({
+      data: data,
+      success: messages.success.create
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 const updateMenu = async (req, res) => {
@@ -45,18 +65,30 @@ const updateMenu = async (req, res) => {
      id_category,
      id
    ); 
-   res.status(200).json(data);
+    res.json({
+      data: data,
+      success: messages.success.update
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 const deleteMenu = async (req, res) =>{
   const {id} = req.params;
   try {
     let data = await menuService.deleteMenuService(id);
-    res.status(200).json(data);
+    res.json({
+      data: data,
+      success: messages.success.delete
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 

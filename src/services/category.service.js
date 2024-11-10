@@ -38,6 +38,6 @@ exports.updateCategory = async (id, type) => {
   const typenew = await validateParamCategory(type, namesCategory);
   let typeUpdated = await updateCategoryById(id, type);
   return {
-    type
-};
+    type,
+  };
 };
