@@ -1,6 +1,6 @@
 const connection = require("../db.js");
 //******** Queries para menu ******** */
-const getDataMenu = async () => {
+exports.getDataMenu = async () => {
   const [getMenu] = await connection.query("SELECT * FROM menu LIMIT 100");
 
   if (!getMenu.length) {
@@ -10,7 +10,7 @@ const getDataMenu = async () => {
   return getMenu;
 };
 
-const findCategoryById = async (id) => {
+exports.findCategoryById = async (id) => {
   // Buscar la categoría específica por id_category
   const [categoryResult] = await connection.query(
     "SELECT * FROM category WHERE id_category = ?",
@@ -22,7 +22,7 @@ const findCategoryById = async (id) => {
   return categoryResult;
 };
 
-const getFilterById = async (id) => {
+exports.getFilterById = async (id) => {
   const [getFilter] = await connection.query(
     "SELECT * FROM menu WHERE id_category = ? LIMIT 100",
     [id]
@@ -33,7 +33,7 @@ const getFilterById = async (id) => {
   return getFilter;
 };
 
-const getNameByMenu = async (name) => {
+exports.getNameByMenu = async (name) => {
   const [getMenu] = await connection.query("SELECT name FROM menu");
   const isRepeat = getMenu.some(
     (item) => item.name.toLowerCase() === name.toLowerCase()
@@ -42,7 +42,7 @@ const getNameByMenu = async (name) => {
     throw new Error("El nombre del menu ya existe");
   }
 };
-const createMenu = async (name, description, price, id_category) => {
+exports.createMenu = async (name, description, price, id_category) => {
   const [data] = await connection.query(
     "INSERT INTO menu (name, description, price, id_category) VALUES (?, ?, ?, ?)",
     [name, description, price, id_category]
@@ -51,7 +51,7 @@ const createMenu = async (name, description, price, id_category) => {
   return data;
 };
 
-const updateMenu = async (name, description, price, id_category, id) => {
+exports.updateMenu = async (name, description, price, id_category, id) => {
   const [getMenu] = await connection.query(
     "UPDATE menu SET name = ?, description = ?, price = ?, id_category = ? WHERE id_menu = ?",
     [name, description, price, id_category, id]
@@ -59,35 +59,35 @@ const updateMenu = async (name, description, price, id_category, id) => {
 
   return getMenu;
 };
-const deleteMenuById = async (id) => {
+exports.deleteMenuById = async (id) => {
   const [deleteMenu] = await connection.query(
     "DELETE FROM menu WHERE id_menu = ?",
     [id]
   );
 };
 
-const getIdMenu = async () => {
+exports.getIdMenu = async () => {
   const [idMenus] = await connection.query("SELECT id_menu FROM menu");
   return idMenus;
 };
 
-const findExistOrderDetail = async (id)=>{
+exports.findExistOrderDetail = async (id)=>{
 const [findMenuItem] = await connection.query("SELECT id_menu FROM order_details WHERE id_menu = ?", [id])
 return findMenuItem;
 }
 
 //*************QUERIES PARA CATEGORIA*************
-const getCategory = async () => {
+exports.getCategory = async () => {
   const [getCategories] = await connection.query("SELECT * FROM category LIMIT 100")
   return getCategories;
 }
-const getCategoryName = async () => {
+exports.getCategoryName = async () => {
   const [getCategoryName] = await connection.query("SELECT type FROM category");
 
   return getCategoryName;
 };
 
-const createCategory = async (type) => {
+exports.createCategory = async (type) => {
   const [data] = await connection.query(
     "INSERT INTO category (type) VALUES (?)",
     [type]
@@ -97,7 +97,7 @@ const createCategory = async (type) => {
 };
 
 
-const updateCategoryById = async (id, type) => {
+exports.updateCategoryById = async (id, type) => {
   const [data] = await connection.query(
     "UPDATE category SET type = ? WHERE id_category = ?",
     [type, id]
@@ -106,7 +106,7 @@ const updateCategoryById = async (id, type) => {
   return data;
 };
 
-const findExistCategory = async (id) => {
+exports.findExistCategory = async (id) => {
   const [findCategoryItem] = await connection.query(
     "SELECT id_category FROM menu WHERE id_category = ?",
     [id]
@@ -114,7 +114,7 @@ const findExistCategory = async (id) => {
   return findCategoryItem;
 };
 
-const deleteCategoryById = async (id) => {
+exports.deleteCategoryById = async (id) => {
   const [deleteCategory] = await connection.query(
     "DELETE FROM category WHERE id_category = ?",
     [id]
@@ -122,20 +122,41 @@ const deleteCategoryById = async (id) => {
 };
 
 
-module.exports = {
-  getDataMenu,
-  findCategoryById,
-  getFilterById,
-  getNameByMenu,
-  createMenu,
-  getIdMenu,
-  updateMenu,
-  deleteMenuById,
-  findExistOrderDetail,
-  getCategory,
-  getCategoryName,
-  createCategory,
-  updateCategoryById,
-  findExistCategory,
-  deleteCategoryById
+//*************QUERIES PARA CONFIG STORE*************
+exports.getConfig = async () => {
+  const [getConfig] = await connection.query("SELECT * FROM store_info LIMIT 100")
+  return getConfig;
+}
+exports.getConfigId = async (id) => {
+  const [getConfigId] = await connection.query(
+    "SELECT * FROM store_info WHERE id_store_info = ?",
+    [id]
+  );
+  if (!getConfigId.length) {
+    throw new Error("No existe esa configuración");
+  }
+  return getConfigId;
+};
+
+
+exports.createConfig = async (name, photo_url, number_of_tables) => {
+  const [createConfig] = await connection.query(
+    "INSERT INTO store_info (name, photo_url, number_of_tables) VALUES (?,?,?)",
+    [name, photo_url, number_of_tables]
+  );
+  if (createConfig.length === 0) {
+    throw new Error("No se pudo guardar la configuración");
+  }
+  return createConfig;
+};
+
+exports.upateConfig = async (id,name, photo_url, number_of_tables) => {
+  const [upateConfig] = await connection.query(
+    "UPDATE store_info SET name = ?, photo_url = ?, number_of_tables = ? WHERE id_store_info = ?",
+    [name, photo_url, number_of_tables, id]
+  );
+  if (upateConfig.length === 0) {
+    throw new Error("No se pudo guardar la configuración");
+  }
+  return upateConfig;
 };

@@ -1,5 +1,11 @@
+const multer = require('multer');
+// Configurar multer para almacenar las imágenes en memoria
+const storageStrategy = multer.memoryStorage();
+const upload = multer({storage: storageStrategy});
+const fs = require('fs');
+const path = require('path');
 //*****************Utilerias para roles*****************
-const validateParamsId = async (id) => {
+exports.validateParamsId = async (id) => {
   if (!id) {
     throw new Error("No has proporcionado un ID como parametro");
   }
@@ -7,7 +13,7 @@ const validateParamsId = async (id) => {
     throw new Error("El ID pasado como parámetro no es válido.");
   }
 };
-const validatesMethodCreate = async (name_rol, getRoles) => {
+exports.validatesMethodCreate = async (name_rol, getRoles) => {
   if (name_rol.length <= 2 || name_rol.length >= 12) {
     throw new Error("El nombre del rol debe tener entre 3 y 5 caracteres ");
   }
@@ -23,7 +29,7 @@ const validatesMethodCreate = async (name_rol, getRoles) => {
   }
 
   //Nota: El método some() comprueba si al menos un elemento del array cumple con la condición implementada por la función proporcionada.
-  const isRepeat = getRoles.some(
+  exports.isRepeat = getRoles.some(
     (role) => role.name_role.toLowerCase() === name_rol.toLowerCase()
   );
   if (isRepeat) {
@@ -31,7 +37,7 @@ const validatesMethodCreate = async (name_rol, getRoles) => {
   }
 };
 
-const validatesMethodUpdate = async (getRoles, id_role, name_role) => {
+exports.validatesMethodUpdate = async (getRoles, id_role, name_role) => {
   if (!id_role) {
     throw new Error("No has proporcionado un ID como parametro");
   }
@@ -66,7 +72,7 @@ const validatesMethodUpdate = async (getRoles, id_role, name_role) => {
     }
   }
 };
-const validatesMethodDelete = async (id_role, getRoles, getEmployees) => {
+exports.validatesMethodDelete = async (id_role, getRoles, getEmployees) => {
   if (!id_role) {
     throw new Error("No has proporcionado un ID como parametro");
   }
@@ -87,7 +93,7 @@ const validatesMethodDelete = async (id_role, getRoles, getEmployees) => {
   }
 };
 
-const validateParamsAddMenu = async (name, description, price, id_category) => {
+exports.validateParamsAddMenu = async (name, description, price, id_category) => {
   if (!name || !description || !price || !id_category || name === null || description === null || price === null || id_category === null) {
     throw new Error("Es necesario todos los campos");
   }
@@ -100,7 +106,7 @@ const validateParamsAddMenu = async (name, description, price, id_category) => {
      
 }
 
-const verifiedIfExist = async (arrayObject, id) =>{
+exports.verifiedIfExist = async (arrayObject, id) =>{
   const isRepeat = arrayObject.some(
     (item) => Number(item.id_menu) === Number(id) 
   );
@@ -110,7 +116,7 @@ const verifiedIfExist = async (arrayObject, id) =>{
 
 //**************************************************
 
-const validateParamCategory = async (type, namesCategory) =>{
+exports.validateParamCategory = async (type, namesCategory) =>{
   if (!type) {
     throw new Error("Es obligatorio el nombre de la categoria");
   }
@@ -125,12 +131,33 @@ const validateParamCategory = async (type, namesCategory) =>{
   return result;
 }
 
-module.exports = {
-  validateParamsId,
-  validatesMethodCreate,
-  validatesMethodUpdate,
-  validatesMethodDelete,
-  validateParamsAddMenu,
-  verifiedIfExist,
-  validateParamCategory
-};
+exports.validateParamConfig = async (name, photo_url, number_of_tables) =>{
+  
+
+  if (!name && !number_of_tables ) {
+    throw new Error("Es obligatorio el nombre y número de mesas del negocio");
+  }
+  // if (!Number.isInteger(number_of_tables) || number_of_tables <= 0) {
+  //   throw new Error("Por lo menos deben de haber 1 mesa");
+  // }
+  if (typeof name !== 'string' || name.length <= 4 || name.length >= 12) {
+    throw new Error("El nombre debe ser ser de tipo cadena y debe ser mayor a 5 y menor a 11 caracteres");
+  }
+  
+}
+//*****************Utilerias Generales*****************
+//Creación y manipulación de imagenes
+exports.photoPathUtil = async (photo_url) =>{
+  const uploadDir = path.join(__dirname, "../uploads");
+  // Crear directorio de almacenamiento
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir); // Crear el directorio si no existe
+  }
+  // Guardar la imagen en la BD
+  const photoPath = path.join(
+    uploadDir,
+    `${Date.now()}-${photo_url.originalname}`
+  );
+  fs.writeFileSync(photoPath, photo_url.buffer);
+  return photoPath;
+}
