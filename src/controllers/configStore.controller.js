@@ -19,11 +19,11 @@ exports.getConfig = async (req, res) => {
 };
 
 exports.createConfig = async (req, res) => {
-  const {name, number_of_tables} = req.body;
+  const {name, number_of_tables, enable} = req.body;
   const photo_url = req.file;//Ojo, obtenemos el img desde el middleware de Multer
 
   try {
-    const {id} = await configStoreService.createConfigService(name, photo_url, number_of_tables);
+    const {id} = await configStoreService.createConfigService(name, photo_url, number_of_tables, enable);
     res.json({
       data:{
         id,
@@ -33,7 +33,8 @@ exports.createConfig = async (req, res) => {
           originalName: photo_url.originalname,
           mimeType: photo_url.mimetype,
           size: photo_url.size
-      }
+      },
+      enable
       } ,
       success: messages.success.create,
     });
@@ -46,12 +47,12 @@ exports.createConfig = async (req, res) => {
 };
 
 exports.updateConfig = async (req, res) => {
-  const {name, number_of_tables} = req.body;
+  const {name, number_of_tables,enable} = req.body;
   const { id } = req.params;
   const photo_url = req.file;
 
   try {
-    const {id_update} = await configStoreService.updateConfigService(id,name, photo_url, number_of_tables);
+    const {id_update} = await configStoreService.updateConfigService(id,name, photo_url, number_of_tables, enable);
     res.json({
       data:{
         id_update,
@@ -61,9 +62,10 @@ exports.updateConfig = async (req, res) => {
           originalName: photo_url.originalname,
           mimeType: photo_url.mimetype,
           size: photo_url.size
-      }
+      },
+      enable
       } ,
-      success: messages.success.create,
+      success: messages.success.update,
     });
   } catch (error) {
     res.json({

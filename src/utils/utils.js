@@ -131,11 +131,14 @@ exports.validateParamCategory = async (type, namesCategory) =>{
   return result;
 }
 
-exports.validateParamConfig = async (name, photo_url, number_of_tables) =>{
+exports.validateParamConfig = async (name, photo_url, number_of_tables, enable) =>{
   
-
+  //1 = ACTIVADO(true) // 2 = DESACTIVADO(false)
   if (!name && !number_of_tables ) {
     throw new Error("Es obligatorio el nombre y número de mesas del negocio");
+  }
+  if(!Number(enable)){
+    throw new Error("El tipo de dato del switch no es adecuado");
   }
   // if (!Number.isInteger(number_of_tables) || number_of_tables <= 0) {
   //   throw new Error("Por lo menos deben de haber 1 mesa");

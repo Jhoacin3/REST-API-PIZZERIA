@@ -140,10 +140,10 @@ exports.getConfigId = async (id) => {
 };
 
 
-exports.createConfig = async (name, photo_url, number_of_tables) => {
+exports.createConfig = async (name, photo_url, number_of_tables, enable) => {
   const [createConfig] = await connection.query(
-    "INSERT INTO store_info (name, photo_url, number_of_tables) VALUES (?,?,?)",
-    [name, photo_url, number_of_tables]
+    "INSERT INTO store_info (name, photo_url, number_of_tables, enable) VALUES (?,?,?,?)",
+    [name, photo_url, number_of_tables, enable]
   );
   if (createConfig.length === 0) {
     throw new Error("No se pudo guardar la configuración");
@@ -151,10 +151,10 @@ exports.createConfig = async (name, photo_url, number_of_tables) => {
   return createConfig;
 };
 
-exports.upateConfig = async (id,name, photo_url, number_of_tables) => {
+exports.upateConfig = async (id,name, photo_url, number_of_tables, enable) => {
   const [upateConfig] = await connection.query(
-    "UPDATE store_info SET name = ?, photo_url = ?, number_of_tables = ? WHERE id_store_info = ?",
-    [name, photo_url, number_of_tables, id]
+    "UPDATE store_info SET name = ?, photo_url = ?, number_of_tables = ?, enable = ? WHERE id_store_info = ?",
+    [name, photo_url, number_of_tables,enable, id]
   );
   if (upateConfig.length === 0) {
     throw new Error("No se pudo guardar la configuración");
