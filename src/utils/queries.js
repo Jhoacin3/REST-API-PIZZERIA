@@ -106,6 +106,7 @@ exports.updateCategoryById = async (id, type) => {
   return data;
 };
 
+
 exports.findExistCategory = async (id) => {
   const [findCategoryItem] = await connection.query(
     "SELECT id_category FROM menu WHERE id_category = ?",

@@ -13,9 +13,6 @@ exports.getCategoriesService = async () => {
 exports.getCategoyId = async (id) => {
   await validateParamsId(id);
   let category = await findCategoryById(id);
-  if (category.length == 0) {
-    throw new Error("No hay registros de categorias");
-  }
 
   return category;
 };
@@ -46,6 +43,8 @@ exports.deleteCategory = async (id) => {
   await validateParamsId(id);
 
   const findCategory = await findExistCategory(id);
+  await findCategoryById(id);
+
   if (findCategory.length !== 0) {
     throw new Error(
       "No se puede borrar esta categoria por que ya hay insumos de este tipo"
