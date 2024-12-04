@@ -156,11 +156,11 @@ exports.photoPathUtil = async (photo_url) =>{
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir); // Crear el directorio si no existe
   }
-  // Guardar la imagen en la BD
-  const photoPath = path.join(
-    uploadDir,
-    `${Date.now()}-${photo_url.originalname}`
-  );
+  // Crear un nombre único para la imagen
+  const uniqueFileName = `${Date.now()}-${photo_url.originalname}`;
+
+  const photoPath = path.join(uploadDir, uniqueFileName);
   fs.writeFileSync(photoPath, photo_url.buffer);
-  return photoPath;
+
+  return uniqueFileName;
 }
