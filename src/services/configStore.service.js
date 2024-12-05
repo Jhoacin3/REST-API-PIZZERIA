@@ -31,26 +31,26 @@ exports.getConfigActiveService = async () => {
   let categories = await getConfig();
    // 1 = CONFIGURACIÓN ACTIVA (true)
    // 2 = CONFIGURACIÓN DESACTIVADA (false)
-  const configActive = categories.filter(configs => configs.enable === Number(1))
-  if (categories.length == 0) {
-    throw new Error("No hay una configuración establecida");
+  const configActive = categories.filter(configs => configs.enable === Number(3))
+  
+  if (configActive.length != 0 ) {
+    for (let configs of configActive) {
+      const {id_store_info, name, photo_url, number_of_tables, enable} = configs;
+      const result = {
+        id_store_info: id_store_info,
+        name: name,
+        photo_url: `${baseUrl}/uploads/${photo_url}`,
+        number_of_tables: number_of_tables,
+        enable: enable
+       };
+      data.push(result);
+    }
+  
+    return data
+    
+  }else{
+    return 0;
   }
-  if (configActive.length == 0 ) {
-    throw new Error("No hay una configuración activa para este negocio");
-  }
-  for (let configs of configActive) {
-    const {id_store_info, name, photo_url, number_of_tables, enable} = configs;
-    const result = {
-      id_store_info: id_store_info,
-      name: name,
-      photo_url: `${baseUrl}/uploads/${photo_url}`,
-      number_of_tables: number_of_tables,
-      enable: enable
-     };
-    data.push(result);
-  }
-
-  return data
 };
 
 exports.createConfigService = async (name, photo_url, number_of_tables, enable) => {
