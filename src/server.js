@@ -6,6 +6,7 @@ const rolRouter = require("./routes/rol.router.js")
 const menuRouter = require("./routes/menuRouter.js")
 const categoryRouter = require("./routes/categoryRouter.js")
 const configStoreRouter = require("./routes/configStoreRouter.js")
+const employeesRouter = require("./routes/employeesRouter.js")
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ app.use('/apiPizza', rolRouter);
 app.use('/apiPizza', menuRouter);
 app.use('/apiPizza', categoryRouter);
 app.use('/apiPizza', configStoreRouter);
+app.use('/apiPizza', employeesRouter);
 
 //Servidor escuchando...
 app.listen(port, () =>{

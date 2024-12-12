@@ -164,3 +164,16 @@ exports.photoPathUtil = async (photo_url) =>{
 
   return uniqueFileName;
 }
+
+
+exports.validParamsEmployee = async (
+  id_employees,
+  full_name,
+  entry_date,
+  salary,
+  email,
+  password
+) => {
+  if (typeof full_name !== "string" || typeof salary !== Number)
+    throw new Error("El nombre debe contener solo letras");
+};

@@ -161,3 +161,21 @@ exports.upateConfig = async (id,name, photo_url, number_of_tables, enable) => {
   }
   return upateConfig;
 };
+
+
+//*************QUERIES PARA EMPLOYEES*************
+
+exports.getEmployeeById = async (id) =>{
+  const [getEmployees] = await connection.query("SELECT * FROM employees LIMIT 100")
+  return getEmployees;
+}
+
+exports.getEmployeeByName = async (name) => {
+  //Nota: LIKE= busca cualquier registro que contenga el valor
+  //LOWER: asegura que la búsqueda sea insensible ante MAYUS y MINUS
+  const [getEmployee] = await connection.query(
+    "SELECT * FROM employees WHERE LOWER(full_name) LIKE ?",
+    [`%${name}%`]
+  );
+  return getEmployee;
+};
