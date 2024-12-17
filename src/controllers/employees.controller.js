@@ -33,3 +33,20 @@ exports.getEmployeeName = async (req, res) => {
     });
   }
 };
+
+
+exports.createEmployee = async (req, res) => {
+  try {
+    let {full_name, email, password} = req.body;
+    const createdEmployee = await employeesService.createEmployeeServ(full_name, email, password);
+    res.json({
+      data: createdEmployee,
+      success: messages.success.create,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};

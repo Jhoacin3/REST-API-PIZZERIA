@@ -18,9 +18,7 @@ exports.getCategoyId = async (id) => {
 };
 exports.createCategory = async (type) => {
   const namesCategory = await getCategoryName();
-  console.log("namesCategory: ", namesCategory);
   const typenew = await validateParamCategory(type, namesCategory);
-  console.log("typenew: ", typenew);
   let typeCreated = await createCategory(type);
   return {
     id: typeCreated.insertId,

@@ -167,13 +167,11 @@ exports.photoPathUtil = async (photo_url) =>{
 
 
 exports.validParamsEmployee = async (
-  id_employees,
   full_name,
-  entry_date,
-  salary,
   email,
   password
 ) => {
-  if (typeof full_name !== "string" || typeof salary !== Number)
-    throw new Error("El nombre debe contener solo letras");
+  if ( !full_name ||!email || !password ) throw new Error("Todos los campos son necesarios");
+  if (typeof full_name !== "string" || !isNaN(Number(full_name)))
+    throw new Error("Proporciona un nombre coherente para la busqueda");
 };

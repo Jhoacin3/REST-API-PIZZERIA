@@ -165,10 +165,11 @@ exports.upateConfig = async (id,name, photo_url, number_of_tables, enable) => {
 
 //*************QUERIES PARA EMPLOYEES*************
 
-exports.getEmployeeById = async (id) =>{
+exports.getEmployees = async (id) =>{
   const [getEmployees] = await connection.query("SELECT * FROM employees LIMIT 100")
   return getEmployees;
 }
+
 
 exports.getEmployeeByName = async (name) => {
   //Nota: LIKE= busca cualquier registro que contenga el valor
@@ -178,4 +179,11 @@ exports.getEmployeeByName = async (name) => {
     [`%${name}%`]
   );
   return getEmployee;
+};
+exports.createEmployee = async (full_name, email, password) => {
+  const [data] = await connection.query(
+    "INSERT INTO employees (full_name, email, password) VALUES (?, ?, ?)",
+    [full_name, email, password]
+  );
+  return data;
 };
