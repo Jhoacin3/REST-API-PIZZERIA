@@ -24,13 +24,14 @@ exports.createEmployeeServ = async (full_name, email, password) => {
     (emails) => emails.email.toLowerCase() === email.toLowerCase()
   );
   if (isRepeat) throw new Error("No se puede repetir el mismo correo");
- 
+
   const createdEmployee = await createEmployee(full_name, email, password);
-  if (createEmployee.affectedRows === 0) throw new Error("Lo siento, no se pudo crear el usuario");
+  if (createEmployee.affectedRows === 0)
+    throw new Error("Lo siento, no se pudo crear el usuario");
 
   return {
     id: createdEmployee.insertId,
     full_name,
-    email
+    email,
   };
 };
