@@ -50,3 +50,22 @@ exports.createEmployee = async (req, res) => {
     });
   }
 };
+
+exports.updateEmployee = async (req, res) =>{
+  try {
+    let {id} = req.params;
+    let {full_name, password, email} = req.body;
+
+    const updatedEmployee = await employeesService.updateEmployeeServ(id,full_name, password,email);
+    res.json({
+      data: updatedEmployee,
+      success: messages.success.update
+    })
+    
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+}

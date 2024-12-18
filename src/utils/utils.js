@@ -166,20 +166,17 @@ exports.photoPathUtil = async (photo_url) =>{
 }
 
 
-exports.validParamsEmployee = async (full_name, email, password) => {
-  if (!full_name || !email || !password)
-    throw new Error("Todos los campos son necesarios");
+exports.validParamsEmployee = async (full_name, password) => {
+  if (!full_name || !password)
+    throw new Error("El nombre y contraseña son obligatorios");
 
   if (typeof full_name !== "string" || !isNaN(Number(full_name)))
     throw new Error("Proporciona un nombre coherente para la busqueda");
 
-  if (full_name.length <= 5 || full_name.length >= 13)
+  if (full_name.length <= 5 || full_name.length >= 30)
     throw new Error(
       "Wl nombre debe de ser mayor a 5 y menos a 12 caracteres"
     );
-
-  let verifiedEmail = await email.includes("@gmail.com");
-  if (verifiedEmail !== true) throw new Error("el email no es correcto");
 
   if (password.length <= 5 || password.length >= 13)
     throw new Error(

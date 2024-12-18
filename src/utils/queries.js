@@ -187,3 +187,14 @@ exports.createEmployee = async (full_name, email, password) => {
   );
   return data;
 };
+
+exports.updateEmployees = async (id, full_name, email, password) => {
+  const [data] = await connection.query(
+    "UPDATE employees SET full_name = ?, email = ?, password = ? WHERE id_employees = ?",
+    [full_name, email, password, id]
+  );
+  if (data.length === 0) {
+    throw new Error("No se pudo actualizar el empleado");
+  }
+  return data;
+};
