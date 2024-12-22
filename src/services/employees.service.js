@@ -1,5 +1,5 @@
 const { validateParamsId, validParamsEmployee } = require("../utils/utils.js");
-const { getEmployeeByName, getEmployees, createEmployee, updateEmployees } = require("../utils/queries.js");
+const { getEmployeeByName, getEmployees, getEmployeeId, createEmployee, updateEmployees, deleteEmployee } = require("../utils/queries.js");
 
 exports.getEmployeeService = async () => {
   let employees = await getEmployees();
@@ -70,5 +70,17 @@ exports.updateEmployeeServ = async (id, full_name, password, email) => {
     id,
     full_name,
     email,
+  };
+};
+
+exports.deleteEmployeeServ = async (id) => {
+  await validateParamsId(id);
+  await getEmployeeId(id);
+  let deletedSuccess = await deleteEmployee(id);
+  
+  if (deletedSuccess.affectedRows != 1)throw new Error("No se pudo eliminar el usuario");
+  
+  return {
+    id: id,
   };
 };

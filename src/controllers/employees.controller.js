@@ -69,3 +69,20 @@ exports.updateEmployee = async (req, res) =>{
     });
   }
 }
+
+exports.deleteEmployee = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    const deletedEmployee = await employeesService.deleteEmployeeServ(id);
+    res.json({
+      data: deletedEmployee,
+      success: messages.success.delete,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};

@@ -170,6 +170,15 @@ exports.getEmployees = async (id) =>{
   return getEmployees;
 }
 
+exports.getEmployeeId = async (id) =>{
+
+  const [getEmployee] = await connection.query("SELECT * FROM employees WHERE id_employees =?", [id]);
+
+  if (getEmployee.length == 0)throw new Error("No existe el usuario");
+  
+  return getEmployee;
+}
+
 
 exports.getEmployeeByName = async (name) => {
   //Nota: LIKE= busca cualquier registro que contenga el valor
@@ -198,3 +207,11 @@ exports.updateEmployees = async (id, full_name, email, password) => {
   }
   return data;
 };
+
+exports.deleteEmployee = async (id) =>{
+  const [deletedEmployee] = await connection.query(
+    "DELETE FROM employees WHERE id_employees = ?", [id]
+  );
+
+  return deletedEmployee
+}
