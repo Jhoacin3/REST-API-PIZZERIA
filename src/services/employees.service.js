@@ -3,7 +3,8 @@ const { getEmployeeByName, getEmployees, getEmployeeId, createEmployee, updateEm
 
 exports.getEmployeeService = async () => {
   let employees = await getEmployees();
-  if (employees.length == 0) throw new Error("No hay usuarios creados");
+  if (employees.length == 0) employees = 0;
+
   return employees;
 };
 
@@ -20,17 +21,17 @@ exports.getEmployeeByName = async (name) => {
 exports.createEmployeeServ = async (full_name, email, password) => {
   await validParamsEmployee(full_name, password);
 
+  if (!email)throw new Error("El correo electronico es obligatorio");
+
   let verifiedEmail = await email.includes("@gmail.com");
   if (verifiedEmail !== true) throw new Error("el email no es correcto");
 
-  if (!email)
-    throw new Error("El correo electronico es obligatorio");
 
   let employees = await getEmployees();
   const isRepeat = employees.some(
-    (emails) => emails.email.toLowerCase() === email.toLowerCase()
+    (item) => item.email.toLowerCase() === email.toLowerCase() || item.full_name === full_name.toLowerCase()
   );
-  if (isRepeat) throw new Error("No se puede repetir el mismo correo");
+  if (isRepeat) throw new Error("No se puede repetir el mismo nombre y/o correo");
 
   const createdEmployee = await createEmployee(full_name, email, password);
   if (createEmployee.affectedRows === 0)
