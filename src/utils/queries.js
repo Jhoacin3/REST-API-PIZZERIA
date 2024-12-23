@@ -189,10 +189,10 @@ exports.getEmployeeByName = async (name) => {
   );
   return getEmployee;
 };
-exports.createEmployee = async (full_name, email, password) => {
+exports.createEmployee = async (full_name, email, hasedPassword) => {
   const [data] = await connection.query(
     "INSERT INTO employees (full_name, email, password) VALUES (?, ?, ?)",
-    [full_name, email, password]
+    [full_name, email, hasedPassword]
   );
   return data;
 };

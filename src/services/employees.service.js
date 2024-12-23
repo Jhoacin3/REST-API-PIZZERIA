@@ -1,5 +1,9 @@
 const { validateParamsId, validParamsEmployee } = require("../utils/utils.js");
 const { getEmployeeByName, getEmployees, getEmployeeId, createEmployee, updateEmployees, deleteEmployee } = require("../utils/queries.js");
+const { SALT_ROUNDS } = require ("../../config/config.js");
+
+const bcrypt = require('bcrypt');
+
 
 exports.getEmployeeService = async () => {
   let employees = await getEmployees();
@@ -33,14 +37,15 @@ exports.createEmployeeServ = async (full_name, email, password) => {
   );
   if (isRepeat) throw new Error("No se puede repetir el mismo nombre y/o correo");
 
-  const createdEmployee = await createEmployee(full_name, email, password);
+  const hasedPassword = await bcrypt.hash(password, SALT_ROUNDS)// --> Este proceso lleva tiempo, se debe usar el await.
+  const createdEmployee = await createEmployee(full_name, email, hasedPassword);
   if (createEmployee.affectedRows === 0)
     throw new Error("Lo siento, no se pudo crear el usuario");
-
   return {
     id: createdEmployee.insertId,
     full_name,
     email,
+    password: hasedPassword
   };
 };
 

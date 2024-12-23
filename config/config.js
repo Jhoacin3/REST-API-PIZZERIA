@@ -7,4 +7,6 @@ module.exports = {
     MYSQL_PASSWORD: process.env.DB_PASSWORD,
     MYSQL_DATABASE: process.env.DB_NAME,
     PORT: 3306,
+    SALT_ROUNDS :10 //NÚMERO PARA LAS ENCRIPTACIONES CON BCRYPT
   };
+
