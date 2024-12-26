@@ -9,10 +9,10 @@ exports.loginController = async (req, res) => {
     res.json({
       success: true,
       data: access,
-      message: messages.success.create,
+      message: messages.success.loginTrue,
     });
   } catch (error) {
-    res.json({
+    res.status(401).json({
       success: false,
       error: error.message,
     });

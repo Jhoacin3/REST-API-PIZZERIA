@@ -165,7 +165,7 @@ exports.upateConfig = async (id,name, photo_url, number_of_tables, enable) => {
 
 //*************QUERIES PARA EMPLOYEES*************
 
-exports.getEmployees = async (id) =>{
+exports.getEmployees = async () =>{
   const [getEmployees] = await connection.query("SELECT * FROM employees LIMIT 100")
   return getEmployees;
 }

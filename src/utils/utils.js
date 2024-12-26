@@ -183,3 +183,10 @@ exports.validParamsEmployee = async (full_name, password) => {
       "La contraseña debe de ser mayor a 5 y menos a 12 caracteres"
     );
 };
+exports.validateEmailExists = async (email, employees) => {
+  let emailFind = await employees.filter((item) => item.email == email);
+  if (emailFind.length == 0)
+    throw new Error("No se encontró el correo proporcionado");
+  
+  return emailFind[0];//como retorna un array de objetos, en este caso retornará un objeto, pues retornamos en la primera pocisión (primero objeto) = [posición: 0]
+};
