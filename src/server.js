@@ -7,6 +7,7 @@ const menuRouter = require("./routes/menuRouter.js")
 const categoryRouter = require("./routes/categoryRouter.js")
 const configStoreRouter = require("./routes/configStoreRouter.js")
 const employeesRouter = require("./routes/employeesRouter.js")
+const authRouter = require("./routes/auth/auth.js")
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.use('/apiPizza', menuRouter);
 app.use('/apiPizza', categoryRouter);
 app.use('/apiPizza', configStoreRouter);
 app.use('/apiPizza', employeesRouter);
+app.use('/apiPizza', authRouter);
 
 //Servidor escuchando...
 app.listen(port, () =>{
