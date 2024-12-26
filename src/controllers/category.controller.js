@@ -7,8 +7,9 @@ exports.getCategories = async (req, res) => {
   try {
     const getCategories = await categoryService.getCategoriesService();
     res.json({
+      success: true,
       data: getCategories,
-      success: messages.success.get,
+      message: messages.success.get,
     });
   } catch (error) {
     res.json({
@@ -23,8 +24,9 @@ exports.getCategoryId = async (req, res) => {
   try {
     const getCategoyId = await categoryService.getCategoyId(id);
     res.json({
+      success: true,
       data: getCategoyId,
-      success: messages.success.get,
+      message: messages.success.get,
     });
   } catch (error) {
     res.json({
@@ -39,8 +41,9 @@ exports.createCategory = async (req, res) => {
   try {
     const categoryCreate = await categoryService.createCategory(type);
     res.json({
+      success: true,
       data: categoryCreate,
-      success: messages.success.create,
+      message: messages.success.create,
     });
   } catch (error) {
     res.json({
@@ -56,8 +59,9 @@ exports.updateCategory = async (req, res) => {
   try {
     const categoryUpdated = await categoryService.updateCategory(id, type);
     res.json({
+      success: true,
       data: categoryUpdated,
-      success: messages.success.update,
+      message: messages.success.update,
     });
   } catch (error) {
     res.json({
@@ -72,8 +76,9 @@ exports.deleteCategory = async (req, res) => {
   try {
     const categoryDeleted = await categoryService.deleteCategory(id);
     res.json({
+      success: true,
       data: categoryDeleted,
-      success: messages.success.delete,
+      message: messages.success.delete,
     });
   } catch (error) {
     res.json({

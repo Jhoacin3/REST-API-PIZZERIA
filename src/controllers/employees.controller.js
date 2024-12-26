@@ -6,8 +6,9 @@ exports.getEmployees = async (req, res) => {
   try {
     const getEmployeeAll = await employeesService.getEmployeeService();
     res.json({
+      success: true,
       data: getEmployeeAll,
-      success: messages.success.get,
+      message: messages.success.get,
     });
   } catch (error) {
     res.json({

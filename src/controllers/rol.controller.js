@@ -1,8 +1,10 @@
 const { json } = require('express');
 const rolService = require('../services/rol_service.js');
 
+//////Métodos no utilizables/////
 
-const getRoles = async (req, res) => {
+
+exports.getRoles = async (req, res) => {
   try {
     const getRolesHistory = await rolService.getRolesService();
     if (getRolesHistory.length === 0) return res.status(200).json([]);
@@ -13,7 +15,7 @@ const getRoles = async (req, res) => {
   }
 };
 
-const getRolId = async (req, res) => {
+exports.getRolId = async (req, res) => {
 const {id} = req.params;
   try {
     const getRolIdHistory = await rolService.getRolIdService(id);
@@ -25,7 +27,7 @@ const {id} = req.params;
     res.status(500).json({ error: error.message });
   }
 };
-const createRol = async (req, res) => {
+exports.createRol = async (req, res) => {
   const { name_role } = req.body;
   try {
     const rolCreated = await rolService.createRolService(name_role);
@@ -34,7 +36,7 @@ const createRol = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const updateRol = async (req, res) => {
+exports.updateRol = async (req, res) => {
   const { name_role } = req.body;
   const { id } = req.params;
   try {
@@ -45,7 +47,7 @@ const updateRol = async (req, res) => {
   }
 };
 
-const deleteRol = async (req, res) => {
+exports.deleteRol = async (req, res) => {
   const { id } = req.params;
   try {
     const rolCreated = await rolService.deleteRolService(id);
@@ -54,6 +56,3 @@ const deleteRol = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-module.exports = { getRoles, getRolId, createRol, updateRol, deleteRol };

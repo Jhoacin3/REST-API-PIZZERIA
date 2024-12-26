@@ -3,12 +3,13 @@ const menuService = require("../services/menu.service.js");
 const {messages} = require("../utils/messages.js")
 
 
-const getMenu = async (req, res) => {
+exports.getMenu = async (req, res) => {
   try {
     const getMenu = await menuService.getMenuService();
     res.json({
-     data: getMenu,
-     success: messages.success.get
+      success: true,
+      data: getMenu,
+      message: messages.success.get,
     });
   } catch (error) {
     res.json({
@@ -18,13 +19,14 @@ const getMenu = async (req, res) => {
   }
 };
 
-const getFilterCategoryMenu = async (req, res) => {
+exports.getFilterCategoryMenu = async (req, res) => {
   const { id } = req.params;
   try {
     let getFilterMenu = await menuService.getFilterCategoryMenuService(id);
     res.json({
-     data: getFilterMenu,
-     success: messages.success.get
+      success: true,
+      data: getFilterMenu,
+      message: messages.success.get,
     });
   } catch (error) {
     res.json({
@@ -34,7 +36,7 @@ const getFilterCategoryMenu = async (req, res) => {
   }
 };
 
-const addMenu = async (req, res) => {
+exports.addMenu = async (req, res) => {
   const { name, description, price, id_category } = req.body;
   try {
     let data = await menuService.addMenuService(
@@ -44,8 +46,9 @@ const addMenu = async (req, res) => {
       id_category
     );
     res.json({
+      success: true,
       data: data,
-      success: messages.success.create
+      message: messages.success.create,
     });
   } catch (error) {
     res.json({
@@ -54,7 +57,7 @@ const addMenu = async (req, res) => {
     });
   }
 };
-const updateMenu = async (req, res) => {
+exports.updateMenu = async (req, res) => {
   const {id} = req.params;
   const { name, description, price, id_category } = req.body;
   try {
@@ -66,8 +69,9 @@ const updateMenu = async (req, res) => {
      id
    ); 
     res.json({
+      success: true,
       data: data,
-      success: messages.success.update
+      message: messages.success.update,
     });
   } catch (error) {
     res.json({
@@ -76,13 +80,14 @@ const updateMenu = async (req, res) => {
     });
   }
 };
-const deleteMenu = async (req, res) =>{
+exports.deleteMenu = async (req, res) =>{
   const {id} = req.params;
   try {
     let data = await menuService.deleteMenuService(id);
     res.json({
+      success: true,
       data: data,
-      success: messages.success.delete
+      message: messages.success.delete,
     });
   } catch (error) {
     res.json({
@@ -91,5 +96,3 @@ const deleteMenu = async (req, res) =>{
     });
   }
 };
-
-module.exports = { getMenu, getFilterCategoryMenu, addMenu, updateMenu, deleteMenu };
