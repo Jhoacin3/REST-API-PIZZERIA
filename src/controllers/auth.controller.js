@@ -2,6 +2,10 @@ const { json } = require("express");
 const authService = require("../services/auth.service.js");
 const {messages} = require("../utils/messages.js")
 
+exports.render= async(req,res) =>{
+  res.render('example', {full_name: 'jhoacin'})
+}
+
 exports.loginController = async (req, res) => {
   try {
     const { email, password } = req.body;

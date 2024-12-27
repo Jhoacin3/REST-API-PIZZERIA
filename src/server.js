@@ -14,6 +14,7 @@ const port = process.env.PORT || 3000;
 
 // Middleware para servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.set('view engine', 'ejs')
 
 //registro de rutas
 app.use('/apiPizza', rolRouter);
