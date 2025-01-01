@@ -13,11 +13,11 @@ exports.loginService = async (email, password) => {
   const employees = await getEmployees();
 
   let validateEmail = await validateEmailExists(email, employees);
-
   const isValid = await bcrypt.compare(password, validateEmail.password); // no desencripta, solo encripta el pass que ingreso y lo compara con el pass encriptado ya guardado.
   if (!isValid) throw new Error("La contraseña es erronea");
 
   return {
+    id: validateEmail.id_employees,
     name: validateEmail.full_name,
   };
 };

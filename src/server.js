@@ -8,9 +8,11 @@ const categoryRouter = require("./routes/categoryRouter.js")
 const configStoreRouter = require("./routes/configStoreRouter.js")
 const employeesRouter = require("./routes/employeesRouter.js")
 const authRouter = require("./routes/auth/auth.js")
-app.use(express.json());
-
+const cookieParser = require('cookie-parser');
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(cookieParser()) //nos ayudará a modificar las cookies, ojo!
 
 // Middleware para servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
