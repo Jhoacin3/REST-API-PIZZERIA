@@ -6,7 +6,7 @@ exports.verifyToken = (req, res, next) => {
   req.session = {user: null}
   
   if (!token) {
-    return res.status(403).json({ message: "No se proporcionó la llave de acceso" });
+    return res.status(403).json({ message: "Debes iniciar sesión para continuar..." });
   }
   try {
     const data = JWT.verify(token, process.env.JWT_SECRET);

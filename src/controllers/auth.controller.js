@@ -30,7 +30,7 @@ exports.loginController = async (req, res) => {
     );
     res
       .cookie("access_token", token, {
-        httpOnly: true, // la cookie solo se puede acceder en el sv, no se podrá leer desde JS, una capa más de seguridad
+        httpOnly: true, // Guardar token en cookies: la cookie solo se puede acceder en el sv, no se podrá leer desde JS, una capa más de seguridad
       })
       .json({
         success: true,

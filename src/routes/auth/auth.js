@@ -5,11 +5,11 @@ const { verifyToken } = require('../../middlewares/auth.middleware');
 
 
 //Nota: middleware verifyToken se ejecuta antes del controlador para Verificar si existe un token válido en las cookies
-router.get("/",verifyToken, authController.render);
+router.get("/",authController.render);
 router.post("/login", authController.loginController);
 router.post("/register", authController.registerController);
 router.post("/logout", authController.logoutController);
-router.get("/protected",verifyToken, authController.protected);
+router.get("/protected",authController.protected);
 
 module.exports = router;
 

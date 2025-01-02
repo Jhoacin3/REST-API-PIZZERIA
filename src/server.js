@@ -1,32 +1,56 @@
 const express = require('express');
 require('dotenv').config();
-const app = express();
 const path = require('path');
-const rolRouter = require("./routes/rol.router.js")
-const menuRouter = require("./routes/menuRouter.js")
-const categoryRouter = require("./routes/categoryRouter.js")
-const configStoreRouter = require("./routes/configStoreRouter.js")
-const employeesRouter = require("./routes/employeesRouter.js")
-const authRouter = require("./routes/auth/auth.js")
 const cookieParser = require('cookie-parser');
+const { verifyToken } = require('./middlewares/auth.middleware');
+
+// Importar rutas
+const rolRouter = require("./routes/rol.router.js");
+const menuRouter = require("./routes/menuRouter.js");
+const categoryRouter = require("./routes/categoryRouter.js");
+const configStoreRouter = require("./routes/configStoreRouter.js");
+const employeesRouter = require("./routes/employeesRouter.js");
+const authRouter = require("./routes/auth/auth.js");
+
+const app = express();
 const port = process.env.PORT || 3000;
 
+// Middleware general
 app.use(express.json());
-app.use(cookieParser()) //nos ayudará a modificar las cookies, ojo!
+app.use(cookieParser());
 
-// Middleware para servir archivos estáticos
+// Archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.set('view engine', 'ejs')
 
-//registro de rutas
-app.use('/apiPizza', rolRouter);
-app.use('/apiPizza', menuRouter);
-app.use('/apiPizza', categoryRouter);
-app.use('/apiPizza', configStoreRouter);
-app.use('/apiPizza', employeesRouter);
-app.use('/apiPizza', authRouter);
+// Motor de plantillas
+app.set('view engine', 'ejs');
 
-//Servidor escuchando...
-app.listen(port, () =>{
+// **Middleware Global**: Protección de rutas privadas
+app.use((req, res, next) => {
+    const publicRoutes = [
+        '/apiPizza/auth/login',
+        '/apiPizza/auth/register',
+        '/apiPizza/auth/logout',
+    ];
+
+    // Si la ruta es pública, permitir acceso sin token
+    if (publicRoutes.includes(req.path)) {
+        return next();
+    }
+
+    // Verificar token para todas las demás rutas
+    verifyToken(req, res, next);
+});
+
+// Registro de rutas
+app.use('/apiPizza/roles', rolRouter);
+app.use('/apiPizza/menu', menuRouter);
+app.use('/apiPizza/categories', categoryRouter);
+app.use('/apiPizza/config-store', configStoreRouter);
+app.use('/apiPizza/employees', employeesRouter);
+app.use('/apiPizza/auth', authRouter);
+
+// Servidor escuchando...
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
