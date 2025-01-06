@@ -11,6 +11,7 @@ const categoryRouter = require("./routes/categoryRouter.js");
 const configStoreRouter = require("./routes/configStoreRouter.js");
 const employeesRouter = require("./routes/employeesRouter.js");
 const authRouter = require("./routes/auth/auth.js");
+const orderPaymentRouter = require("./routes/orderPaymentRouter.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -49,6 +50,7 @@ app.use('/apiPizza/categories', categoryRouter);
 app.use('/apiPizza/config-store', configStoreRouter);
 app.use('/apiPizza/employees', employeesRouter);
 app.use('/apiPizza/auth', authRouter);
+app.use('/apiPizza/orderPayment', orderPaymentRouter);
 
 // Servidor escuchando...
 app.listen(port, () => {

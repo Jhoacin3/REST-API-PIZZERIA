@@ -1,6 +1,4 @@
-const connection = require("../db.js");
 const { validateParamsId, validateParamsAddMenu, verifiedIfExist } = require("../utils/utils.js");
-const {messages} = require("../utils/messages.js")
 const {getDataMenu, findCategoryById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById, findExistOrderDetail} = require("../utils/queries.js")
 
 /**
@@ -122,7 +120,6 @@ const deleteMenuService = async (id) => {
 
   return {
     id: id,
-    success: messages.success.delete
   };
 }
 

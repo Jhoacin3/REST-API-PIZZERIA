@@ -215,3 +215,19 @@ exports.deleteEmployee = async (id) =>{
 
   return deletedEmployee
 }
+exports.getTableNumbersUtils = async() =>{
+  // const number = parseInt(numerTable)
+  const [data] = await connection.query(
+    "SELECT number_of_tables FROM store_info WHERE enable = ?",
+    [1]
+  )
+  return data
+}
+exports.findItemsMenu = async (item) => {
+  const [data] = await connection.query(
+    "SELECT name FROM menu WHERE LOWER(name) LIKE ?",
+    [`%${item}%`]
+  );
+  console.log(data)
+  return data
+};
