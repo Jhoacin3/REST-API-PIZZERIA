@@ -190,3 +190,18 @@ exports.validateEmailExists = async (email, employees) => {
   
   return emailFind[0];//como retorna un array de objetos, en este caso retornará un objeto, pues retornamos en la primera pocisión (primero objeto) = [posición: 0]
 };
+
+//*****************Utilerias orderPayment*****************
+
+
+exports.validateParamsOrder = async (
+  employees_id, menu_id, id_table,date, total, state
+) => {
+  if (!employees_id) throw new Error("Es necesario un empleado atendiendo");
+  if (!menu_id) throw new Error("Es necesario un insumo para una orden");
+  if (!id_table) throw new Error("Es necesario el número de mesa");
+  if (!date && !total && !state)
+    throw new Error("Es necesario todos los parametros para la orden.");
+};
+
+

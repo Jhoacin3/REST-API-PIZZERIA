@@ -172,10 +172,9 @@ exports.getEmployees = async () =>{
 
 exports.getEmployeeId = async (id) =>{
 
-  const [getEmployee] = await connection.query("SELECT * FROM employees WHERE id_employees =?", [id]);
+  const [getEmployee] = await connection.query("SELECT id_employees FROM employees WHERE id_employees =?", [id]);
 
-  if (getEmployee.length == 0)throw new Error("No existe el usuario");
-  
+  if (getEmployee.length == 0)throw new Error("No existe el empleado");
   return getEmployee;
 }
 
@@ -215,6 +214,10 @@ exports.deleteEmployee = async (id) =>{
 
   return deletedEmployee
 }
+
+
+//*************QUERIES PARA orderPayment*************
+
 exports.getTableNumbersUtils = async() =>{
   // const number = parseInt(numerTable)
   const [data] = await connection.query(
@@ -230,4 +233,9 @@ exports.findItemsMenu = async (item) => {
   );
   console.log(data)
   return data
+};
+exports.getMenuId = async (id) => {
+  const [data] = await connection.query("SELECT id_menu FROM menu WHERE id_menu = ?", [id]);
+  if (data.length === 0)throw new Error("No se encontró el insumo seleccionado");
+  return data;
 };

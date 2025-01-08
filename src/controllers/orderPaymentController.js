@@ -37,3 +37,18 @@ exports.getItemsMenu = async(req, res) =>{
         
     }
 }
+
+exports.orderPayment = async (req, res) => {
+  const {employees_id, menu_id, id_table,date, total, state } =
+    req.body;
+  try {
+    const data = await orderPaymentService.orderPaymentSer(
+      employees_id, menu_id, id_table,date, total, state
+    );
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};

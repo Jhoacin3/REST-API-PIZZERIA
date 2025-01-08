@@ -1,5 +1,5 @@
-const { validateParamsId, validateParamsAddMenu, verifiedIfExist } = require("../utils/utils.js");
-const {getTableNumbersUtils, findItemsMenu} = require("../utils/queries.js")
+const { validateParamsId, validateParamsAddMenu, verifiedIfExist, validateParamsOrder} = require("../utils/utils.js");
+const {getTableNumbersUtils, findItemsMenu, getEmployeeId, getMenuId} = require("../utils/queries.js")
 
 exports.getTableNumberSer = async () => {
   const checkActiveTable = await getTableNumbersUtils();
@@ -21,4 +21,18 @@ exports.getItemsMenuSer = async (item) => {
   return {
     namesMenu,
   };
+};
+
+exports.orderPaymentSer = async (
+  employees_id, menu_id, id_table,date, total, state
+) => {
+  await validateParamsOrder(employees_id, menu_id, id_table,date, total, state);
+  //Buscando la existencia del usuario
+  await getEmployeeId(employees_id);
+  //Buscando la existencia del insumo seleccionado
+  await getMenuId(menu_id)
+  return employees_id
+
+
+  
 };

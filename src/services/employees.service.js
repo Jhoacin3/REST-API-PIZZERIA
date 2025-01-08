@@ -44,8 +44,8 @@ exports.createEmployeeServ = async (full_name, email, password) => {
   return {
     id: createdEmployee.insertId,
     full_name,
-    email,
-    password: hasedPassword
+    //email,
+    //password: hasedPassword
   };
 };
 
