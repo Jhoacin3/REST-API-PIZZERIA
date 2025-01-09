@@ -138,6 +138,17 @@ exports.getConfigId = async (id) => {
   }
   return getConfigId;
 };
+exports.getActiveConfig = async () => {
+  let active = 1
+  const [getConfigId] = await connection.query(
+    "SELECT * FROM store_info WHERE enable = ?",
+    [active]
+  );
+  if (!getConfigId.length) {
+    throw new Error("No hay una configuración activa del negocio");
+  }
+  return getConfigId;
+};
 
 
 exports.createConfig = async (name, photo_url, number_of_tables, enable) => {
@@ -150,6 +161,20 @@ exports.createConfig = async (name, photo_url, number_of_tables, enable) => {
   }
   return createConfig;
 };
+
+//Se crean una longitud automatica segpun la cantidad de mesas establecidas por el negocio
+exports.createTablesLength = async(number_of_tables,store_id) =>{
+  let status = "Disponible"
+  const lengthTables = [];
+  for (let i = 1; i <= number_of_tables; i++) {
+    lengthTables.push([store_id, i, status])
+  }
+  const [data] = await connection.query(
+    "INSERT INTO tables (store_id, table_number, status) VALUES ?",
+    [lengthTables]
+  );
+  return data
+}
 
 exports.upateConfig = async (id,name, photo_url, number_of_tables, enable) => {
   const [upateConfig] = await connection.query(
@@ -237,5 +262,14 @@ exports.findItemsMenu = async (item) => {
 exports.getMenuId = async (id) => {
   const [data] = await connection.query("SELECT id_menu FROM menu WHERE id_menu = ?", [id]);
   if (data.length === 0)throw new Error("No se encontró el insumo seleccionado");
+  return data;
+};
+
+exports.getTableId = async (id, store_id) => {
+  const [data] = await connection.query(
+    "SELECT id_tables,table_number,status  FROM tables WHERE (table_number = ?) AND (store_id = ?)",
+    [id, store_id]
+  );
+  if(!data.length) throw new Error("No se encontró la mesa seleccionada")
   return data;
 };

@@ -1,5 +1,5 @@
 const {validateParamsId, validateParamConfig, photoPathUtil} = require("../utils/utils.js")
-const {getConfig,getConfigId, createConfig, upateConfig} = require("../utils/queries.js");
+const {getConfig,getConfigId, createConfig, upateConfig, createTablesLength, getActiveConfig} = require("../utils/queries.js");
 const e = require("express");
 const baseUrl = "http://localhost:3000";
 const path = require('path');
@@ -53,20 +53,35 @@ exports.getConfigActiveService = async () => {
   }
 };
 
-exports.createConfigService = async (name, photo_url, number_of_tables, enable) => {
+exports.createConfigService = async (
+  name,
+  photo_url,
+  number_of_tables,
+  enable
+) => {
   await validateParamConfig(name, photo_url, number_of_tables, enable);
   const photoPath = await photoPathUtil(photo_url);
   let categories = await getConfig();
-  const verifieEnable = categories.some(e => e.enable === 1);
+  const verifieEnable = categories.some((e) => e.enable === 1);
   if (verifieEnable && Number(enable) === 1) {
     throw new Error("Ya existe una configuración activa para el negocio");
   }
-  const configCreated = await createConfig(name, photoPath, number_of_tables, enable);
+
+  const configCreated = await createConfig(
+    name,
+    photoPath,
+    number_of_tables,
+    enable
+  );
+  const result = await createTablesLength(
+    number_of_tables,
+    configCreated.insertId
+  );
+  if (!result.length) throw new Error("No se creó las mesas del negocio.");
 
   return {
     id: configCreated.insertId,
     photo_url: `${baseUrl}/uploads/${photoPath}`,
-
   };
 };
 

@@ -143,8 +143,8 @@ exports.validateParamConfig = async (name, photo_url, number_of_tables, enable) 
   // if (!Number.isInteger(number_of_tables) || number_of_tables <= 0) {
   //   throw new Error("Por lo menos deben de haber 1 mesa");
   // }
-  if (typeof name !== 'string' || name.length <= 4 || name.length >= 12) {
-    throw new Error("El nombre debe ser ser de tipo cadena y debe ser mayor a 5 y menor a 11 caracteres");
+  if (typeof name !== 'string' || name.length <= 4 || name.length >= 15) {
+    throw new Error("El nombre debe ser ser de tipo cadena y debe ser mayor a 5 y menor a 15 caracteres");
   }
   
 }
