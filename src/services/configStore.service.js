@@ -76,9 +76,9 @@ exports.createConfigService = async (
   const result = await createTablesLength(
     number_of_tables,
     configCreated.insertId
-  );
-  if (!result.length) throw new Error("No se creó las mesas del negocio.");
-
+  ); 
+  if (result.length == 0) throw new Error("No se creó las mesas del negocio.");
+//AQUI HAY ERROR... NO SE PUEDE CREAR UNA ORDEN
   return {
     id: configCreated.insertId,
     photo_url: `${baseUrl}/uploads/${photoPath}`,

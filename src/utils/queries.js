@@ -253,10 +253,9 @@ exports.getTableNumbersUtils = async() =>{
 }
 exports.findItemsMenu = async (item) => {
   const [data] = await connection.query(
-    "SELECT name FROM menu WHERE LOWER(name) LIKE ?",
+    "SELECT id_menu,name,price FROM menu WHERE LOWER(name) LIKE ?",
     [`%${item}%`]
   );
-  console.log(data)
   return data
 };
 exports.getMenuId = async (id) => {
@@ -265,11 +264,67 @@ exports.getMenuId = async (id) => {
   return data;
 };
 
-exports.getTableId = async (id, store_id) => {
+exports.getTableAndStatus = async(id_table) =>{
+  const [data] = await connection.query("SELECT id_tables, status FROM tables WHERE id_tables = ?", [id_table])
+  return data;
+}
+
+exports.getTableId = async (id_tables, store_id) => {
   const [data] = await connection.query(
     "SELECT id_tables,table_number,status  FROM tables WHERE (table_number = ?) AND (store_id = ?)",
-    [id, store_id]
+    [id_tables, store_id]
   );
-  if(!data.length) throw new Error("No se encontró la mesa seleccionada")
   return data;
 };
+
+exports.verifiedOrderAndTables = async (id_order, store_id,id_tables) => {
+  const statusOld = "Ocupado";
+  const [data] = await connection.query(
+    "SELECT id_tables,table_number,status  FROM tables WHERE (table_number = ?) AND (store_id = ?) AND (status = ?)",
+    [id_tables, store_id, statusOld]
+  );
+  return data;
+};
+exports.createOrder = async(
+  employees_id,
+  id_table,
+  currentDate,
+  total,
+  state) =>{
+    const [data] = await connection.query("INSERT INTO orders (employees_id, id_tables, date, total, state) VALUES (?,?,?,?,?)", 
+      [
+      employees_id,
+      id_table,
+      currentDate,
+      total,
+      state
+    ]);
+    return data
+
+  }
+  exports.tableStatusEdition = async (status, id_tables) => {
+    let statusNew = status;
+    const [data] = await connection.query(
+      "UPDATE tables SET status =? WHERE id_tables =?",
+      [statusNew, id_tables]
+    );
+    return data
+  };
+  exports.menuStateEdition = async (id_order) => {
+    let stateNew = "Servido";
+    const [data] = await connection.query(
+      "UPDATE orders SET state =? WHERE id_orders =?",
+      [stateNew,id_order]
+    );
+    return data
+  };
+  
+
+  exports.getOrderId = async(id) =>{
+    const [data] = await connection.query("SELECT id_orders FROM orders WHERE id_orders = ?", [id])
+    return data
+  }
+  exports.getOrderDetails = async(id) =>{
+    const [data] = await connection.query("SELECT id_orders, id_tables, state FROM orders WHERE (id_orders = ?) AND (state = ?)", [id, "En preparación"])
+    return data
+  }

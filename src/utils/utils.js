@@ -107,9 +107,10 @@ exports.validateParamsAddMenu = async (name, description, price, id_category) =>
 }
 
 exports.verifiedIfExist = async (arrayObject, id) =>{
-  const isRepeat = arrayObject.some(
+  const isRepeat = await arrayObject.some(
     (item) => Number(item.id_menu) === Number(id) 
   );
+  console.log(isRepeat)
   return isRepeat;
 
 }
@@ -195,13 +196,33 @@ exports.validateEmailExists = async (email, employees) => {
 
 
 exports.validateParamsOrder = async (
-  employees_id, menu_id, id_table,date, total, state
+  employees_id, id_table, state
 ) => {
   if (!employees_id) throw new Error("Es necesario un empleado atendiendo");
-  if (!menu_id) throw new Error("Es necesario un insumo para una orden");
   if (!id_table) throw new Error("Es necesario el número de mesa");
-  if (!date && !total && !state)
-    throw new Error("Es necesario todos los parametros para la orden.");
+  if (!state)
+    throw new Error("Es necesario el estatus para la orden.");
 };
 
 
+exports.validateParamsOrderDetail = async (menuDetails) => {
+  for (let i = 0; i < menuDetails.length; i++) {
+    if (menuDetails[i].amount == null) {
+      throw new Error("Es necesario la cantidad de productos");
+    }
+    if (menuDetails[i].unit_price == null || menuDetails[i].unit_price <= 0) {
+      throw new Error("Es necesario el precio unitario de los productos");
+    }
+    if (menuDetails[i].id_menu == null) {
+      throw new Error("Es necesario el id del producto");
+    }
+  }
+};
+
+exports.calculateOrderTotal = async (menuDetails) => {
+  let total = 0;
+  for (let i = 0; i < menuDetails.length; i++) {
+    total += menuDetails[i].amount * menuDetails[i].unit_price;
+  }
+  return total;
+}
