@@ -176,6 +176,24 @@ exports.createTablesLength = async(number_of_tables,store_id) =>{
   return data
 }
 
+exports.createOrderDetails = async (
+  id_order,
+  id_menu,
+  amount,
+  unit_price,
+  description
+) => {
+ 
+  const [data] = await connection.query(
+    "INSERT INTO order_details (id_order, id_menu, amount, unit_price, description) VALUES (?, ?, ?, ?, ?)",
+    [id_order, id_menu, amount, unit_price, description]
+  );
+  if (data.length === 0) {
+    throw new Error("No se pudo guardar el detalle de la orden");
+  }
+  return data;
+};
+
 exports.upateConfig = async (id,name, photo_url, number_of_tables, enable) => {
   const [upateConfig] = await connection.query(
     "UPDATE store_info SET name = ?, photo_url = ?, number_of_tables = ?, enable = ? WHERE id_store_info = ?",

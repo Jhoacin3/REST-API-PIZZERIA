@@ -1,5 +1,5 @@
 const { validateParamsId, validateParamsAddMenu, verifiedIfExist, validateParamsOrder, validateParamsOrderDetail, calculateOrderTotal} = require("../utils/utils.js");
-const {getTableNumbersUtils, findItemsMenu, getEmployeeId, getMenuId, getConfigId, getTableId, getActiveConfig, createOrder, tableStatusEdition, getOrderId, verifiedOrderAndTables, getOrderDetails,menuStateEdition,getTableAndStatus} = require("../utils/queries.js")
+const {getTableNumbersUtils, findItemsMenu, getEmployeeId, getMenuId, getConfigId, getTableId, getActiveConfig, createOrder, tableStatusEdition, getOrderId, verifiedOrderAndTables, getOrderDetails,menuStateEdition,getTableAndStatus, createOrderDetails} = require("../utils/queries.js")
 
 exports.getTableNumberSer = async () => {
   const checkActiveTable = await getTableNumbersUtils();
@@ -25,7 +25,7 @@ exports.getItemsMenuSer = async (item) => {
   return itemsMenu;
 };
 
-exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {
+exports. orderPaymentSer = async (employees_id, id_table, menuDetails) => {
   const newState = "En preparación";
 
   await validateParamsOrder(employees_id, id_table, newState);
@@ -72,21 +72,30 @@ exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {
   return { insertId, total, menuDetails };
 };
 
-exports.orderDetailServ = async(id_order,menuDetails) =>{
-    if (!Array.isArray(menuDetails) || menuDetails.length === 0)throw new Error("No se proporcionaron productos para la orden");
+exports.orderDetailServ = async (id_order, menuDetails) => {
+  if (!Array.isArray(menuDetails) || menuDetails.length === 0)
+    throw new Error("No se proporcionaron productos para la orden");
 
-   const ordersId = await getOrderId(id_order);
-    if(ordersId.length == 0) throw new Error("No se encontró la orden asociada")
+  const ordersId = await getOrderId(id_order);
+  if (ordersId.length == 0) throw new Error("No se encontró la orden asociada");
 
+  const newOrderDetail = menuDetails.map((item) => {
+    delete item.name;
+    return item;
+  });
 
-  
-    for (const item of menuDetails) {
-    const { id_order,id_menu,amoun,unit_price,description } = item;
-    //await validateParamsOrderDetail(id_order, id_menu, amount, unit_price, description);
-    //await orderDetailServ(id_order, id_menu, amount, unit_price, description);
+  for (const element of newOrderDetail) {
+    const { id_menu, amount, unit_price, description } = element;
+    await createOrderDetails(
+      id_order,
+      id_menu,
+      amount,
+      unit_price,
+      description
+    );
   }
   return { id_order, menuDetails };
-}
+};
 
 exports.calculateOrderTotal = async (menuDetails) => {
   let total = 0;
@@ -98,21 +107,24 @@ exports.calculateOrderTotal = async (menuDetails) => {
   }
   return total;
 }
+
+
 exports.deleteItemMenu = async (id_menu, menuDetails) => {
-  if (!id_menu)
-    throw new Error("Se necesita un parametro valido");
+  if (!id_menu) throw new Error("Se necesita un parametro valido");
 
   await getMenuId(id_menu);
   if (!Array.isArray(menuDetails) || menuDetails.length === 0)
     throw new Error("No se proporcionaron productos para la orden");
-  let filterItemId = await verifiedIfExist(menuDetails,id_menu);
-  if(filterItemId !== true) throw new Error("No se encontró el producto en la orden");
+  let filterItemId = await verifiedIfExist(menuDetails, id_menu);
+  if (filterItemId !== true)
+    throw new Error("No se encontró el producto en la orden");
 
-  const resultnewItems =  menuDetails.filter(items => items.id_menu !== id_menu)
-
+  const resultnewItems = menuDetails.filter(
+    (items) => items.id_menu !== id_menu
+  );
 
   return { resultnewItems };
-}
+};
 
 exports.changeStateOrder = async (id_order) => {
   if (!id_order)

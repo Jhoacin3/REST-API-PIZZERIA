@@ -78,7 +78,6 @@ exports.createConfigService = async (
     configCreated.insertId
   ); 
   if (result.length == 0) throw new Error("No se creó las mesas del negocio.");
-//AQUI HAY ERROR... NO SE PUEDE CREAR UNA ORDEN
   return {
     id: configCreated.insertId,
     photo_url: `${baseUrl}/uploads/${photoPath}`,

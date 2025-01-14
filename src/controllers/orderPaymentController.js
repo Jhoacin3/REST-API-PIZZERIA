@@ -49,11 +49,12 @@ exports.orderPayment = async (req, res) => {
       employees_id, id_table, menuDetails
     );
     const {insertId} = data;
-    const ss = await orderPaymentService.orderDetailServ(insertId, menuDetails);
+    const resultOrderDetail = await orderPaymentService.orderDetailServ(insertId, menuDetails);
 
     res.json({
       success: true,
       data:data,
+      resultOrderDetail:resultOrderDetail,
       messages: messages.success.orderCreated
     })
   } catch (error) {
