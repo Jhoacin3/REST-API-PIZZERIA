@@ -110,12 +110,10 @@ exports.verifiedIfExist = async (arrayObject, id) =>{
   const isRepeat = await arrayObject.some(
     (item) => Number(item.id_menu) === Number(id) 
   );
-  console.log(isRepeat)
   return isRepeat;
 
 }
 
-//**************************************************
 
 exports.validateParamCategory = async (type, namesCategory) =>{
   if (!type) {

@@ -54,7 +54,6 @@ exports.orderPayment = async (req, res) => {
     res.json({
       success: true,
       data:data,
-      resultOrderDetail:resultOrderDetail,
       messages: messages.success.orderCreated
     })
   } catch (error) {
