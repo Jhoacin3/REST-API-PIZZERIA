@@ -1,7 +1,62 @@
 
-<section class="content">
+<!-- <section class="content">
   <app-login></app-login>
-</section>
+</section> -->
+
+<div class="container">
+  <h1>{{ title }}</h1>
+
+  <!--Alerta exitosa-->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <!--Alerta erronea-->
+  <div *ngIf="errorMessage"class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <table *ngIf="menuItems.length >= 1" class="table table-striped">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>categoria</th>
+        <th>tipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of menuItems; let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+        <td>{{item.price}}</td>
+        <td>{{item.id_category}}</td>
+        <td>{{item.type}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+  <!-- Mensaje si no hay datos -->
+  <div *ngIf="menuItems.length === 0 && !errorMessage" class="alert alert-info">
+    No hay elementos en el menú para mostrar.
+  </div>
+
+
+  <!--
+  <div class="menu-item" *ngFor="let item of menuItems">
+    <h2>Nombre del producto:</h2>
+    <h4>{{ item.name }}</h4>
+    <h2>Descripción:</h2>
+    <p>{{ item.description }}</p>
+    <p><strong>Precio:</strong> {{ item.price }}</p>
+    <p><strong>Categoría:</strong> {{ item.type }}</p>
+  </div>
+  -->
+
 
 
 <router-outlet />
