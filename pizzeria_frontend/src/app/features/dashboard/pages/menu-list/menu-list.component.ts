@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItemModel } from '../../models/menu-item.model';
-import { MenuService } from '../../services/menu.service';
+import { MenuItemModel } from '../../../../core/models/menu-item.model';
+import { MenuService } from '../../../../core/services/menu.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
