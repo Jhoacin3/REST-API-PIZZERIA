@@ -1,0 +1,8 @@
+.welcome-img {
+    display: block;
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+    max-width: 100%; /* Asegura que la imagen no exceda el ancho del contenedor */
+    max-height: 90vh; /* Asegura que la imagen no sea demasiado alta */
+    height: auto; /* Mantiene la proporción de la imagen */
+    border-radius: 10px; /* Bordes redondeados opcionales */
+  }
