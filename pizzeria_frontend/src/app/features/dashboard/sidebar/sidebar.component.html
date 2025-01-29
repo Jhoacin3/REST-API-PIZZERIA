@@ -5,26 +5,55 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Inicio</a>
-      <a mat-list-item href="#">Empleados</a>
-      <a mat-list-item href="#">Menu</a>
-      <a mat-list-item href="#">Mesas</a>
-      <a mat-list-item href="#">Configuracion</a>
+      <a mat-list-item routerLink="/home" routerLinkActive="router-link-active">
+        <mat-icon aria-label="Side nav toggle icon" class="mat-icon-align">home</mat-icon>
+        <span class="mat-text-align">Inicio</span>
+      </a>
+      <a mat-list-item href="#">
+        <mat-icon aria-label="Side nav toggle icon" class="mat-icon-align">people</mat-icon>
+        <span class="mat-text-align">Empleados</span>
+      </a>
+      <a mat-list-item [routerLink]="['/menu']" routerLinkActive="router-link-active" >
+        <mat-icon aria-label="Side nav toggle icon" class="mat-icon-align">restaurant</mat-icon>
+        <span class="mat-text-align">Menu</span>
+      </a>
+      <a mat-list-item href="#">
+        <mat-icon aria-label="Side nav toggle icon" class="mat-icon-align">book</mat-icon>
+        <span class="mat-text-align">Categorias</span>
+      </a>
+      <a mat-list-item href="#">
+        <mat-icon aria-label="Side nav toggle icon" class="mat-icon-align">event_seat</mat-icon>
+        <span class="mat-text-align">Mesas</span>
+      </a>
+      <br>
+      <a mat-list-item href="#">
+        <mat-icon aria-label="Side nav toggle icon" class="mat-icon-align">settings</mat-icon>
+        <span class="mat-text-align">Configuracion</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="accent">
-
-      @if (isHandset$ | async) {
-        <button
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-icon-button
-          (click)="drawer.toggle()">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
-      }
-      <span>pizzeria_frontend</span>
+      <div class="toolbar-content">
+        <div class="left-content">
+          <button
+            type="button"
+            aria-label="Toggle sidenav"
+            mat-icon-button
+            (click)="drawer.toggle()">
+            <mat-icon aria-label="Side nav toggle icon">restaurant_menu</mat-icon>
+          </button>
+          <span>Bienvenido</span>
+        </div>
+        <div class="right-content">
+          <button
+            type="button"
+            aria-label="Exit app"
+            mat-icon-button>
+            <mat-icon aria-label="Side nav toggle icon">exit_to_app</mat-icon>
+          </button>
+        </div>
+      </div>
     </mat-toolbar>
     <!-- Add Content Here -->
   </mat-sidenav-content>

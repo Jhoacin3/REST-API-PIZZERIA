@@ -1,7 +1,9 @@
 .sidenav-container {
   height: 100%;
 }
-
+.mat-sidenav-content {
+  background-color: white;
+}
 .sidenav {
   width: 200px;
 }
@@ -14,4 +16,27 @@
   position: sticky;
   top: 0;
   z-index: 1;
+}
+.mat-icon-align {
+  vertical-align: middle;
+  margin-right: 20px; /* Espacio entre el icono y el texto */
+}
+
+.mat-text-align {
+  vertical-align: middle;
+}
+.toolbar-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.left-content {
+  display: flex;
+  align-items: center;
+}
+
+.right-content {
+  display: flex;
+  align-items: center;
 }
