@@ -1,0 +1,87 @@
+h3 {
+    margin: 0;
+  }
+  .error {
+    color: red;
+  }
+  /* Estilo para el contenedor principal */
+
+
+/* Estilo para el título */
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Estilo para las alertas */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alert-success {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #d6e9c6;
+}
+
+.alert-danger {
+  background-color: #f2dede;
+  color: #a94442;
+  border: 1px solid #ebccd1;
+}
+
+.add-button {
+  margin-left: 10px;
+}
+
+.alert-info {
+  background-color: #d9edf7;
+  color: #31708f;
+  border: 1px solid #bce8f1;
+}
+
+/* Estilo para la tabla */
+.table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table th {
+  background-color: #4bd147;
+  color: #333;
+}
+  /* Estilos del boton delete de la tabla*/
+  .example-flex-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .example-button-container {
+    margin-right: 2px;
+  }
+  button.mat-mini-fab {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 15px; 
+  }
+  

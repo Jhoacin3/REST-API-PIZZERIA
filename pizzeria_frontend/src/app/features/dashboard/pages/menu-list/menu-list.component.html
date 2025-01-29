@@ -1,10 +1,55 @@
-<div class="menu-container">
-    <h1>Menú</h1>
-    <div class="menu-item" *ngFor="let item of menuItems">
-      <h2>{{ item.name }}</h2>
-      <p>{{ item.description }}</p>
-      <p><strong>Precio:</strong> {{ item.price| currency }}</p>
-      <p><strong>Tipo:</strong> {{ item.type| currency }}</p>
-    </div>
-  </div>
+<div class="container">
+  <h1>Menú</h1>
+
+  
+  <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
+    <button type="button" class="btn btn-success">
+      <i class="bi bi-plus">Agregar</i>
+    </button>
+  <span *ngIf="successMessage">{{ successMessage }}</span>
+  <span *ngIf="errorMessage">{{ errorMessage }}</span>
+</div>
+  <table *ngIf="menuItems.length >= 1" class="table table-striped">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>categoria</th>
+        <th>tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of menuItems;">
+        <td>{{item.id_menu}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+        <td>{{item.price}}</td>
+        <td>{{item.id_category}}</td>
+        <td>{{item.type}}</td>
+        <section>
+          <div class="example-button-row">
+            <div class="example-flex-container">
+              <div class="example-button-container">
+                <td>
+                  <button type="button" class="btn btn-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                  <span> | </span>
+                  <button type="button" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  
+                </td>
+              </div>
+            </div>
+          </div>
+        </section>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
   <router-outlet />
