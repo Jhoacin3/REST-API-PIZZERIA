@@ -8,7 +8,7 @@ exports.getTableNumbers = async(req, res) =>{
         const data = await orderPaymentService.getTableNumberSer();
         res.json({
             success: true,
-            data,
+            data:data,
             messages: messages.success.get
         })
     } catch (error) {

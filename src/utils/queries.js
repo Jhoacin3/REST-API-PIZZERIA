@@ -264,7 +264,7 @@ exports.deleteEmployee = async (id) =>{
 exports.getTableNumbersUtils = async() =>{
   // const number = parseInt(numerTable)
   const [data] = await connection.query(
-    "SELECT number_of_tables FROM store_info WHERE enable = ?",
+    "SELECT id_store_info , number_of_tables FROM store_info WHERE enable = ?",
     [1]
   )
   return data
