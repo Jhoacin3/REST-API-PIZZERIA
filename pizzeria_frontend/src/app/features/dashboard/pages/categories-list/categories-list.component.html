@@ -1,1 +1,52 @@
-<p>categories-list works!</p>
+<div class="container">
+    <h1>Categorias</h1>
+    <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
+        <button type="button" class="btn btn-success">
+          <i class="bi bi-plus">Agregar</i>
+        </button>
+      <span *ngIf="successMessage">{{ successMessage }}</span>
+      <span *ngIf="errorMessage">{{ errorMessage }}</span>
+    </div>
+
+    <table *ngIf="categoriesItems.length >= 1" class="table table-striped">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>tipo</th>
+            <th>Acciones</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of categoriesItems;">
+            
+            <td>{{item.id_category}}</td>
+            <td>{{item.type}}</td>
+
+            <section>
+              <div class="example-button-row">
+                <div class="example-flex-container">
+                  <div class="example-button-container">
+                    <td>
+                      <button type="button" class="btn btn-danger">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                      <span> | </span>
+                      <button type="button" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      
+                    </td>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+
+<router-outlet />
+

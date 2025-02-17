@@ -1,0 +1,15 @@
+<h1>Mesas</h1>
+<div class="row row-cols-1 row-cols-md-5 g-4">
+  <div class="col" *ngFor="let table of number_of_tables">
+    <div class="card h-60">
+        <!-- //hacer un ngIf si la mesa viene disponible, mostrar succes sino, mostrar warning color -->
+        <p><a class="text-bg-success p-3 d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2">Disponible</a></p>
+
+      <img src="assets/mesas-dos.jpg" class="card-img-top">
+      <div class="card-body">
+        <h4>Mesa número: {{ table }}</h4>
+        <a href="#" class="btn btn-warning  ">Ocupar mesa</a>
+      </div>
+    </div>
+  </div>
+</div>

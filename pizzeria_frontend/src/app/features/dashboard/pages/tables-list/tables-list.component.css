@@ -5,17 +5,17 @@ h3 {
     color: red;
   }
   /* Estilo para el contenedor principal */
-  
-  
-  /* Estilo para el título */
-  h1 {
+
+
+/* Estilo para el título */
+h1 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  }
-  
-  /* Estilo para las alertas */
-  .alert {
+}
+
+/* Estilo para las alertas */
+.alert {
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 4px;
@@ -23,51 +23,51 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  }
-  
-  .alert-success {
+}
+
+.alert-success {
   background-color: #dff0d8;
   color: #3c763d;
   border: 1px solid #d6e9c6;
-  }
-  
-  .alert-danger {
+}
+
+.alert-danger {
   background-color: #f2dede;
   color: #a94442;
   border: 1px solid #ebccd1;
-  }
-  
-  .add-button {
+}
+
+.add-button {
   margin-left: 10px;
-  }
-  
-  .alert-info {
+}
+
+.alert-info {
   background-color: #d9edf7;
   color: #31708f;
   border: 1px solid #bce8f1;
-  }
-  
-  /* Estilo para la tabla */
-  .table {
+}
+
+/* Estilo para la tabla */
+.table {
   width: 100%;
   margin-bottom: 20px;
   border-collapse: collapse;
-  }
-  
-  .table th, .table td {
+}
+
+.table th, .table td {
   padding: 12px;
   text-align: left;
   border: 1px solid #ddd;
-  }
-  
-  .table-striped tbody tr:nth-of-type(odd) {
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
   background-color: #f9f9f9;
-  }
-  
-  .table th {
+}
+
+.table th {
   background-color: #4bd147;
   color: #333;
-  }
+}
   /* Estilos del boton delete de la tabla*/
   .example-flex-container {
     display: flex;
