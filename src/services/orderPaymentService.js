@@ -26,7 +26,6 @@ const {
 } = require("../utils/queries.js");
 
 exports.getTableNumberSer = async () => {
-  let result = [];
   const checkActiveTable = await getTableNumbersUtils();
   if (!checkActiveTable.length)
     throw new Error("No hay una configuración activa en tu negocio");
@@ -35,16 +34,12 @@ exports.getTableNumberSer = async () => {
 
   if (!getTables.length) throw new Error("Lo siento, no se encontró la mesa ");
 
-  for (const tables of getTables) {
-    const {id_tables, table_number, status} = tables;
-    let data = {
-      id_tables,
-      table_number,
-      status
-    }
-    result.push(data);
+  const result = getTables.map(({ id_tables, table_number, status }) => ({
+    id_tables,
+    table_number,
+    status
+  }));
 
-  }
   return result;
 };
 
