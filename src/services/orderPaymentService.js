@@ -1,14 +1,51 @@
-const { validateParamsId, validateParamsAddMenu, verifiedIfExist, validateParamsOrder, validateParamsOrderDetail, calculateOrderTotal} = require("../utils/utils.js");
-const {getTableNumbersUtils, findItemsMenu, getEmployeeId, getMenuId, getConfigId, getTableId, getActiveConfig, createOrder, tableStatusEdition, getOrderId, verifiedOrderAndTables, getOrderDetails,menuStateEdition,getTableAndStatus, createOrderDetails} = require("../utils/queries.js")
+const {
+  validateParamsId,
+  validateParamsAddMenu,
+  verifiedIfExist,
+  validateParamsOrder,
+  validateParamsOrderDetail,
+  calculateOrderTotal,
+} = require("../utils/utils.js");
+const {
+  getTableNumbersUtils,
+  findItemsMenu,
+  getEmployeeId,
+  getMenuId,
+  getConfigId,
+  getTableId,
+  getActiveConfig,
+  createOrder,
+  tableStatusEdition,
+  getOrderId,
+  verifiedOrderAndTables,
+  getOrderDetails,
+  menuStateEdition,
+  getTableAndStatus,
+  createOrderDetails,
+  statusTable
+} = require("../utils/queries.js");
 
 exports.getTableNumberSer = async () => {
+  let result = [];
   const checkActiveTable = await getTableNumbersUtils();
   if (!checkActiveTable.length)
     throw new Error("No hay una configuración activa en tu negocio");
-  const { number_of_tables } = checkActiveTable[0];
-  return {
-    number_of_tables,
-  };
+  const { id_store_info } = checkActiveTable[0];
+  const getTables = await statusTable(id_store_info);
+
+  if (!getTables.length) throw new Error("Lo siento, no se encontró la mesa ");
+
+  for (const tables of getTables) {
+    const {id_tables, table_number, status} = tables;
+    let data = {
+      id_tables,
+      table_number,
+      status
+    }
+    result.push(data);
+
+  }
+  return result;
 };
 
 exports.getItemsMenuSer = async (item) => {
@@ -25,7 +62,7 @@ exports.getItemsMenuSer = async (item) => {
   return itemsMenu;
 };
 
-exports. orderPaymentSer = async (employees_id, id_table, menuDetails) => {
+exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {
   const newState = "En preparación";
 
   await validateParamsOrder(employees_id, id_table, newState);
@@ -99,15 +136,15 @@ exports.orderDetailServ = async (id_order, menuDetails) => {
 
 exports.calculateOrderTotal = async (menuDetails) => {
   let total = 0;
-  if (!Array.isArray(menuDetails) || menuDetails.length === 0)throw new Error("No se proporcionaron productos para la orden");
-   await validateParamsOrderDetail(menuDetails);
+  if (!Array.isArray(menuDetails) || menuDetails.length === 0)
+    throw new Error("No se proporcionaron productos para la orden");
+  await validateParamsOrderDetail(menuDetails);
 
   for (let i = 0; i < menuDetails.length; i++) {
     total += menuDetails[i].amount * menuDetails[i].unit_price;
   }
   return total;
-}
-
+};
 
 exports.deleteItemMenu = async (id_menu, menuDetails) => {
   if (!id_menu) throw new Error("Se necesita un parametro valido");
@@ -129,27 +166,30 @@ exports.deleteItemMenu = async (id_menu, menuDetails) => {
 exports.changeStateOrder = async (id_order) => {
   if (!id_order)
     throw new Error("Se necesitan la orden asociada a la mesa actual");
-  
+
   let resultOrderId = await getOrderDetails(id_order);
-  if (!resultOrderId.length) throw new Error("No se encontró la orden asociada");
-  const {state } = resultOrderId[0];
-  if (state == "Servido")
-    throw new Error("La orden ya ha sido servida");
+  if (!resultOrderId.length)
+    throw new Error("No se encontró la orden asociada");
+  const { state } = resultOrderId[0];
+  if (state == "Servido") throw new Error("La orden ya ha sido servida");
 
   const resultEdition = await menuStateEdition(id_order);
-  if(!resultEdition.length) throw new Error("No se pudo actualizar el estatus de la orden")
-  return { id_order,  state};
-}
+  if (!resultEdition.length)
+    throw new Error("No se pudo actualizar el estatus de la orden");
+  return { id_order, state };
+};
 
 exports.changeStatusTable = async (id_table) => {
-  if(!id_table) throw new Error("Falta el número de mesa")
-    const result = await getTableAndStatus(id_table)
-  if(!result.length) throw new Error("Lo siento, no se encontró la mesa ")
-    const {status} = result[0];
-  if(status == "Disponible") throw new Error("Ya esta disponible la mesa")
-const newState = "Disponible"
-  const resultStatusEdit = await tableStatusEdition(newState,id_table)
-  if(resultStatusEdit.length <= 0) throw new Error("Lo sentimos, no se pudo actualizar el estatus de la tabla.")
-  return result
-
-}
+  if (!id_table) throw new Error("Falta el número de mesa");
+  const result = await getTableAndStatus(id_table);
+  if (!result.length) throw new Error("Lo siento, no se encontró la mesa ");
+  const { status } = result[0];
+  if (status == "Disponible") throw new Error("Ya esta disponible la mesa");
+  const newState = "Disponible";
+  const resultStatusEdit = await tableStatusEdition(newState, id_table);
+  if (resultStatusEdit.length <= 0)
+    throw new Error(
+      "Lo sentimos, no se pudo actualizar el estatus de la tabla."
+    );
+  return result;
+};

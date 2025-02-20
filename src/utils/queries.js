@@ -294,6 +294,13 @@ exports.getTableId = async (id_tables, store_id) => {
   );
   return data;
 };
+exports.statusTable = async (store_id) => {
+  const [data] = await connection.query(
+    "SELECT id_tables,table_number,status  FROM tables WHERE store_id = ?",
+    [store_id]
+  );
+  return data;
+};
 
 exports.verifiedOrderAndTables = async (id_order, store_id,id_tables) => {
   const statusOld = "Ocupado";
