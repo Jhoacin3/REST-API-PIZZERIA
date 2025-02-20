@@ -7,7 +7,7 @@ import { CategoryInterface } from '../models/category-interface';
   providedIn: 'root'
 })
 export class CategoryService {
-  private BaseURL = 'http://localhost:3000/apiPizza/categories/getCategory';
+  private BaseURL = 'http://localhost:4000/apiPizza/categories/getCategory';
   
 
   constructor(private http: HttpClient) { }

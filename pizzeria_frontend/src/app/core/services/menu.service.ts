@@ -12,7 +12,7 @@ import {MenuItemModel} from '../models/menu-item.model';
   providedIn: 'root'
 })
 export class MenuService {
-  private baseUrl = 'http://localhost:3000/apiPizza/menu/getMenu';
+  private baseUrl = 'http://localhost:4000/apiPizza/menu/getMenu';
   //Constructor de la clase
   constructor(private http: HttpClient) { }
   

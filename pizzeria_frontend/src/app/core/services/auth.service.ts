@@ -12,8 +12,8 @@ import { response } from 'express';
 })
 export class AuthService {
   //apuntando al endpoint de la API para el login
-  private loginURL = 'http://localhost:3000/apiPizza/auth/login';
-  private logoutURL = 'http://localhost:3000/apiPizza/auth/logout';
+  private loginURL = 'http://localhost:4000/apiPizza/auth/login';
+  private logoutURL = 'http://localhost:4000/apiPizza/auth/logout';
   //para cerrar sesion
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(
     this.hasToken()
