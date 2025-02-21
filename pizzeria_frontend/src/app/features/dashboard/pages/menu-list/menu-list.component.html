@@ -1,14 +1,17 @@
 <div class="container">
   <h1>Menú</h1>
 
-  
-  <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
-    <button type="button" class="btn btn-success">
-      <i class="bi bi-plus">Agregar</i>
+
+  <div *ngIf="successMessage || errorMessage" class="alert"
+    [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
+
+    <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addMenu"
+      data-bs-whatever="@mdo">Agregar
     </button>
-  <span *ngIf="successMessage">{{ successMessage }}</span>
-  <span *ngIf="errorMessage">{{ errorMessage }}</span>
-</div>
+
+    <span *ngIf="successMessage">{{ successMessage }}</span>
+    <span *ngIf="errorMessage">{{ errorMessage }}</span>
+  </div>
   <table *ngIf="menuItems.length >= 1" class="table table-striped">
     <thead>
       <tr>
@@ -41,7 +44,7 @@
                   <button type="button" class="btn btn-primary">
                     <i class="bi bi-pencil"></i>
                   </button>
-                  
+
                 </td>
               </div>
             </div>
@@ -51,5 +54,50 @@
     </tbody>
   </table>
 
+  <!-- Formulario desplegable para crear categoria -->
+  <div class="modal fade" id="addMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Crear nuevo menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <div class="mb-3">
+              <label for="formGroupExampleInput" class="form-label">Nombre del insumo:</label>
+              <input type="text" class="form-control" id="name_menu" placeholder="Escriba un nombre">
+            </div>
+
+            <div class="mb-3">
+              <label for="formGroupExampleInput" class="form-label">Nombre del insumo:</label>
+              <input type="text" class="form-control" id="descripcion_menu" placeholder="Escriba un nombre">
+            </div>
+
+            <div class="mb-3">
+              <label for="formGroupExampleInput" class="form-label">Precio:</label>
+              <input type="number" class="form-control" id="price_menu">
+            </div>
+
+            <select class="form-select" id="category_id" aria-label="Default select example">
+              <option selected>Seleccione la categoria</option>
+              <option *ngFor="let item of categoryItem" [value]="item.id_category">{{ item.type }}</option>
+            </select>
+
+          </form>
+          <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo">Crear
+          </button>
+          <span> | </span>
+          <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo">Cancelar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
-  <router-outlet />
+<router-outlet />
