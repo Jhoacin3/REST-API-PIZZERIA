@@ -42,29 +42,17 @@ export class MenuListComponent implements OnInit {
     this.getMenusTable();
     this.getCategoriesSelect();
   }
-
+  
   private getMenusTable(): void {
     this.menuService.getMenuItems().subscribe({
-      next: (response: any) => {
-        this.handleResponse(response, 'menuTable')
-      },
-      error: (error) => {
-        // Si ocurre un error inesperado (problema de red, etc.)
-        this.errorMessage = 'Error al cargar el menú.';
-        this.successMessage = '';
-      },
+      next: (response) => this.handleResponse(response, 'menuTable'),
+      error: () => this.handleError('Error al cargar el menú.'),
     });
   }
   private getCategoriesSelect(): void {
     this.categoryService.getCategories().subscribe({
-      next: (response: any) => {
-      this.handleResponse(response,'category')
-      },
-      error: (error) => {
-        // Si ocurre un error inesperado (problema de red, etc.)
-        this.errorMessage = 'Error al cargar el menú.';
-        this.successMessage = '';
-      },
+      next: (response) => this.handleResponse(response, 'category'),
+      error: () => this.handleError('Error al cargar la categoria.'),
     });
   }
   //creacion de menu
@@ -91,22 +79,33 @@ export class MenuListComponent implements OnInit {
       }
     })
   }
-
-  private handleResponse(response: any, type: any): void {
-    if (response.success) {
-      if (type === 'category') {
-        this.categoryItem = response.data;
-      }else if (type === 'menuTable') {
-        this.menuItems = response.data;
-        
-      }
-      this.successMessage = response.message;
-      this.errorMessage = '';
-    } else {
-      this.errorMessage = response.message;
-      this.successMessage = '';
-    }
+  //FUNCIONES DE APOYO
+  private handleError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
   }
+  trackById(index: number, item: MenuItemModel): number {
+    return item.id_menu; // Si `id` es único
+  }
+  
+
+private handleResponse<T>(response: any, type: 'category' | 'menuTable'): void {
+  if (response.success) {
+    switch (type) {
+      case 'category':
+        this.categoryItem = response.data as CategoryInterface[];
+        break;
+      case 'menuTable':
+        this.menuItems = response.data as MenuItemModel[];
+        break;
+    }
+    this.successMessage = response.message;
+    this.errorMessage = '';
+  } else {
+    this.handleError(response.message);
+  }
+}
+
   clearForm() {
     this.menuData = { name: '', description: '', price: 0, id_category: 0 };
   }

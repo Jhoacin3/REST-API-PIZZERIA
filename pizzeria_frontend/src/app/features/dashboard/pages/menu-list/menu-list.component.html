@@ -25,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of menuItems;">
+      <tr *ngFor="let item of menuItems; trackBy: trackById">
         <td>{{item.id_menu}}</td>
         <td>{{item.name}}</td>
         <td>{{item.description}}</td>
