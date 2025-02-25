@@ -55,49 +55,52 @@
   </table>
 
   <!-- Formulario desplegable para crear categoria -->
-  <div class="modal fade" id="addMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Crear nuevo menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="addMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo menú</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+          {{ errorMessage }}
         </div>
-        <div class="modal-body">
-          <form>
+        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
+          {{ successMessage }}
+        </div>
+        <form (ngSubmit)="createMenu()">
+          <div class="mb-3">
+            <label class="form-label">Nombre del menú:</label>
+            <input type="text" class="form-control" [(ngModel)]="menuData.name" name="name" id="name" placeholder="Escriba un nombre">
+          </div>
 
-            <div class="mb-3">
-              <label for="formGroupExampleInput" class="form-label">Nombre del insumo:</label>
-              <input type="text" class="form-control" id="name_menu" placeholder="Escriba un nombre">
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción:</label>
+            <input type="text" class="form-control" [(ngModel)]="menuData.description" name="description" id="description" placeholder="Escriba una descripción">
+          </div>
 
-            <div class="mb-3">
-              <label for="formGroupExampleInput" class="form-label">Nombre del insumo:</label>
-              <input type="text" class="form-control" id="descripcion_menu" placeholder="Escriba un nombre">
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Precio:</label>
+            <input type="number" class="form-control" [(ngModel)]="menuData.price" name="price" id="">
+          </div>
 
-            <div class="mb-3">
-              <label for="formGroupExampleInput" class="form-label">Precio:</label>
-              <input type="number" class="form-control" id="price_menu">
-            </div>
-
-            <select class="form-select" id="category_id" aria-label="Default select example">
-              <option selected>Seleccione la categoria</option>
+          <div class="mb-3">
+            <label class="form-label">Categoría:</label>
+            <select class="form-select" [(ngModel)]="menuData.id_category" name="id_category" id="id_category">
               <option *ngFor="let item of categoryItem" [value]="item.id_category">{{ item.type }}</option>
             </select>
+          </div>
+        </form>
 
-          </form>
-          <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#exampleModal"
-            data-bs-whatever="@mdo">Crear
-          </button>
-          <span> | </span>
-          <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#exampleModal"
-            data-bs-whatever="@mdo">Cancelar
-          </button>
-        </div>
-
+        <button type="submit" class="btn btn-success" (click)="createMenu()">Crear</button>
+        <span> | </span>
+        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
+</div>
 
 </div>
+
 <router-outlet />

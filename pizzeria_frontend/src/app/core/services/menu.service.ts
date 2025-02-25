@@ -12,13 +12,18 @@ import {MenuItemModel} from '../models/menu-item.model';
   providedIn: 'root'
 })
 export class MenuService {
-  private baseUrl = 'http://localhost:4000/apiPizza/menu/getMenu';
+  private baseURL = 'http://localhost:4000/apiPizza';
   //Constructor de la clase
   constructor(private http: HttpClient) { }
   
   //Método que obtiene el menú de la pizzería
   getMenuItems(): Observable<MenuItemModel[]> {
-    return this.http.get<MenuItemModel[]>(this.baseUrl);
+    return this.http.get<MenuItemModel[]>(`${this.baseURL}/menu/getMenu`);;
+  }
+
+  //Metodo para crear un nuevo item en el menú
+  addMenuItem(menuItem: any): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}/menu/addMenu`, menuItem);
   }
 
 }
