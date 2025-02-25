@@ -2,24 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../../material-module';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { CategoryInterface } from '../../../../core/models/category-interface';
 import { CategoryService } from '../../../../core/services/category.service';
 
 @Component({
   selector: 'app-categories-list',
-  imports: [MaterialModule,CommonModule,RouterOutlet],
+  imports: [MaterialModule,CommonModule,RouterOutlet, FormsModule],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.css'
 })
 export class CategoriesListComponent implements OnInit {
   successMessage = "";
   errorMessage = "";
+  banderin = false;
+  type = "";
   //decimos que categoriesItems sera de del modelo instanciado (CategoryInterface)
   categoriesItems: CategoryInterface[] = [];
   constructor(private categoriesService: CategoryService){}
 
   ngOnInit(): void {
+    this.getCategoriesTable();
+  }
+
+   getCategoriesTable(): void {
     this.categoriesService.getCategories().subscribe({
       next:(response: any) =>{
         if (response.success) {
@@ -28,20 +35,41 @@ export class CategoriesListComponent implements OnInit {
           this.successMessage = response.message;
           this.errorMessage = ''; // Limpiamos posibles errores previos
         }else{
-          this.errorMessage = response.error
-          this.successMessage = ''; // Limpiamos posibles mensajes previos
-
+          this.handleError(response.error);
         }
       },
-      error:(error)=>{
-        // Si ocurre un error inesperado (problema de red, etc.)
-        this.errorMessage = 'Error al cargar los empleados.';
-        this.successMessage = '';
-        console.error(error); 
-      }
+      error: () => this.handleError('Error al cargar la categoria.'),
     })
   }
 
+   createCategories(): void{
+    if(!this.type){
+      this.errorMessage = 'El nombre es requerido';
+      return;
+    }
+    this.categoriesService.createCategory(this.type).subscribe({
+      next:(response) =>{
+        if(response.success){
+          this.banderin = true;
+          this.successMessage = response.message;
+          this.errorMessage ='';
+          window.location.reload();
+        }else{
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al crear la categoria.'),
 
+    });
+  }
 
+ //FUNCIONES DE APOYO
+  private handleError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
+  }
+
+  clearForm() {
+    this.type = '';
+  }
 }

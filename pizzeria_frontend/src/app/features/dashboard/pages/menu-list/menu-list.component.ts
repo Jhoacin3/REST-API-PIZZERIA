@@ -70,13 +70,11 @@ export class MenuListComponent implements OnInit {
           this.clearForm();
           window.location.reload();
         } else {
-          this.errorMessage = response.error;
-          this.successMessage = '';
+          this.handleError(response.error);
         }
       },
-      error: (error) => {
-        console.error(error);
-      }
+      error: () => this.handleError('Error al crear el menu.'),
+
     })
   }
   //FUNCIONES DE APOYO

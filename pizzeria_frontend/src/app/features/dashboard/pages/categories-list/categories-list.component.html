@@ -57,36 +57,24 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form>
+                <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+                  {{ errorMessage }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="banderin === true">
+                  {{ successMessage }}
+                </div>
+                  <form (ngSubmit)="createCategories()">
 
                       <div class="mb-3">
-                          <label for="formGroupExampleInput" class="form-label">Nombre del negocio:</label>
-                          <input type="text" class="form-control" id="formGroupExampleInput"
-                              placeholder="Escriba un nombre">
+                          <label for="formGroupExampleInput" class="form-label">Nombre de la categoria:</label>
+                          <input type="text" class="form-control" [(ngModel)]="type" name="type" id="type"
+                          placeholder="Escriba un nombre">
                       </div>
 
-                      <div class="mb-3">
-                          <label for="formFile" class="form-label">Seleccione un archivo</label>
-                          <input class="form-control" type="file" id="formFile">
-                      </div>
-                      <div class="mb-3">
-                          <label for="formGroupExampleInput" class="form-label">Número de mesas:</label>
-                          <input type="number" class="form-control" id="formGroupExampleInput">
-                      </div>
-
-                      <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                          <label class="form-check-label" for="flexSwitchCheckDefault">Desactivar/Activar
-                              configuración</label>
-                      </div>
                   </form>
-                  <button type="button" class="btn btn-success " data-bs-toggle="modal"
-                      data-bs-target="#exampleModal" data-bs-whatever="@mdo">Listo
-                  </button>
+                  <button type="submit" class="btn btn-success" (click)="createCategories()">Crear</button>
                   <span> | </span>
-                  <button type="button" class="btn btn-danger " data-bs-toggle="modal"
-                      data-bs-target="#exampleModal" data-bs-whatever="@mdo">Cancelar
-                  </button>
+                  <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
               </div>
 
           </div>
