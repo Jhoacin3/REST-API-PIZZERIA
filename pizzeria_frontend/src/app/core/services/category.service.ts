@@ -2,17 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CategoryInterface } from '../models/category-interface';
+import { environment } from '../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private BaseURL = 'http://localhost:4000/apiPizza/categories/getCategory';
+  private baseUrl = environment.apiBaseUrl;
   
 
   constructor(private http: HttpClient) { }
+  
   //metodo que obtiene las categorias
   getCategories(): Observable<CategoryInterface[]> {
-    return this.http.get<CategoryInterface[]>(this.BaseURL);
+    return this.http.get<CategoryInterface[]>(`${this.baseUrl}/categories/getCategory`);
   }
 }
