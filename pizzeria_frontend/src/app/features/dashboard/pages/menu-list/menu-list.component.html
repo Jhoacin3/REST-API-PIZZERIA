@@ -54,6 +54,28 @@
     </tbody>
   </table>
 
+<!-- Toast de éxito o error -->
+<div id="toastMessage" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" [ngClass]="{'show': errorMessage}">
+  <div class="toast-header" [ngClass]="{'bg-danger': errorMessage}">
+    <img src="assets/ic_notification.png" class="rounded me-2" alt="..." width="30" height="30">
+    <strong class="me-auto" [ngClass]="{'text-light': errorMessage}">Mensaje del sistema</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    {{ errorMessage }}
+  </div>
+</div>
+<!-- <div id="toastMessage" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" [ngClass]="{'show': successMessage || errorMessage}">
+  <div class="toast-header" [ngClass]="{'bg-success': successMessage, 'bg-danger': errorMessage}">
+    <img src="assets/ic_notification.png" class="rounded me-2" alt="..." width="30" height="30">
+    <strong class="me-auto" [ngClass]="{'text-light': successMessage || errorMessage}">Mensaje del sistema</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    {{ successMessage || errorMessage }}
+  </div>
+</div> -->
+
   <!-- Formulario desplegable para crear categoria -->
 <div class="modal fade" id="addMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">

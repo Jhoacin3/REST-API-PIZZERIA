@@ -106,6 +106,7 @@ private handleResponse<T>(response: any, type: 'category' | 'menuTable'): void {
 
   clearForm() {
     this.menuData = { name: '', description: '', price: 0, id_category: 0 };
+    this.getCategoriesSelect();
   }
 
 
