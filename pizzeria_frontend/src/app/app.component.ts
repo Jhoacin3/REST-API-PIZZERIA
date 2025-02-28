@@ -7,11 +7,12 @@ import { MenuItemModel } from './core/models/menu-item.model';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './features/dashboard/sidebar/sidebar.component';
 import {MaterialModule} from './material-module';
+import { FormsModule } from '@angular/forms'; // 👈 Asegúrate de importar esto
 
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule,RouterOutlet, LoginComponent, MenuListComponent, RouterModule, SidebarComponent],
+  imports: [CommonModule,RouterOutlet, RouterModule, SidebarComponent, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
