@@ -7,15 +7,18 @@
     </button>
     <hr>
     <!-- historial de config -->
-    <div class="list-group">
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h3 class="mb-1">Nombre de la configuración: configuración primera</h3>
+    <div class="list-group" *ngFor= "let config of employeeData">
+        <a class="list-group-item " >
+
+            <div class="d-flex w-100 justify-content-between"  >
+                <h3 class="mb-1">Nombre de la configuración: {{ config.name}}</h3>
                 <small class="text-muted">
+
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [checked]="config.enable">
                         <label class="form-check-label" for="flexSwitchCheckDefault">Desactivar/Activar</label>
-                    </div>
+                      </div>
+
                     <button type="button" class="btn btn-danger">
                         <i class="bi bi-trash"></i>
                     </button>
@@ -25,27 +28,10 @@
                     </button>
                 </small>
             </div>
-            <p class="mb-1">Número de mesas: 3</p>
+            <p class="mb-1">Número de mesas: {{ config.number_of_tables}}</p>
+
         </a>
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h3 class="mb-1">Nombre de la configuración: configuración secundaria</h3>
-                <small class="text-muted">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Desactivar/Activar</label>
-                    </div>
-                    <button type="button" class="btn btn-danger">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    <span> | </span>
-                    <button type="button" class="btn btn-primary">
-                        <i class="bi bi-pencil"></i>
-                    </button>
-                </small>
-            </div>
-            <p class="mb-1">Número de mesas: 9</p>
-        </a>
+
     </div>
 
     <!-- Formulario desplegable para crear config -->
