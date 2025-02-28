@@ -1,3 +1,75 @@
+# SISTEMA COMPLETO PARA RESTAURANTE
+## Node.js
+![Node.js](https://img.shields.io/badge/Node.js-22.14.0-green?logo=node.js)
+![Express.js](https://img.shields.io/badge/Express.js-4..21.2x-lightgrey?logo=express)  
+![MySQL](https://img.shields.io/badge/MySQL-8.0.41-blue?logo=MySQL)  
+![License](https://img.shields.io/badge/license-MIT-blue.svg)  
+
+## Tecnologías Backend
+
+- **Node.js**- Entorno de ejecución de JavaScript en el servidor.
+- **Express** - Framework web para Node.js.
+- **MySQL** - Base de datos relacional.
+- **Jest & Supertest** - Para pruebas unitarias de la API.
+- **Dotenv** - Gestión de variables de entorno.
+### Tecnologías Frontend
+-  **Angular 19**
+
+
+## Requisitos previos
+
+Antes de ejecutar el proyecto, asegúrate de tener instalado:
+
+- *[Node.js](https://nodejs.org/)*
+- *[Postman](https://www.postman.com/)* 
+- *[Angular](https://angular.dev/)* 
+
+instalar dependencias:
+```
+npm install
+```
+## Configuración
+Configura las variables de entorno creando un archivo .env en la raíz del proyecto:
+```
+DB_HOST=
+```
+```
+DB_PORT=
+```
+```
+DB_NAME=bd_mypizzeria
+```
+```
+DB_USER=root
+```
+```
+DB_PASSWORD=
+```
+```
+ JWT_SECRET=
+```
+> [!IMPORTANT]
+> El script completo de creación de la base de datos está disponible con el nombre de: "database"
+> 
+> Este proyecto utiliza una base de datos MySQL para gestionar una pizzería. La estructura incluye tablas para: 
+
+- Empleados (employees)
+- Inventario (inventories)
+- Menú (menu)
+- Categorías (category)
+- Mesas (Tables)
+- Órdenes (orders)
+- Detalles de órdenes (order_details)
+## Ejecución del servidor
+Para iniciar el servidor en modo desarrollo comando:
+```
+npm run start
+```
+Para iniciar los test:
+```
+ npm run test
+```
+Las pruebas se han implementado con Jest y Supertest.
 # Estructura JSON de algunas respuestas de endpoints de la API REST Pizzería
 
 Respuesta al iniciar sesion (Login)
@@ -33,4 +105,5 @@ Error de servidor controlado
 <p align="left">
   <img src="https://github.com/user-attachments/assets/71f9a2a9-482a-422e-b9be-8c69c08f4530" alt="home_inicio1" width="800px">
 </p>
+
 
