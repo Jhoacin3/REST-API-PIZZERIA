@@ -174,7 +174,7 @@ exports.validParamsEmployee = async (full_name, password) => {
 
   if (full_name.length <= 5 || full_name.length >= 30)
     throw new Error(
-      "Wl nombre debe de ser mayor a 5 y menos a 12 caracteres"
+      "El nombre debe de ser mayor a 5 y menos a 12 caracteres"
     );
 
   if (password.length <= 5 || password.length >= 13)

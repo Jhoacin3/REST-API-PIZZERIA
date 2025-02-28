@@ -24,8 +24,9 @@ exports.getEmployeeName = async (req, res) => {
     const {name} = req.params;
     const getEmployeName = await employeesService.getEmployeeByName(name);
     res.json({
+      success: true,
       data: getEmployeName,
-      success: messages.success.get,
+      message: messages.success.get,
     });
   } catch (error) {
     res.json({
@@ -41,8 +42,9 @@ exports.createEmployee = async (req, res) => {
     let {full_name, email, password} = req.body;
     const createdEmployee = await employeesService.createEmployeeServ(full_name, email, password);
     res.json({
+      success: true,
       data: createdEmployee,
-      success: messages.success.create,
+      message: messages.success.create,
     });
   } catch (error) {
     res.json({
