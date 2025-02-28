@@ -15,4 +15,9 @@ export class EmployeeService {
   getEmployees(): Observable<EmployeeInterface[]> {
     return this.http.get<EmployeeInterface[]>(`${this.baseUrl}/employees/getEmployees`);
   }
+
+  //Metodo para crear un empleado
+  createEmployee(request_data: any): Observable<any>{
+    return this.http.post<any>(`${this.baseUrl}/employees/createEmployee`, request_data);
+  }
 }

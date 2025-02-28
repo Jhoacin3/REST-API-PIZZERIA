@@ -5,10 +5,11 @@ import { MaterialModule } from '../../../../material-module';
 import { EmployeeInterface } from '../../../../core/models/employee-interface';
 import { EmployeeService } from '../../../../core/services/employee.service';
 import { response } from 'express';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employees-list',
-  imports: [RouterOutlet, CommonModule, MaterialModule],
+  imports: [RouterOutlet, CommonModule, MaterialModule, FormsModule],
   templateUrl: './employees-list.component.html',
   styleUrl: './employees-list.component.css'
 })
@@ -16,6 +17,13 @@ export class EmployeesListComponent implements OnInit {
 
   successMessage = "";
   errorMessage = "";
+  banderin = false;
+  
+  employeeData = {
+    full_name: '',
+    email: '',
+    password: ''
+  }
 
   employeeItems : EmployeeInterface[] =[];
 
@@ -25,6 +33,10 @@ export class EmployeesListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getEmployeeTable();
+  }
+
+  private getEmployeeTable ():void{
     this.employeService.getEmployees().subscribe({
       next: (response: any) =>{
         if (response.success) {
@@ -32,17 +44,49 @@ export class EmployeesListComponent implements OnInit {
           this.successMessage = response.message;
           this.errorMessage = ''; // Limpiamos posibles errores previos
         }else{
-          this.errorMessage = response.message;
-          this.successMessage = ''; // Limpiamos posibles mensajes previos
+          this.handleError(response.error);
         }
       },
-      error:(error)=>{
-      // Si ocurre un error inesperado (problema de red, etc.)
-      this.errorMessage = 'Error al cargar los empleados.';
-        this.successMessage = '';
-        console.error(error); 
-      }
+      error: () => this.handleError('Error al crear el empleado.'),
+
     })
   }
 
+  //crear empleado
+  employeeAdd(): void {
+    if(!this.employeeData.full_name || !this.employeeData.email || !this.employeeData.password){
+      this.errorMessage = 'Todos los campos son requeridos';
+      return;
+    }
+
+    this.employeService.createEmployee(this.employeeData).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.banderin = true
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          this.clearForm();
+        } else {
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al crear el menu.'),
+    })
+  } 
+
+   //FUNCIONES DE APOYO
+   private handleError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
+  }
+
+  clearForm() {
+    this.employeeData = {
+      full_name: '',
+      email: '',
+      password: ''
+    }
+    // this.getEmployeeTable();
+    window.location.reload();
+  }
 }

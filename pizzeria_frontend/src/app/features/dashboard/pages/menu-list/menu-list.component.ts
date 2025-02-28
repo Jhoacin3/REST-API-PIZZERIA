@@ -68,7 +68,6 @@ export class MenuListComponent implements OnInit {
           this.successMessage = response.message;
           this.errorMessage = '';
           this.clearForm();
-          window.location.reload();
         } else {
           this.handleError(response.error);
         }

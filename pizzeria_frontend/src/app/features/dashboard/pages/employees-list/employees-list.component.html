@@ -1,9 +1,11 @@
 <div class="container">
     <h1>Empleados</h1>
     <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
-        <button type="button" class="btn btn-success">
-          <i class="bi bi-plus">Agregar</i>
+
+        <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addEmployee"
+      data-bs-whatever="@mdo">Agregar
         </button>
+
       <span *ngIf="successMessage">{{ successMessage }}</span>
       <span *ngIf="errorMessage">{{ errorMessage }}</span>
     </div>
@@ -50,5 +52,66 @@
       </table>
 </div>
 
+<!-- Toast de éxito o error -->
+<div id="toastMessage" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" [ngClass]="{'show': errorMessage}">
+  <div class="toast-header" [ngClass]="{'bg-danger': errorMessage}">
+    <img src="assets/ic_notification.png" class="rounded me-2" alt="..." width="30" height="30">
+    <strong class="me-auto" [ngClass]="{'text-light': errorMessage}">Mensaje del sistema</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    {{ errorMessage }}
+  </div>
+</div>
+
+ <!-- Formulario desplegable para crear usuario -->
+ <div class="modal fade" id="addEmployee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo empleado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
+          {{ successMessage }}
+        </div>
+        <form (ngSubmit)="employeeAdd()">
+          <div class="mb-3">
+            <label class="form-label">Nombre del empleado:</label>
+            <input type="text" class="form-control" [(ngModel)]="employeeData.full_name" name="full_name" id="full_name" placeholder="Escriba un nombre">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Correo electronico:</label>
+            <input type="text" class="form-control" [(ngModel)]="employeeData.email" name="email" id="email" placeholder="Escriba su Correo">
+          </div>
+
+          <div class="row g-3 align-items-center">
+            <div class="col-auto">
+              <label for="inputPassword6" class="col-form-label">Contraseña</label>
+            </div>
+            <div class="col-auto">
+              <input type="password" [(ngModel)]="employeeData.password" name="password" id="password"  class="form-control" aria-describedby="passwordHelpInline">
+            </div>
+            <div class="col-auto">
+              <span id="passwordHelpInline" class="form-text">
+                debe de ser mayor a 5 y menos a 12 caracteres
+              </span>
+            </div>
+          </div>
+
+        </form>
+
+        <button type="submit" class="btn btn-success" (click)="employeeAdd()">Crear</button>
+        <span> | </span>
+        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <router-outlet />
