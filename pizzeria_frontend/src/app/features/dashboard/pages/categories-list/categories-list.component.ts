@@ -71,5 +71,6 @@ export class CategoriesListComponent implements OnInit {
 
   clearForm() {
     this.type = '';
+    this.getCategoriesTable();
   }
 }
