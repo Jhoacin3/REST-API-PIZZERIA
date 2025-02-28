@@ -69,7 +69,8 @@ Para iniciar los test:
 ```
  npm run test
 ```
-Las pruebas se han implementado con Jest y Supertest.
+> [!NOTE]
+>Las pruebas se han implementado con Jest y Supertest.
 # Estructura JSON de algunas respuestas de endpoints de la API REST Pizzería
 
 Respuesta al iniciar sesion (Login)
