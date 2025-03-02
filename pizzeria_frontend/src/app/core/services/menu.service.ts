@@ -28,4 +28,9 @@ export class MenuService {
     return this.http.post<any>(`${this.baseUrl}/menu/addMenu`, menuItem);
   }
 
+  //metodo para eliminar un menu
+  deleteMenuItem(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/menu/deleteMenu/${id}`);
+  }
+
 }

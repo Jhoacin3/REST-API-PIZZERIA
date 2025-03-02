@@ -20,6 +20,8 @@ export class MenuListComponent implements OnInit {
   successMessage = '';
   banderin = false;
   // Datos del formulario
+  id = 0
+
   menuData = {
     name: '',
     description: '',
@@ -76,6 +78,31 @@ export class MenuListComponent implements OnInit {
 
     })
   }
+
+    // Método para establecer el id del menú a eliminar
+  setIdToDelete(id: number): void {
+    this.id = id;
+  }
+
+  //Metodo para eliminar un item en el menu
+  deleteMenu():void{
+    this.menuService.deleteMenuItem(this.id).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // this.banderin = true
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          // this.getMenusTable(); // Recargar la tabla después de eliminar
+          window.location.reload();
+
+        } else {
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al eliminar el menu.'),
+
+    })
+  }
   //FUNCIONES DE APOYO
   private handleError(message: string): void {
     this.errorMessage = message;
@@ -104,9 +131,11 @@ private handleResponse<T>(response: any, type: 'category' | 'menuTable'): void {
 }
 
   clearForm() {
-    this.menuData = { name: '', description: '', price: 0, id_category: 0 };
-    this.getCategoriesSelect();
+        window.location.reload();
+
+    // this.getMenusTable();
   }
+
 
 
 }
