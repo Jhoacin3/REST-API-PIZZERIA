@@ -79,8 +79,9 @@ exports.deleteEmployee = async (req, res) => {
 
     const deletedEmployee = await employeesService.deleteEmployeeServ(id);
     res.json({
+      success: true,
       data: deletedEmployee,
-      success: messages.success.delete,
+      message: messages.success.delete,
     });
   } catch (error) {
     res.json({
