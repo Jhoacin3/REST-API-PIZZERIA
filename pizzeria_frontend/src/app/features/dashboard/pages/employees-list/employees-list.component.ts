@@ -18,7 +18,7 @@ export class EmployeesListComponent implements OnInit {
   successMessage = "";
   errorMessage = "";
   banderin = false;
-  
+  id = 0
   employeeData = {
     full_name: '',
     email: '',
@@ -72,9 +72,30 @@ export class EmployeesListComponent implements OnInit {
       },
       error: () => this.handleError('Error al crear el menu.'),
     })
-  } 
+  }
+
+  deleteEmployee():void{
+    this.employeService.deleteEmployee(this.id).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // this.banderin = true
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          window.location.reload();
+
+        } else {
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al eliminar el menu.'),
+    })
+  }
 
    //FUNCIONES DE APOYO
+   setIdForDelete(id_employee: number){
+    this.id = id_employee;
+
+   }
    private handleError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';

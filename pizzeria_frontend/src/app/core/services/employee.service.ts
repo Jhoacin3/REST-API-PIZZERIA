@@ -20,4 +20,9 @@ export class EmployeeService {
   createEmployee(request_data: any): Observable<any>{
     return this.http.post<any>(`${this.baseUrl}/employees/createEmployee`, request_data);
   }
+
+  //metodo para eliminar un empleado
+  deleteEmployee(id:number): Observable<any>{
+    return this.http.delete<any>(`${this.baseUrl}/employees/deleteEmployee/${id}`);
+  }
 }
