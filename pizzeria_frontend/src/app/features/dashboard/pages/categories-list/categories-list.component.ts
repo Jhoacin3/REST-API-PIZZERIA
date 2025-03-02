@@ -18,6 +18,7 @@ export class CategoriesListComponent implements OnInit {
   errorMessage = "";
   banderin = false;
   type = "";
+  id = 0
   //decimos que categoriesItems sera de del modelo instanciado (CategoryInterface)
   categoriesItems: CategoryInterface[] = [];
   constructor(private categoriesService: CategoryService){}
@@ -63,7 +64,29 @@ export class CategoriesListComponent implements OnInit {
     });
   }
 
+  deleteCategories():void{
+    this.categoriesService.deleteCategory(this.id).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // this.banderin = true
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          // this.getMenusTable(); // Recargar la tabla después de eliminar
+          window.location.reload();
+
+        } else {
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al eliminar el menu.'),
+    })
+  }
+
  //FUNCIONES DE APOYO
+
+ setIdToDelete(id_category: number){
+  this.id = id_category
+ }
   private handleError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';

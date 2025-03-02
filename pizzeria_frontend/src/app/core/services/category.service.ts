@@ -23,4 +23,7 @@ export class CategoryService {
     const category = { type };
     return this.http.post<any>(`${this.baseUrl}/categories/createCategory`, category);
   }
+  deleteCategory(id:number): Observable<any>{
+    return this.http.delete<any>(`${this.baseUrl}/categories/deleteCategory/${id}`);
+  }
 }
