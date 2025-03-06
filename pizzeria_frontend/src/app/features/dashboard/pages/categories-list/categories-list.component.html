@@ -37,8 +37,8 @@
                       </button>
 
                       <span> | </span>
-
-                      <button type="button" class="btn btn-primary">
+                      
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCategory" (click)="setIdUpdate(item.id_category, item)">
                         <i class="bi bi-pencil"></i>
                       </button>
                       
@@ -112,6 +112,43 @@
 
                   </form>
                   <button type="submit" class="btn btn-success" (click)="createCategories()">Crear</button>
+                  <span> | </span>
+                  <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+              </div>
+
+          </div>
+      </div>
+  </div>
+    <!-- Formulario desplegable para editar categoria -->
+    <div class="modal fade" id="editCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Crear configuración</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+                  {{ errorMessage }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="banderin === true">
+                  {{ successMessage }}
+                </div>
+                  <form (ngSubmit)="createCategories()">
+
+                    <div class="mb-3">
+                      <label class="form-label">ID</label>
+                      <input type="number" class="form-control" readonly [(ngModel)]="dataUpCategory.id_category" name="id" id="id">
+                    </div>
+
+                      <div class="mb-3">
+                          <label for="formGroupExampleInput" class="form-label">Nombre de la categoria:</label>
+                          <input type="text" class="form-control" [(ngModel)]="dataUpCategory.type" name="type" id="type"
+                          placeholder="Escriba un nombre">
+                      </div>
+
+                  </form>
+                  <button type="submit" class="btn btn-success" (click)="updateCategory()">Editar</button>
                   <span> | </span>
                   <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
               </div>
