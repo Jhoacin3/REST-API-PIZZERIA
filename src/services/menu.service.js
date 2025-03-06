@@ -80,6 +80,7 @@ const addMenuService = async (name, description, price, id_category) => {
 const updateMenuService = async (name, description, price, id_category, id) => {
   await validateParamsAddMenu(name, description, price, id_category);
   await validateParamsId(id);
+  await getNameByMenu(name);
   const idMenus = await getIdMenu();
   let isRepeat=  await verifiedIfExist(idMenus, id);
   if (!isRepeat) {
