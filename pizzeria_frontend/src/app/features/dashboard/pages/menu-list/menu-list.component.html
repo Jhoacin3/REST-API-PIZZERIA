@@ -43,7 +43,7 @@
                   </button>
                   <span> | </span>
 
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showConfirmateUpdate">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editMenu" (click)="setIdUpdate(item.id_menu, item)">
                     <i class="bi bi-pencil"></i>
                   </button>
 
@@ -102,7 +102,7 @@
   </div>
 </div> -->
 
-  <!-- Formulario desplegable para crear categoria -->
+  <!-- Formulario desplegable para crear menu -->
 <div class="modal fade" id="addMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -142,6 +142,58 @@
         </form>
 
         <button type="submit" class="btn btn-success" (click)="createMenu()">Crear</button>
+        <span> | </span>
+        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Formulario desplegable para editar menu -->
+<div class="modal fade" id="editMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Editar menu seleccionado</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
+          {{ successMessage }}
+        </div>
+        <form (ngSubmit)="createMenu()">
+          <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="number" class="form-control" readonly [(ngModel)]="menuItemToEdit.id_menu" name="id" id="id">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nombre del menú:</label>
+            <input type="text" class="form-control" [(ngModel)]="menuItemToEdit.name" name="name" id="name" placeholder="Escriba un nombre">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Descripción:</label>
+            <input type="text" class="form-control" [(ngModel)]="menuItemToEdit.description" name="description" id="description" placeholder="Escriba una descripción">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Precio:</label>
+            <input type="number" class="form-control" [(ngModel)]="menuItemToEdit.price" name="price" id="">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Categoría:</label>
+            <select class="form-select" [(ngModel)]="menuItemToEdit.id_category" name="id_category" id="id_category">
+              <option *ngFor="let item of categoryItem" [value]="item.id_category">{{ item.type }}</option>
+            </select>
+          </div>
+        </form>
+
+        <button type="submit" class="btn btn-success" (click)="editMenu()">Actualizar</button>
         <span> | </span>
         <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
       </div>

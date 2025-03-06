@@ -33,4 +33,9 @@ export class MenuService {
     return this.http.delete<any>(`${this.baseUrl}/menu/deleteMenu/${id}`);
   }
 
+  //metodo para editar un menu
+  updateMenu(id: number, menuData: any): Observable<any>{
+    return this.http.put<any>(`${this.baseUrl}/menu/updateMenu/${id}`, menuData);
+  }
+
 }

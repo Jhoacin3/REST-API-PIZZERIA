@@ -29,6 +29,8 @@ export class MenuListComponent implements OnInit {
     id_category: 0
   };
 
+  menuItemToEdit: any = {};
+
   menuItems: MenuItemModel[] = [];
   categoryItem: CategoryInterface[] = [];
   
@@ -79,9 +81,31 @@ export class MenuListComponent implements OnInit {
     })
   }
 
+  //metodo para editar un menu
+  editMenu(): void {
+    this.menuService.updateMenu(this.menuItemToEdit.id_menu ,this.menuItemToEdit).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.banderin = true
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          this.clearForm();
+        } else {
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al crear el menu.'),
+
+    })
+
+  }
+
     // Método para establecer el id del menú a eliminar
   setIdToDelete(id: number): void {
     this.id = id;
+  }
+  setIdUpdate(id: number, item: any) {
+    this.menuItemToEdit = {...item};
   }
 
   //Metodo para eliminar un item en el menu
