@@ -1,4 +1,4 @@
-const { validateParamsId, validParamsEmployee } = require("../utils/utils.js");
+const { validateParamsId, validParamsEmployee, validParamsEmployeeUp } = require("../utils/utils.js");
 const { getEmployeeByName, getEmployees, getEmployeeId, createEmployee, updateEmployees, deleteEmployee } = require("../utils/queries.js");
 const { SALT_ROUNDS } = require ("../../config/config.js");
 
@@ -51,7 +51,7 @@ exports.createEmployeeServ = async (full_name, email, password) => {
 
 exports.updateEmployeeServ = async (id, full_name, password, email) => {
   await validateParamsId(id);
-  await validParamsEmployee(full_name, password);
+  await validParamsEmployeeUp(full_name);
 
   let employees = await getEmployees();
   let isExist = employees.some(

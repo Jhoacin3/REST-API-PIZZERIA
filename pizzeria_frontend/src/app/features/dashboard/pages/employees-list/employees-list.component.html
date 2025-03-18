@@ -41,7 +41,7 @@
 
                       <span> | </span>
 
-                      <button type="button" class="btn btn-primary">
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editEmployee" (click)="setIdUpdate(item.id_employees, item)">
                         <i class="bi bi-pencil"></i>
                       </button>
                       
@@ -133,6 +133,57 @@
         </form>
 
         <button type="submit" class="btn btn-success" (click)="employeeAdd()">Crear</button>
+        <span> | </span>
+        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <!-- Formulario desplegable para editar -->
+ <div class="modal fade" id="editEmployee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo empleado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
+          {{ successMessage }}
+        </div>
+        <form (ngSubmit)="employeeAdd()">
+          <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="number" class="form-control" readonly [(ngModel)]="employeeUpData.id_employees" name="id" id="id">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre del empleado:</label>
+            <input type="text" class="form-control" [(ngModel)]="employeeUpData.full_name" name="full_name" id="full_name" placeholder="Escriba un nombre">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Correo electronico:</label>
+            <input type="text" class="form-control" [(ngModel)]="employeeUpData.email" name="email" id="email" placeholder="Escriba su Correo">
+          </div>
+
+          <div class="row g-3 align-items-center">
+            <div class="col-auto">
+              <label for="inputPassword6" class="col-form-label">Contraseña</label>
+            </div>
+            <div class="col-auto">
+              <input type="password" [(ngModel)]="employeeUpData.password" readonly name="password" id="password"  class="form-control" aria-describedby="passwordHelpInline">
+            </div>
+            <div class="col-auto">
+              
+            </div>
+          </div>
+
+        </form>
+
+        <button type="submit" class="btn btn-success" (click)="updateEmployee()">Editar</button>
         <span> | </span>
         <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
       </div>

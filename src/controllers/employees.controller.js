@@ -58,7 +58,6 @@ exports.updateEmployee = async (req, res) =>{
   try {
     let {id} = req.params;
     let {full_name, password, email} = req.body;
-
     const updatedEmployee = await employeesService.updateEmployeeServ(id,full_name, password,email);
     res.json({
       data: updatedEmployee,

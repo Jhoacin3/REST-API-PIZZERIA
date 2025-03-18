@@ -24,6 +24,7 @@ export class EmployeesListComponent implements OnInit {
     email: '',
     password: ''
   }
+  employeeUpData:any = {};
 
   employeeItems : EmployeeInterface[] =[];
 
@@ -87,7 +88,23 @@ export class EmployeesListComponent implements OnInit {
           this.handleError(response.error);
         }
       },
-      error: () => this.handleError('Error al eliminar el menu.'),
+      error: () => this.handleError('Error al eliminar el empleado')
+    })
+  }
+  updateEmployee():void{
+    this.employeService.updateEmployee(this.employeeUpData.id_employees, this.employeeUpData).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // this.banderin = true
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          window.location.reload();
+
+        } else {
+          this.handleError(response.error);
+        }
+      },
+      error: () => this.handleError('Error al editar el empleado')
     })
   }
 
@@ -96,6 +113,10 @@ export class EmployeesListComponent implements OnInit {
     this.id = id_employee;
 
    }
+   setIdUpdate(id: number, item: any){
+    this.employeeUpData = {...item};
+   }
+
    private handleError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';
