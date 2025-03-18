@@ -182,6 +182,20 @@ exports.validParamsEmployee = async (full_name, password) => {
       "La contraseña debe de ser mayor a 5 y menos a 12 caracteres"
     );
 };
+exports.validParamsEmployeeUp = async (full_name, password) => {
+  if (!full_name )
+    throw new Error("Es requerido el nombre para poder actualizar");
+
+  if (typeof full_name !== "string" || !isNaN(Number(full_name)))
+    throw new Error("Proporciona un nombre coherente para la busqueda");
+
+  if (full_name.length <= 5 || full_name.length >= 30)
+    throw new Error(
+      "El nombre debe de ser mayor a 5 y menos a 12 caracteres"
+    );
+
+ 
+};
 exports.validateEmailExists = async (email, employees) => {
   let emailFind = await employees.filter((item) => item.email == email);
   if (emailFind.length == 0)
