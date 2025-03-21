@@ -8,6 +8,7 @@ import { TablesListComponent } from './features/dashboard/pages/tables-list/tabl
 import { ConfigurationListComponent } from './features/dashboard/pages/configuration-list/configuration-list.component';
 import { LoginComponent } from './auth/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
+import { PageErrorComponent } from './features/shared/page-error/page-error.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a /login por defecto
@@ -18,7 +19,8 @@ export const routes: Routes = [
     { path: 'category', component: CategoriesListComponent, canActivate: [authGuard] }, // Ruta para el categorias
     { path: 'tables', component: TablesListComponent, canActivate: [authGuard] }, // Ruta para el mesas
     { path: 'configuration', component: ConfigurationListComponent, canActivate: [authGuard] }, // Ruta para las configuraciones propias del negocio
-    { path: '**', redirectTo: 'login', pathMatch: 'full' } //MEJORAR: redireccionar a vista pagina no encontrada
+    { path: '**', component: PageErrorComponent }
+    // { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
 
 @NgModule({
