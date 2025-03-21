@@ -60,6 +60,7 @@ exports.updateEmployee = async (req, res) =>{
     let {full_name, password, email} = req.body;
     const updatedEmployee = await employeesService.updateEmployeeServ(id,full_name, password,email);
     res.json({
+      success: true,
       data: updatedEmployee,
       success: messages.success.update
     })
