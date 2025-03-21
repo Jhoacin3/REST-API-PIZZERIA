@@ -37,10 +37,12 @@ export class AuthService {
     );
   }
   
-  logout(): void {
-    this.http.post(`${this.baseUrl}/auth/logout`, {}, { withCredentials: true }).subscribe(() => {
-      this.isAuthenticatedSubject.next(false); // ❌ Usuario no autenticado
-    });
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/auth/logout`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.isAuthenticatedSubject.next(false); // Indica que el usuario no está autenticado
+      })
+    );
   }
 
   validateSession(): Observable<any> {
