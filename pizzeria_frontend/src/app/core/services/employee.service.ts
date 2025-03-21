@@ -20,17 +20,23 @@ export class EmployeeService {
 
   //Metodo para crear un empleado
   createEmployee(request_data: any): Observable<any>{
-    return this.http.post<any>(`${this.baseUrl}/employees/createEmployee`, request_data);
+    return this.http.post<any>(`${this.baseUrl}/employees/createEmployee`, request_data, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
   //metodo para eliminar un empleado
   deleteEmployee(id:number): Observable<any>{
-    return this.http.delete<any>(`${this.baseUrl}/employees/deleteEmployee/${id}`);
+    return this.http.delete<any>(`${this.baseUrl}/employees/deleteEmployee/${id}`, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
   //metodo update
   updateEmployee(id: number, data: any): Observable<any>{
-    return this.http.put<any>(`${this.baseUrl}/employees/updateEmployee/${id}`, data);
+    return this.http.put<any>(`${this.baseUrl}/employees/updateEmployee/${id}`, data, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 }
   

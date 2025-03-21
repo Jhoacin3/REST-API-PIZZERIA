@@ -11,7 +11,6 @@ exports.render = async (req, res) => {
 
 exports.validateSession = (req, res) => {
   const token = req.cookies.access_token;
-  console.log(token)
   if (!token) {
     return res.status(401).json({ authenticated: false, message: "No token provided" });
   }
@@ -86,6 +85,7 @@ exports.logoutController = async (req, res) => {
   res
   .clearCookie('access_token')
   .json({
+    success: true,
     message: messages.auth.logout,
   })
 

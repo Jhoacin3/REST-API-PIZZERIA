@@ -34,12 +34,16 @@ export class MenuService {
 
   //metodo para eliminar un menu
   deleteMenuItem(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/menu/deleteMenu/${id}`);
+    return this.http.delete<any>(`${this.baseUrl}/menu/deleteMenu/${id}`, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
   //metodo para editar un menu
   updateMenu(id: number, menuData: any): Observable<any>{
-    return this.http.put<any>(`${this.baseUrl}/menu/updateMenu/${id}`, menuData);
+    return this.http.put<any>(`${this.baseUrl}/menu/updateMenu/${id}`, menuData, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
 }
