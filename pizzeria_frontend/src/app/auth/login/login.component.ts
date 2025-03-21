@@ -3,19 +3,22 @@ import {Router, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule
 import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../material-module';
+import { CreateUserInterface } from '../.././core/models/create-user-interface';
+import { response } from 'express';
 
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterOutlet, FormsModule,CommonModule],
+  imports: [RouterOutlet, FormsModule,CommonModule, MaterialModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  email = '';
-  password = '';
+  email: string = '';
+  password: string = '';
   errorMessage = '';
   successMessage = '';
 
@@ -23,14 +26,35 @@ export class LoginComponent {
 
     // Método para iniciar sesión
   login(): void{
-    console.log('Email:', this.email, 'Password:', this.password);
-    this.authService.login(this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
-      error: (error) => {
-        this.errorMessage = 'Credenciales incorrectas';
-        console.error(error);
-      }
+    if(!this.email || !this.password){
+      this.errorMessage = 'Por favor, ingrese su email y contraseña';
+      return;
+    }
+    const user : CreateUserInterface ={
+      email: this.email,
+      password: this.password
+    }
+
+    this.authService.login(user).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          this.successMessage = response.message;
+          this.errorMessage = '';
+          this.router.navigate(['/home']) 
+        }else{
+          this.handleError(response.error);
+          console.log('Error:', response.error);
+          //minuto 2>49
+        }
+
+      },
+      error: () => this.handleError('Error al iniciar sesión')
     })
+  }
+
+  private handleError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
   }
 
 

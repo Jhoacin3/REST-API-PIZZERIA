@@ -35,9 +35,10 @@
             	   </div>
             	</div>
             	 <!--<a href="#">Forgot Password?</a> -->
-            	<input type="submit" class="btn" value="Iniciar sesion">
+            	<input type="submit" class="btn" (click)="login()" value="Iniciar sesion">
             </form>
 			<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+			<p *ngIf="successMessage" class="error">{{ successMessage }}</p>
 
         </div>
     </div>
