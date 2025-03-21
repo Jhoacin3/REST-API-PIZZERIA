@@ -1,6 +1,7 @@
-<section class="content">
-  <app-sidebar></app-sidebar> <!-- Sidebar o Navbar -->
-</section> 
+
+<section class="content" *ngIf="isAuthenticated && !isLoginRoute">
+  <app-sidebar></app-sidebar> <!-- Sidebar solo si el usuario está autenticado -->
+</section>
 
 <!-- Aquí se cargará dinámicamente el contenido según la ruta -->
 <div class="container">

@@ -6,15 +6,19 @@ import { EmployeesListComponent } from './features/dashboard/pages/employees-lis
 import { CategoriesListComponent } from './features/dashboard/pages/categories-list/categories-list.component';
 import { TablesListComponent } from './features/dashboard/pages/tables-list/tables-list.component';
 import { ConfigurationListComponent } from './features/dashboard/pages/configuration-list/configuration-list.component';
+import { LoginComponent } from './auth/login/login.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirige a /menu por defecto
-    { path: 'home', component: HomeComponent }, // Ruta para el home
-    { path: 'menu', component: MenuListComponent }, // Ruta para el menú
-    { path: 'employees', component: EmployeesListComponent }, // Ruta para el menú
-    { path: 'category', component: CategoriesListComponent }, // Ruta para el categorias
-    { path: 'tables', component: TablesListComponent }, // Ruta para el mesas
-    { path: 'configuration', component: ConfigurationListComponent }, // Ruta para las configuraciones propias del negocio
+    { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a /login por defecto
+    { path: 'home', component: HomeComponent, canActivate: [authGuard] }, // Ruta para el home
+    { path: 'login', component: LoginComponent }, // Ruta para el home
+    { path: 'menu', component: MenuListComponent, canActivate: [authGuard] }, // Ruta para el menú
+    { path: 'employees', component: EmployeesListComponent, canActivate: [authGuard] }, // Ruta para el menú
+    { path: 'category', component: CategoriesListComponent, canActivate: [authGuard] }, // Ruta para el categorias
+    { path: 'tables', component: TablesListComponent, canActivate: [authGuard] }, // Ruta para el mesas
+    { path: 'configuration', component: ConfigurationListComponent, canActivate: [authGuard] }, // Ruta para las configuraciones propias del negocio
+    { path: '**', redirectTo: 'login', pathMatch: 'full' } //MEJORAR: redireccionar a vista pagina no encontrada
 ];
 
 @NgModule({
