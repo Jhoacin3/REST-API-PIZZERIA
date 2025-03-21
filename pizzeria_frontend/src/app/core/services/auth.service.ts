@@ -5,57 +5,51 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject  } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { response } from 'express';
+import { environment } from '../../environments/environments';
+import { CreateUserInterface } from '../.././core/models/create-user-interface';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  //apuntando al endpoint de la API para el login
-  private loginURL = 'http://localhost:4000/apiPizza/auth/login';
-  private logoutURL = 'http://localhost:4000/apiPizza/auth/logout';
-  //para cerrar sesion
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(
-    this.hasToken()
-  );
-  constructor(private http: HttpClient) {}
+    private baseUrl = environment.apiBaseUrl;
+    private isAuthenticatedSubject = new BehaviorSubject<boolean>(false); // Estado reactivo
+    isAuthenticated$ = this.isAuthenticatedSubject.asObservable(); // Observable para suscribirse
+
+  constructor(private http: HttpClient) {
+    this.validateSession().subscribe(response => {
+      this.isAuthenticatedSubject.next(response.authenticated);
+    });
+  }
 
   //Método para el logeo
-  login(email: string, password: string): Observable<any> {
+  login(user: CreateUserInterface): Observable<any> {
     return this.http.post<any>(
-      this.loginURL, 
-      { email, password },  
-      { withCredentials: true } //permite que la cookie sea guardada en el navegador
-     ).pipe(
-      tap((response) => {
-        if (response.success && response.data) {
-          localStorage.setItem('access_token', response.data.token); //Nota: Almacenar token en localStorage
-
-          this.isAuthenticatedSubject.next(true); //Nota: Notificar autenticación
+      `${this.baseUrl}/auth/login`, user,
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        if (response.success) {
+          this.isAuthenticatedSubject.next(true); // ✅ Actualiza el estado
         }
       })
     );
   }
-
-  //Método para cerrar sesión
+  
   logout(): void {
-    this.http.post(this.logoutURL, {}, { withCredentials: true }).subscribe({
-      next: () => {
-        localStorage.removeItem('access_token'); // Eliminamos el token almacenado
-
-        this.isAuthenticatedSubject.next(false); // Notificamos que el usuario ya no está autenticado
-      },
-      error: (error) => console.error('Error al cerrar sesión:', error),
+    this.http.post(`${this.baseUrl}/auth/logout`, {}, { withCredentials: true }).subscribe(() => {
+      this.isAuthenticatedSubject.next(false); // ❌ Usuario no autenticado
     });
   }
-  // Método para verificar si el usuario está autenticado
-  isAuthenticated(): Observable<boolean> {
-    return this.isAuthenticatedSubject.asObservable();
+
+  validateSession(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/auth/validate-session`, { withCredentials: true });
   }
 
-  // Método para verificar si hay un token almacenado
-  private hasToken(): boolean {
-    return !!localStorage.getItem('access_token'); // Verifica si hay token en localStorage
-    //Usa !! para convertir un valor a booleano (true si existe el token, false si no).
+
+  isAuthenticated(): boolean {
+    return document.cookie.includes('access_token'); // ✅ Si la cookie existe, el usuario está autenticado
   }
+
 }
