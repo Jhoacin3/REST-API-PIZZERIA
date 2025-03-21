@@ -15,7 +15,9 @@ export class CategoryService {
 
   //metodo que obtiene las categorias
   getCategories(): Observable<CategoryInterface[]> {
-    return this.http.get<CategoryInterface[]>(`${this.baseUrl}/categories/getCategory`);
+    return this.http.get<CategoryInterface[]>(`${this.baseUrl}/categories/getCategory`, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
   //metodo crear una categoria

@@ -16,6 +16,8 @@ export class ConfigurationService {
 
   //metodo para obtener todas las configuraciones
   getConfig(): Observable<ConfigurationInterface[]> {
-    return this.http.get<ConfigurationInterface[]>(`${this.baseUrl}/config-store/getConfigStore`);
+    return this.http.get<ConfigurationInterface[]>(`${this.baseUrl}/config-store/getConfigStore`, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 }

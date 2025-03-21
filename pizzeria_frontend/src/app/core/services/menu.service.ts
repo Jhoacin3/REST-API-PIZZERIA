@@ -20,12 +20,16 @@ export class MenuService {
   
   //Método que obtiene el menú de la pizzería
   getMenuItems(): Observable<MenuItemModel[]> {
-    return this.http.get<MenuItemModel[]>(`${this.baseUrl}/menu/getMenu`);
+    return this.http.get<MenuItemModel[]>(`${this.baseUrl}/menu/getMenu`, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
   //Metodo para crear un nuevo item en el menú
   addMenuItem(menuItem: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/menu/addMenu`, menuItem);
+    return this.http.post<any>(`${this.baseUrl}/menu/addMenu`, menuItem, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    });
   }
 
   //metodo para eliminar un menu

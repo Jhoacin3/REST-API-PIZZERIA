@@ -13,7 +13,9 @@ export class PaymentService {
 
   //metodo que retorna el numero de mesas
   GetNumberTables(): Observable<TablesInterface[]>{
-    return this.http.get<TablesInterface[]>(`${this.baseUrl}/orderPayment/getTableNumbers`);
+    return this.http.get<TablesInterface[]>(`${this.baseUrl}/orderPayment/getTableNumbers`, { 
+      withCredentials: true //permite que la cookie sea guardada en el navegador
+    } );
   }
 
 }

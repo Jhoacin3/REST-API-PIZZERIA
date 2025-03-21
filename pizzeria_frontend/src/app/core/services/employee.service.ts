@@ -13,7 +13,9 @@ export class EmployeeService {
 
   //Método que obtiene los empleados
   getEmployees(): Observable<EmployeeInterface[]> {
-    return this.http.get<EmployeeInterface[]>(`${this.baseUrl}/employees/getEmployees`);
+    return this.http.get<EmployeeInterface[]>(`${this.baseUrl}/employees/getEmployees`, { 
+        withCredentials: true //permite que la cookie sea guardada en el navegador
+      } );
   }
 
   //Metodo para crear un empleado
