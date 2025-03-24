@@ -9,6 +9,7 @@ import { ConfigurationListComponent } from './features/dashboard/pages/configura
 import { LoginComponent } from './auth/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
 import { PageErrorComponent } from './features/shared/page-error/page-error.component';
+import { OrderPaymentComponent } from './features/dashboard/pages/order-payment/order-payment.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a /login por defecto
@@ -17,7 +18,13 @@ export const routes: Routes = [
     { path: 'menu', component: MenuListComponent, canActivate: [authGuard] }, // Ruta para el menú
     { path: 'employees', component: EmployeesListComponent, canActivate: [authGuard] }, // Ruta para el menú
     { path: 'category', component: CategoriesListComponent, canActivate: [authGuard] }, // Ruta para el categorias
+
+
     { path: 'tables', component: TablesListComponent, canActivate: [authGuard] }, // Ruta para el mesas
+    { path: 'orderPayment', component: OrderPaymentComponent, canActivate: [authGuard] },
+
+
+    
     { path: 'configuration', component: ConfigurationListComponent, canActivate: [authGuard] }, // Ruta para las configuraciones propias del negocio
     { path: '**', component: PageErrorComponent }
     // { path: '**', redirectTo: 'login', pathMatch: 'full' },

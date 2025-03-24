@@ -1,0 +1,107 @@
+<h1 class="text-center">MESA No. 0</h1>
+
+<div class="row">
+  <!-- Inputs al lado izquierdo -->
+  <div class="col-md-8">
+    <div class="mb-2">
+      <label for="searchInput" class="form-label">Buscar Insumo:</label>
+      <input type="text" class="form-control" id="searchInput" placeholder="Ingrese el nombre del platillo o bebida">
+    </div>
+
+    <ul class="list-group" id="searchResults"></ul>
+
+    <ul class="d-none" id="fullItemList">
+      <li class="list-group-item" data-value="1">One</li>
+      <li class="list-group-item" data-value="2">Two</li>
+      <li class="list-group-item" data-value="3">Three</li>
+      <li class="list-group-item" data-value="4">Another Item</li>
+      <li class="list-group-item" data-value="5">Something Else</li>
+    </ul>
+
+    <div class="mb-3">
+      <label class="form-label">Empleado en función:</label>
+      <select class="form-select" [(ngModel)]="selectEmployee" name="selectEmployee" id="selectEmployee">
+        <option *ngFor="let item of employeeItems" [value]="item.id_employees">{{ item.full_name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Card al lado derecho -->
+  <div class="col-md-4 d-flex justify-content-end">
+    <div class="card" style="width: 18rem;">
+      <div class="row g-0 align-items-center">
+        <!-- Imagen en el lado izquierdo -->
+        <div class="col-4 d-flex justify-content-center align-items-center">
+          <img src="assets/ic_orde_payment.png" class="img-fluid" alt="..." style="max-width: 150px; max-height: 150px;">
+        </div>
+        <!-- Costo y botón en el lado derecho -->
+        <div class="col-8">
+          <div class="card-body text-center">
+            <span class="text-warning fw-bold fs-1 d-block">$200</span>
+            <br>
+            <button class="btn btn-success mt-2 bi bi-check" type="button">Ordenar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<!-- <div class="mb-3">
+    <label class="form-label">Insumos:</label>
+    <select class="form-select" [(ngModel)]="menuItemToEdit.id_category" name="id_category" id="id_category">
+      <option *ngFor="let item of categoryItem" [value]="item.id_category">{{ item.type }}</option>
+    </select>
+</div> -->
+
+<!-- Tabla -->
+ <br>
+ <h2 >Detalles de la orden: </h2>
+
+ <hr>
+<table  class="table table-striped">
+    <thead>
+      <tr>
+        <th>Insumo</th>
+        <th>Precio unitario</th>
+        <th>Descripción</th>
+        <th>categoria</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr >
+        <td>comida</td>
+        <td>100</td>
+        <td>
+          <input type="text" class="form-control form-control-sm" placeholder="Ej. Salsa roja, sin queso...">
+        </td>
+        <td>2</td>
+        <td>
+          <div style="width: 80px;"> <input type="number" class="form-control form-control-sm" value="1" min="1"></div>
+        </td>
+        <section>
+          <td>
+            <div class="example-button-row">
+              <div class="example-flex-container">
+                <div class="example-button-container">
+                  <td>
+  
+                    <button type="button" class="btn btn-danger" >
+                      <i class="bi bi-trash"></i>
+                    </button>
+  
+                  </td>
+                </div>
+              </div>
+            </div>
+          </td>
+        </section>
+      </tr>
+    </tbody>
+  </table>
+
+
+<router-outlet />
