@@ -2,13 +2,21 @@ import { Component, OnInit, inject } from '@angular/core';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { response } from 'express';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import {MaterialModule} from '../../../../material-module';
 import { TablesInterface } from '../../../../core/models/tables-interface';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-tables-list',
-  imports: [ CommonModule, RouterOutlet, MaterialModule],
+  imports: [ CommonModule, RouterOutlet, MaterialModule, MatToolbarModule,
+      MatButtonModule,
+      RouterModule,
+      MatSidenavModule,
+      MatListModule,],
   templateUrl: './tables-list.component.html',
   styleUrl: './tables-list.component.css'
 })

@@ -16,7 +16,7 @@
       <img src="assets/mesas-dos.jpg" class="card-img-top" width="100" height="100" alt="...">
       <div class="card-body">
         <h4>Mesa número: {{ table.table_number }}</h4>
-        <a href="#" class="btn btn-warning  ">Ocupar mesa</a>
+        <a class="btn btn-warning" [routerLink]="['/orderPayment']" routerLinkActive="router-link-active">Ocupar mesa</a>
       </div>
     </div>
   </div>
