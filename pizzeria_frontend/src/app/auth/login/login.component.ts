@@ -43,8 +43,6 @@ export class LoginComponent {
           this.router.navigate(['/home']) 
         }else{
           this.handleError(response.error);
-          console.log('Error:', response.error);
-          //minuto 2>49
         }
 
       },
