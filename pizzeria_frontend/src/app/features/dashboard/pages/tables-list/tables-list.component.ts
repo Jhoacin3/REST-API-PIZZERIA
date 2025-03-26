@@ -24,6 +24,7 @@ export class TablesListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   tablesInterface: TablesInterface[] = [];
+  tableSelectId = 0;
 
 
   constructor(private paymentService: PaymentService){}
@@ -48,6 +49,10 @@ export class TablesListComponent implements OnInit {
       console.error(error);    
     }
    })
+  }
+
+  setIdTable(id: number): void {
+    this.paymentService.setTableId(id);
   }
 
 }

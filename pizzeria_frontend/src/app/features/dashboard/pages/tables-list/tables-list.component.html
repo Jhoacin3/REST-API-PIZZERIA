@@ -16,7 +16,9 @@
       <img src="assets/mesas-dos.jpg" class="card-img-top" width="100" height="100" alt="...">
       <div class="card-body">
         <h4>Mesa número: {{ table.table_number }}</h4>
-        <a class="btn btn-warning" [routerLink]="['/orderPayment']"
+        <a class="btn btn-warning" 
+        (click)="setIdTable(table.table_number)"
+        [routerLink]="['/orderPayment']"
         [ngClass]="{'disabled': table.status === 'Ocupado',}"
         routerLinkActive="router-link-active">Ocupar mesa</a>
       </div>

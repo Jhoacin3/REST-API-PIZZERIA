@@ -5,6 +5,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EmployeeInterface } from '../../../../core/models/employee-interface';
 import { EmployeeService } from '../../../../core/services/employee.service';
+import { TablesListComponent } from '../../../../features/dashboard/pages/tables-list/tables-list.component';
+import { PaymentService } from '../../../../core/services/payment.service';
 
 @Component({
   selector: 'app-order-payment',
@@ -17,11 +19,15 @@ export class OrderPaymentComponent implements OnInit{
    errorMessage = "";
    selectEmployee= "";
    employeeItems : EmployeeInterface[] =[];
-
-    constructor(private employeService : EmployeeService){}
+   selectedTableId: number | null = null;
+    constructor(
+      private employeService : EmployeeService,
+      private paymentService: PaymentService
+    ){}
 
   ngOnInit(): void {
     this.getEmployeeSelect();
+    this.getSelectedTableId();
   }
 
   getEmployeeSelect():void {
@@ -43,6 +49,9 @@ export class OrderPaymentComponent implements OnInit{
   private handleError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';
+  }
+  private getSelectedTableId(): void {
+    this.selectedTableId = this.paymentService.getTableId();
   }
 
 }

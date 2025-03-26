@@ -7,7 +7,9 @@ import { environment } from '../../environments/environments';
   providedIn: 'root'
 })
 export class PaymentService {
-  private baseUrl = environment.apiBaseUrl
+  private baseUrl = environment.apiBaseUrl;
+  private selectedTableId: number | null = null;
+  
 
   constructor(private http: HttpClient){}
 
@@ -16,6 +18,16 @@ export class PaymentService {
     return this.http.get<TablesInterface[]>(`${this.baseUrl}/orderPayment/getTableNumbers`, { 
       withCredentials: true //permite que la cookie sea guardada en el navegador
     } );
+  }
+
+  // Método para establecer el ID de la mesa seleccionada
+  setTableId(id: number): void {
+    this.selectedTableId = id;
+  }
+
+  // Método para obtener el ID de la mesa seleccionada
+  getTableId(): number | null {
+    return this.selectedTableId;
   }
 
 }
