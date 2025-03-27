@@ -22,7 +22,8 @@ const {
   menuStateEdition,
   getTableAndStatus,
   createOrderDetails,
-  statusTable
+  statusTable,
+  getOrders
 } = require("../utils/queries.js");
 
 exports.getTableNumberSer = async () => {
@@ -55,6 +56,28 @@ exports.getItemsMenuSer = async (item) => {
   }));
 
   return itemsMenu;
+};
+exports.getOrderServ = async () => {
+  result = [];
+
+  const findOrderAll = await getOrders();
+  if (findOrderAll.length == 0) throw new Error("No hay ordenes en este momento");
+  for (item of findOrderAll) {
+    const { employees_id, id_orders, id_tables, date, total, state } = item;
+    const employee = await getEmployeeId(employees_id);
+    const { full_name } = employee[0];
+    const data = {
+      id_order: id_orders,
+      employees_id: employees_id,
+      id_tables: full_name,
+      date: date,
+      total: total,
+      state: state
+    }
+    result.push(data);
+  }
+
+  return result;
 };
 
 exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {

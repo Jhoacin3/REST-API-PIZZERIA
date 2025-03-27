@@ -215,7 +215,7 @@ exports.getEmployees = async () =>{
 
 exports.getEmployeeId = async (id) =>{
 
-  const [getEmployee] = await connection.query("SELECT id_employees FROM employees WHERE id_employees =?", [id]);
+  const [getEmployee] = await connection.query("SELECT id_employees, full_name FROM employees WHERE id_employees =?", [id]);
 
   if (getEmployee.length == 0)throw new Error("No existe el empleado");
   return getEmployee;
@@ -347,6 +347,10 @@ exports.createOrder = async(
 
   exports.getOrderId = async(id) =>{
     const [data] = await connection.query("SELECT id_orders FROM orders WHERE id_orders = ?", [id])
+    return data
+  }
+  exports.getOrders = async(id) =>{
+    const [data] = await connection.query("SELECT id_orders, employees_id, id_tables, date, total, state FROM orders LIMIT 100")
     return data
   }
   exports.getOrderDetails = async(id) =>{

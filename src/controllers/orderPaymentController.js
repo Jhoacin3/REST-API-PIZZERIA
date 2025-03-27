@@ -20,6 +20,23 @@ exports.getTableNumbers = async(req, res) =>{
         
     }
 }
+exports.getOrdersContr = async(req, res) =>{
+    try {
+        const data = await orderPaymentService.getOrderServ();
+        res.json({
+            success: true,
+            data:data,
+            messages: messages.success.get
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            error: error.message,
+            messages: messages.error.notGet
+        })
+        
+    }
+}
 
 
 exports.getItemsMenu = async(req, res) =>{
