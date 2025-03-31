@@ -68,8 +68,8 @@ exports.getOrderServ = async () => {
     const { full_name } = employee[0];
     const data = {
       id_order: id_orders,
-      employees_id: employees_id,
-      id_tables: full_name,
+      employee: full_name,
+      id_tables: id_tables,
       date: date,
       total: total,
       state: state
