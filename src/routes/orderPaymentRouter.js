@@ -6,6 +6,7 @@ const router = express.Router();//constructor que retorna un objeto
 router.get("/getTableNumbers", orderPaymentController.getTableNumbers);
 router.get("/getItemsMenu/:item", orderPaymentController.getItemsMenu);
 router.get("/getOrders", orderPaymentController.getOrdersContr);
+router.get("/getOrderDetails/:id", orderPaymentController.getOrderDetails);
 router.post("/orderPayment", orderPaymentController.orderPayment);
 router.get("/calculateOrderTotal/:menuDetails", orderPaymentController.calculateOrderTotal);
 router.post("/deleteItemMenu", orderPaymentController.deleteItemMenu);

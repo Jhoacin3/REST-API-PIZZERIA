@@ -277,7 +277,7 @@ exports.findItemsMenu = async (item) => {
   return data
 };
 exports.getMenuId = async (id) => {
-  const [data] = await connection.query("SELECT id_menu FROM menu WHERE id_menu = ?", [id]);
+  const [data] = await connection.query("SELECT id_menu, name FROM menu WHERE id_menu = ?", [id]);
   if (data.length === 0)throw new Error("No se encontró el insumo seleccionado");
   return data;
 };
@@ -346,7 +346,7 @@ exports.createOrder = async(
   
 
   exports.getOrderId = async(id) =>{
-    const [data] = await connection.query("SELECT id_orders FROM orders WHERE id_orders = ?", [id])
+    const [data] = await connection.query("SELECT id_orders, total FROM orders WHERE id_orders = ?", [id])
     return data
   }
   exports.getOrders = async(id) =>{
@@ -355,5 +355,9 @@ exports.createOrder = async(
   }
   exports.getOrderDetails = async(id) =>{
     const [data] = await connection.query("SELECT id_orders, id_tables, state FROM orders WHERE (id_orders = ?) AND (state = ?)", [id, "En preparación"])
+    return data
+  }
+  exports.getOrderDetailsAll = async(id) =>{
+    const [data] = await connection.query("SELECT id_order_details, id_order, id_menu, amount, unit_price, description FROM order_details WHERE id_order = ?", [id])
     return data
   }

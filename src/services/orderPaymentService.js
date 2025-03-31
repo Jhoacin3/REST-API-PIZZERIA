@@ -23,7 +23,8 @@ const {
   getTableAndStatus,
   createOrderDetails,
   statusTable,
-  getOrders
+  getOrders,
+  getOrderDetailsAll
 } = require("../utils/queries.js");
 
 exports.getTableNumberSer = async () => {
@@ -79,6 +80,31 @@ exports.getOrderServ = async () => {
 
   return result;
 };
+//mostrar los detalles de cada orden en la tabla de ordenes
+exports.getOrderDetailsServ = async (id) => {
+  const result = [];
+  if (!id) throw new Error("Se necesita el identificador del menu para mostrar los detalles");
+  let searchOrder = await getOrderId(id);
+  if (searchOrder.length == 0) throw new Error("No se encontró la orden asociada");
+  const { total } = searchOrder[0];
+  let orderDetail = await getOrderDetailsAll(id);
+  if (orderDetail.length == 0) throw new Error("No se encontraron detalles de la orden asociada");
+  for (item of orderDetail) {
+    const { id_menu, id_order_details, amount, unit_price, description } = item;
+    let searchMenu = await getMenuId(id_menu);
+    if (searchMenu.length == 0) throw new Error("No se encontró el menu asociado a la orden");
+    const { name } = searchMenu[0];
+    const data = {
+      id_order_details: id_order_details,
+      name: name,
+      amount: amount,
+      unit_price: unit_price,
+      description: description
+    }
+    result.push(data);
+  }
+  return result;
+}
 
 exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {
   const newState = "En preparación";
