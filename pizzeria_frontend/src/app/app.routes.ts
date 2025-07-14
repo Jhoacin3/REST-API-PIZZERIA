@@ -11,6 +11,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { PageErrorComponent } from './features/shared/page-error/page-error.component';
 import { OrderPaymentComponent } from './features/dashboard/pages/order-payment/order-payment.component';
 import { OrderListComponent } from './features/dashboard/pages/order-list/order-list.component';
+import { UpdateOrderPaymentComponentHtmlComponent } from './features/dashboard/pages/update-order-payment.component.html/update-order-payment.component.html.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a /login por defecto
@@ -20,6 +21,7 @@ export const routes: Routes = [
     { path: 'ordenes', component: OrderListComponent, canActivate: [authGuard] }, // Ruta para el menú
     { path: 'employees', component: EmployeesListComponent, canActivate: [authGuard] }, // Ruta para el menú
     { path: 'category', component: CategoriesListComponent, canActivate: [authGuard] }, // Ruta para el categorias
+    { path: 'update-Order', component: UpdateOrderPaymentComponentHtmlComponent, canActivate: [authGuard] },
 
 
     { path: 'tables', component: TablesListComponent, canActivate: [authGuard] }, // Ruta para el mesas
