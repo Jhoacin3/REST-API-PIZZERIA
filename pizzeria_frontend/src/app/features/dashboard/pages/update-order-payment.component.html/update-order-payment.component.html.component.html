@@ -1,0 +1,120 @@
+<h1 class="text-center">Actualizar orden con ID: {{ orderIdSelected || 'No encontrada' }}</h1>
+<h2 class="text-center">MESA No. {{ tableSelected || 'No seleccionada' }}</h2>
+<div class="row">
+    <!-- Inputs al lado izquierdo -->
+    <div class="col-md-8">
+  
+      <label for="exampleDataList" class="form-label">Buscar Insumo:</label>
+      <!-- <input 
+        class="form-control" 
+        list="datalistOptions" 
+        id="exampleDataList" 
+        placeholder="Ingrese el nombre del platillo o bebida"
+        [(ngModel)]="selectedName"
+        (input)="onSelectItem()"
+      > -->
+      
+      <!-- <datalist id="datalistOptions">
+        <option *ngFor="let item of menu" [value]="item.name"></option>
+      </datalist> -->
+  
+   
+  
+      <!-- <div class="mb-3">
+        <label class="form-label">Empleado en función:</label>
+        <select class="form-select" [(ngModel)]="employees_id" name="employees_id" id="employees_id">
+          <option *ngFor="let item of employeeItems" [value]="item.id_employees">{{ item.full_name }}</option>
+        </select>
+      </div> -->
+      
+      <div class="mb-3">
+        <label class="form-label">Empleado seleccionado:</label>
+        <input type="number" class="form-control" readonly [(ngModel)]="responseEmployees_id" name="id" id="id">
+      </div>
+
+    </div>
+  
+    <!-- Card al lado derecho -->
+    <div class="col-md-4 d-flex justify-content-end">
+      <div class="card" style="width: 20rem;">
+        <div class="row g-0 align-items-center">
+          <!-- Imagen en el lado izquierdo -->
+          <div class="col-4 d-flex justify-content-center align-items-center">
+            <img src="assets/ic_orde_payment.png" class="img-fluid" alt="..." style="max-width: 150px; max-height: 150px;">
+          </div>
+          <!-- Costo y botón en el lado derecho -->
+          <div class="col-8">
+            <div class="card-body text-center">
+              <span class="text-warning fw-bold fs-1 d-block">${{ responseTotalOrder }}</span>
+              <br>
+              <button class="btn btn-success mt-2 bi bi-check"
+               
+               type="button">Actualizar</button>
+              <button class="btn btn-danger mt-2 bi bi-x" [routerLink]="['/tables']" type="button">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <br>
+  <!-- <div class="mb-3">
+      <label class="form-label">Insumos:</label>
+      <select class="form-select" [(ngModel)]="menuItemToEdit.id_category" name="id_category" id="id_category">
+        <option *ngFor="let item of categoryItem" [value]="item.id_category">{{ item.type }}</option>
+      </select>
+  </div> -->
+  
+  <!-- Tabla -->
+   <br>
+   <h2 >Detalles de la orden: </h2>
+  
+   <hr>
+  <table  class="table table-striped" *ngIf="dataOrderUpdate.length > 0" >
+      <thead>
+        <tr>
+          <th>Insumo</th>
+          <th>Precio unitario</th>
+          <th>Descripción</th>
+          <th>categoria</th>
+          <th>Cantidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of dataOrderUpdate" >
+          <td>{{ item.name }}</td>
+          <td>{{ item.unit_price }}</td>
+          <td>
+            <input type="text" class="form-control form-control-sm" placeholder="Ej. Salsa roja, sin queso...">
+          </td>
+          <td>{{ item.type }}</td>
+          <td>
+            <div style="width: 80px;"> <input type="number" class="form-control form-control-sm" value="1" min="1"></div>
+          </td>
+          <section>
+            <td>
+              <div class="example-button-row">
+                <div class="example-flex-container">
+                  <div class="example-button-container">
+                    <td>
+  
+                      <button type="button" class="btn btn-outline-danger" >
+                        <i class="bi bi-trash"></i>
+                      </button>
+    
+                    </td>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </section>
+        </tr>
+      </tbody>
+    </table>
+    <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  
+  <router-outlet />
