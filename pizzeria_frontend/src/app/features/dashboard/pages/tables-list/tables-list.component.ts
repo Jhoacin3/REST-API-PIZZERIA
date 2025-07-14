@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { OrderDetailsInterface } from '../../../../core/models/order-details-interface';
 
 @Component({
   selector: 'app-tables-list',
@@ -24,7 +25,14 @@ export class TablesListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   tablesInterface: TablesInterface[] = [];
+  orderDetailsRes: OrderDetailsInterface[] = [];
+  orderDataUpdate : any = {};
+
   tableSelectId = 0;
+  orderIdSelected = 0;
+  orderTotal= "";
+  tableIdForDetails =0;
+  employees_id: any;
 
 
   constructor(private paymentService: PaymentService){}
@@ -51,8 +59,42 @@ export class TablesListComponent implements OnInit {
    })
   }
 
+  getOrderDetails(order_id: number | null, id_tables: number):void {
+    this.tableIdForDetails = id_tables;
+
+    this.paymentService.getOrderDetails(order_id).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          this.orderDetailsRes = response.data.result;
+          console.log('Detalles de la orderDetailsRes:', this.orderDetailsRes);
+          this.orderTotal = response.data.total;
+          this.orderIdSelected = response.data.orderIdSelected;
+          this.employees_id = response.data.employees_id;
+          this.setIdUpdate(this.orderIdSelected, this.orderTotal, this.orderDetailsRes, this.employees_id)
+          this.successMessage = response.message;
+          this.errorMessage = '';
+        }else{
+          this.handleError(response.error);
+        }
+
+      },
+      error: (error) => {
+        this.errorMessage = 'Error al cargar los detalles de la orden.';
+        this.successMessage = '';
+      }
+
+    })
+  }
+
   setIdTable(id: number): void {
     this.paymentService.setTableId(id);
+  }
+  setIdUpdate(orderIdSelected: number, id:string, data: any, employees_id: number){
+    this.paymentService.setIdUpdate(orderIdSelected, id, data, employees_id);
+   }
+  private handleError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
   }
 
 }
