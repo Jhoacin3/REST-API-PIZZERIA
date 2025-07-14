@@ -1,1 +1,100 @@
-<p>order-list works!</p>
+<div class="container">
+    <h1>Ordenes</h1>
+    <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
+
+
+      <span *ngIf="successMessage">{{ successMessage }}</span>
+      <span *ngIf="errorMessage">{{ errorMessage }}</span>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>No. Orden</th>
+            <th>Empleado en función</th>
+            <th>Mesa No.</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado de la orden</th>
+            <th>Acciones</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of ordersInterface;">
+            <td>{{item.id_order}}</td>
+            <td>{{item.employee}}</td>
+            <td>{{item.id_tables}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.total}}</td>
+            <td>{{item.state}}</td>
+
+            <section>
+              <div class="example-button-row">
+                <div class="example-flex-container">
+                  <div class="example-button-container">
+                    <td>
+
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#showDetails" (click)="getOrderDetails(item.id_order)" >
+                        <i class="bi bi-eye-fill"></i>
+                      </button>
+
+                    </td>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+<!-- Modal para reflejar los detalles de una orden -->
+<div class="modal fade modal-lg" id="showDetails" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <h1 class="modal-title text-center text-dark" id="staticBackdropLabel">Detalles de la orden</h1>
+        <div class="modal-header bg-light">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>insumos</th>
+                <th>precio unitario</th>
+                <th>cantidades</th>
+                <th>descriptiones</th>
+              </tr>
+            </thead>
+            <tbody>
+    
+              <tr *ngFor="let item of orderDetailsRes;">
+                <td>{{item.name}}</td>
+                <td>{{item.unit_price}}</td>
+                <td>{{item.amount}}</td>
+                <td>{{item.description}}</td>
+              </tr>
+
+            </tbody>
+            <div style="margin-top: 15px;">
+              <strong style="font-size: 1.2em;">Total:</strong>
+              <span style="font-size: 1.4em; color: rgb(255, 81, 0); font-weight: bold;">
+                  {{ orderTotal}}
+              </span>
+          </div>
+          </table>
+          
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+<router-outlet />
+
