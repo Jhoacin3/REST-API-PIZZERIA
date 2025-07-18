@@ -7,7 +7,7 @@ const {getDataMenu, findCategoryById, getFilterById, getNameByMenu, createMenu, 
 const getMenuService = async () => {
   const data = [];
   const menuItem = await getDataMenu();
- 
+  
   for (let menus of menuItem) {
     const { id_category } = menus;
     const categoryResult = await findCategoryById(id_category);

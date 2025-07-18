@@ -13,7 +13,7 @@ import { MenuItemModel } from '../../../../core/models/menu-item.model';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { AlertService } from '../../../../services/alert.service.ts.service'; // Ajusta la ruta
+import { AlertService } from '../../../../services/alert.service.ts.service';
 
 @Component({
   selector: 'app-order-payment',
@@ -30,7 +30,7 @@ export class OrderPaymentComponent implements OnInit{
    errorMessage = "";
    selectEmployee= "";
    employeeItems : EmployeeInterface[] =[];
-
+   amountInput = 1;
    employees_id = 0;
    menuDetails: CreateOrderInterface[] = [];
    selectedTableId: number | null = null;
@@ -61,13 +61,12 @@ export class OrderPaymentComponent implements OnInit{
         name: selectedItem.name,
         id_category: selectedItem.id_category,
         type: selectedItem.type,
-        amount: 1, //cambiar
+        amount: 1,
         unit_price: selectedItem.price,
-        description: selectedItem.description
+        description: ""
       };
 
       this.menuDetails.push(orderItem);
-      console.log('Insumos seleccionados:', this.menuDetails);
     }
   }
   getTotalOrder(): number {
@@ -82,39 +81,27 @@ export class OrderPaymentComponent implements OnInit{
       next: (response: any) => {
         if (response.success) {
           this.employeeItems = response.data;
-          this.successMessage = response.message;
-          this.errorMessage = ''; // Limpiamos posibles errores previos
-
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al editar el empleado')
+      error: () => this.alertService.error('', 'Error al obtener los empleados.'),
     })
   }
 
   getMenu(): void{
     this.menuService.getMenuItems().subscribe({
       next: (response) => this.handleResponse(response),
-      error: () => this.handleError('Error al cargar el menú.'),
+      error: () => this.alertService.error('', 'Error al cargar el menú.'),
     })
   }
 
   createOrder(): void{
-    // if(!this.employees_id || !this.selectedTableId)
-    //   {
-    //     this.errorMessage = 'Todos los campos son requeridos';
-    //     return;
-    //   }
-    
-
     this.paymentService
       .createOrden(this.employees_id, this.selectedTableId, this.menuDetails)
       .subscribe({
         next: (response) => {
           if (response.success) {
-
-            console.log('Orden creada:', response.data);
             this.alertService
               .success(
                 '', response.messages

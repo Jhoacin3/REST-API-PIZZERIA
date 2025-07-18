@@ -54,7 +54,7 @@ export class TablesListComponent implements OnInit {
       // Si ocurre un error inesperado (problema de red, etc.)
       this.errorMessage = 'Error al cargar las mesas.';
       this.successMessage = '';
-      console.error(error);    
+      // console.error(error);    
     }
    })
   }
@@ -66,7 +66,7 @@ export class TablesListComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           this.orderDetailsRes = response.data.result;
-          console.log('Detalles de la orderDetailsRes:', this.orderDetailsRes);
+          // console.log('Detalles de la orderDetailsRes:', this.orderDetailsRes);
           this.orderTotal = response.data.total;
           this.orderIdSelected = response.data.orderIdSelected;
           this.employees_id = response.data.employees_id;

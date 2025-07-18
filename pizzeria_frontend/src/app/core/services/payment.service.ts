@@ -59,8 +59,8 @@ export class PaymentService {
     });
   }
 
-  deleteInsumoOrderService(table_id: number, order_id: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/orderPayment/deleteInsumoOrder/${order_id}/${table_id}`, {
+  deleteInsumoOrderService(id_menu: number, order_id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/orderPayment/deleteInsumoOrder/${id_menu}/${order_id}`, {
       withCredentials: true
     });
   }
