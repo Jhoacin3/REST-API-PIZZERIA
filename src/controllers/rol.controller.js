@@ -11,7 +11,6 @@ exports.getRoles = async (req, res) => {
     res.status(200).json(getRolesHistory);
   } catch (error) {
     res.status(500).json({ error: error.message });
-    //console.log("Error: ", err.message);
   }
 };
 

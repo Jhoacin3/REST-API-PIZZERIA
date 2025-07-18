@@ -70,9 +70,13 @@ exports.getIdMenu = async () => {
   const [idMenus] = await connection.query("SELECT id_menu FROM menu");
   return idMenus;
 };
+exports.getIdOrders = async (id) => {
+  const [data] = await connection.query("SELECT id_order_details FROM order_details WHERE id_order = ?", [id]);
+  return data;
+};
 
 exports.findExistOrderDetail = async (id)=>{
-const [findMenuItem] = await connection.query("SELECT id_menu FROM order_details WHERE id_menu = ?", [id])
+const [findMenuItem] = await connection.query("SELECT id_order_details, id_menu FROM order_details WHERE id_menu = ?", [id])
 return findMenuItem;
 }
 
@@ -80,6 +84,11 @@ return findMenuItem;
 exports.getCategory = async () => {
   const [getCategories] = await connection.query("SELECT * FROM category LIMIT 100")
   return getCategories;
+}
+exports.getCategoryId = async (id) => {
+  const [getCategoryId] = await connection.query("SELECT type FROM category WHERE id_category = ?",
+    [id])
+  return getCategoryId;
 }
 exports.getCategoryName = async () => {
   const [getCategoryName] = await connection.query("SELECT type FROM category");
@@ -182,11 +191,15 @@ exports.createOrderDetails = async (
   amount,
   unit_price,
   description
-) => {
+) => {  
+  let newDescription = description;
+  if (!description || description.length === 0) {
+    newDescription = "Sin descripción";
+  }
  
   const [data] = await connection.query(
     "INSERT INTO order_details (id_order, id_menu, amount, unit_price, description) VALUES (?, ?, ?, ?, ?)",
-    [id_order, id_menu, amount, unit_price, description]
+    [id_order, id_menu, amount, unit_price, newDescription]
   );
   if (data.length === 0) {
     throw new Error("No se pudo guardar el detalle de la orden");
@@ -277,7 +290,7 @@ exports.findItemsMenu = async (item) => {
   return data
 };
 exports.getMenuId = async (id) => {
-  const [data] = await connection.query("SELECT id_menu, name FROM menu WHERE id_menu = ?", [id]);
+  const [data] = await connection.query("SELECT id_menu, name, id_category FROM menu WHERE id_menu = ?", [id]);
   if (data.length === 0)throw new Error("No se encontró el insumo seleccionado");
   return data;
 };
@@ -346,7 +359,11 @@ exports.createOrder = async(
   
 
   exports.getOrderId = async(id) =>{
-    const [data] = await connection.query("SELECT id_orders, total FROM orders WHERE id_orders = ?", [id])
+    const [data] = await connection.query("SELECT id_orders, total, employees_id FROM orders WHERE id_orders = ?", [id])
+    return data
+  }
+  exports.getOrderIdByTable = async(id) =>{
+    const [data] = await connection.query("SELECT id_orders FROM orders WHERE (id_tables = ?) AND (state = ?)", [id, "En preparación"])
     return data
   }
   exports.getOrders = async(id) =>{
@@ -357,7 +374,46 @@ exports.createOrder = async(
     const [data] = await connection.query("SELECT id_orders, id_tables, state FROM orders WHERE (id_orders = ?) AND (state = ?)", [id, "En preparación"])
     return data
   }
+  exports.getOrderAndStatus = async(id, table_id) =>{
+    const [data] = await connection.query("SELECT id_orders, id_tables, state FROM orders WHERE (id_orders = ?) AND (state = ?) AND (id_tables = ?)", [id, "En preparación", table_id])
+    return data
+  }
   exports.getOrderDetailsAll = async(id) =>{
     const [data] = await connection.query("SELECT id_order_details, id_order, id_menu, amount, unit_price, description FROM order_details WHERE id_order = ?", [id])
     return data
   }
+  // exports.updateOrder = async (id) => {
+  //   const [data] = await connection.query("UPDATE orders SET state = ? WHERE id_orders = ?", ["En preparación", id])
+  //   return data
+  // }
+
+exports.updateOrderDetail = async (id_order_details, name, type, amount, unit_price, description, id_menu) => {
+  const [data] = await connection.query("UPDATE order_details SET amount = ?, unit_price = ?, description = ?, id_menu = ? WHERE id_order_details = ?", [ amount, unit_price, description, id_menu, id_order_details])
+
+  if (data.length === 0) {
+    throw new Error("No se pudo actualizar el detalle de la orden");
+  }
+  return data;
+}
+
+exports.deleteOrderDetail = async (id_order_details, order_id) =>{
+  const [data] = await connection.query("DELETE FROM order_details WHERE id_order_details = ? AND id_order = ?", [id_order_details, order_id])
+  if (data.length === 0) {
+    throw new Error("No se pudo eliminar el detalle de la orden");
+  }
+  return data;
+}
+
+exports.setOrderTotal = async (order_id) => {
+  const [data] = await connection.query("UPDATE orders SET total = (SELECT SUM(unit_price * amount) FROM order_details WHERE id_order = ?) WHERE id_orders = ?", [order_id, order_id]);
+  if (data.length === 0) {
+    throw new Error("No se pudo actualizar el total de la orden");
+  }
+
+}
+
+exports.insertOrderDetail = async (orderId, name, id_menu, type, unit_price, amount, description) => {
+  const [data] = await connection.query("INSERT INTO order_details (id_order,  id_menu, amount, unit_price, description) VALUES (?, ?, ?, ?, ?)", [orderId, id_menu, amount, unit_price, description]);
+  return data
+
+}
