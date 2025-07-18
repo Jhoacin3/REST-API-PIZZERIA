@@ -5,6 +5,7 @@ exports.messages = {
       create: "Creación exitosa",
       update: "Actualización exitosa",
       orderCreated: "Orden realizada exitosamente",
+      orderPaid: "Orden pagada exitosamente",
     },
     error: {
       notFound: "No se pudo eliminar",

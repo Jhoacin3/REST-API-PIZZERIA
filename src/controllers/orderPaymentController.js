@@ -119,6 +119,23 @@ exports.orderPayment = async (req, res) => {
     });
   }
 };
+exports.payOrder = async (req, res) => {
+  const { id_order } = req.body;
+  try {
+    const data = await orderPaymentService.payOrderServ(id_order);
+    res.json({
+      success: true,
+      data,
+      messages: messages.success.orderPaid
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+      // messages: messages.error.notPaid
+    });
+  }
+}
 
 exports.calculateOrderTotal = async(req, res) =>{
     const {menuDetails} = req.params;

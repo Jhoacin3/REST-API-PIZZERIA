@@ -232,6 +232,23 @@ exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {
   return { insertId, total, menuDetails };
 };
 
+exports.payOrderServ = async (id_order) => {
+  if (!id_order) throw new Error("Se necesita un parametro valido");
+  const ordersId = await getOrderId(id_order);
+  if (ordersId.length == 0) throw new Error("No se encontró la orden asociada");
+  const { state, id_tables } = ordersId[0];
+  if (state == "Pagado") throw new Error("La orden ya ha sido pagada");
+
+  const resultEdition = await menuStateEdition(id_order);
+  if (resultEdition.length === 0)
+    throw new Error("No se pudo actualizar el estatus de la orden");
+  const resultStatusEdit = await tableStatusEdition("Disponible", id_tables);
+  if (resultStatusEdit.length === 0)
+    throw new Error("No se pudo actualizar el estatus de la mesa");
+
+  return { id_order, state: "Pagado" };
+}
+
 exports.orderDetailServ = async (id_order, menuDetails) => {
   if (!Array.isArray(menuDetails) || menuDetails.length === 0)
     throw new Error("No se proporcionaron productos para la orden");
@@ -346,7 +363,7 @@ exports.updateOrderSer = async (orderId, orderDetails) => {
 
     } else {
       // Validación de campos obligatorios para inserción
-      if (!amount || !unit_price || !name || !description || !id_menu) {
+      if (!amount || !unit_price || !name || description == null || !id_menu) {
         banderin = false;
         throw new Error(`Faltan datos para agregar un nuevo detalle a la orden: ${JSON.stringify(data)}`);
       }

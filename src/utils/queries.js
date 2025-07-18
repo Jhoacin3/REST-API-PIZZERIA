@@ -349,7 +349,7 @@ exports.createOrder = async(
     return data
   };
   exports.menuStateEdition = async (id_order) => {
-    let stateNew = "Servido";
+    let stateNew = "Pagado";
     const [data] = await connection.query(
       "UPDATE orders SET state =? WHERE id_orders =?",
       [stateNew,id_order]
@@ -359,7 +359,7 @@ exports.createOrder = async(
   
 
   exports.getOrderId = async(id) =>{
-    const [data] = await connection.query("SELECT id_orders, total, employees_id FROM orders WHERE id_orders = ?", [id])
+    const [data] = await connection.query("SELECT id_orders, total, employees_id, id_tables, state FROM orders WHERE id_orders = ?", [id])
     return data
   }
   exports.getOrderIdByTable = async(id) =>{
@@ -413,7 +413,11 @@ exports.setOrderTotal = async (order_id) => {
 }
 
 exports.insertOrderDetail = async (orderId, name, id_menu, type, unit_price, amount, description) => {
-  const [data] = await connection.query("INSERT INTO order_details (id_order,  id_menu, amount, unit_price, description) VALUES (?, ?, ?, ?, ?)", [orderId, id_menu, amount, unit_price, description]);
+   let newDescription = description;
+  if (!description || description.length === 0) {
+    newDescription = "Sin descripción";
+  }
+  const [data] = await connection.query("INSERT INTO order_details (id_order,  id_menu, amount, unit_price, description) VALUES (?, ?, ?, ?, ?)", [orderId, id_menu, amount, unit_price, newDescription]);
   return data
 
 }

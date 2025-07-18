@@ -9,6 +9,8 @@ router.get("/getOrders", orderPaymentController.getOrdersContr);
 router.get("/getOrderDetails/:id", orderPaymentController.getOrderDetails);
 router.get("/getItemsByOrder/:order_id/:table_id", orderPaymentController.getItemsByOrder);
 router.post("/orderPayment", orderPaymentController.orderPayment);
+//endpoint para pagar la orden
+router.post("/payOrder", orderPaymentController.payOrder);
 router.get("/calculateOrderTotal/:menuDetails", orderPaymentController.calculateOrderTotal);
 router.post("/deleteItemMenu", orderPaymentController.deleteItemMenu);
 router.delete("/deleteInsumoOrder/:id_order_details/:order_id", orderPaymentController.deleteInsumoOrder);
