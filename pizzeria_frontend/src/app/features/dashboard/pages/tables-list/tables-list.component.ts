@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { response } from 'express';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import {MaterialModule} from '../../../../material-module';
 import { TablesInterface } from '../../../../core/models/tables-interface';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { OrderDetailsInterface } from '../../../../core/models/order-details-interface';
+import { AlertService } from '../../../../services/alert.service.ts.service';
 
 @Component({
   selector: 'app-tables-list',
@@ -35,7 +36,11 @@ export class TablesListComponent implements OnInit {
   employees_id: any;
 
 
-  constructor(private paymentService: PaymentService){}
+  constructor(
+    private paymentService: PaymentService,
+    private alertService: AlertService,
+    private router: Router
+  ){}
   //subscribe: metodo que permite escuchar y maneja dos escenario: next y error
   ngOnInit(): void {
    this.paymentService.GetNumberTables().subscribe({
@@ -66,7 +71,6 @@ export class TablesListComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           this.orderDetailsRes = response.data.result;
-          // console.log('Detalles de la orderDetailsRes:', this.orderDetailsRes);
           this.orderTotal = response.data.total;
           this.orderIdSelected = response.data.orderIdSelected;
           this.employees_id = response.data.employees_id;
@@ -83,6 +87,27 @@ export class TablesListComponent implements OnInit {
         this.successMessage = '';
       }
 
+    })
+  }
+
+  orderPayment():void {
+    this.paymentService.orderPaid(this.orderIdSelected).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          this.alertService.success('', response.messages).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+            window.location.reload();
+          });
+
+        }else{
+           this.alertService.error('', response.error);
+        }
+      },
+      error: (error) => {
+        this.alertService.error('', 'Error al procesar el pago.');
+      }
     })
   }
 

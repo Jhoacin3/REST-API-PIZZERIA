@@ -50,9 +50,14 @@ export class PaymentService {
         withCredentials: true
       });
   }
+  //metodo para pagar una orden
+  orderPaid(id_order: number): Observable<any>{
+    return this.http.post<any>(`${this.baseUrl}/orderPayment/payOrder`, { id_order }, {
+      withCredentials: true
+    });
+  }
 
   updateOrder(id:number, orderDetails : any): Observable<any>{
-    console.log('los detalles de la orden son service: ', orderDetails);
     return this.http.put<any>(`${this.baseUrl}/orderPayment/updateOrder/${id}`, orderDetails, 
       { 
       withCredentials: true
@@ -81,7 +86,6 @@ export class PaymentService {
     this.totalOrder= id;
     this.employees_id = employees_id;
     this.orderIdSelected = orderIdSelected;
-    // console.log('los detalles de la orden son: ', this.orderDataUpdate, this.totalOrder);
    }
 
    getdataOrderUpdate():any {
