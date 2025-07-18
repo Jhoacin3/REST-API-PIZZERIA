@@ -57,6 +57,25 @@ exports.getOrderDetails = async(req, res) =>{
         
     }
 }
+exports.getItemsByOrder = async(req, res) =>{
+  const  {order_id, table_id} = req.params
+
+    try {
+        const data = await orderPaymentService.getItemsByOrderServ(order_id, table_id);
+        res.json({
+            success: true,
+            data:data,
+            messages: messages.success.get
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            error: error.message,
+            messages: messages.error.notGet
+        })
+        
+    }
+}
 
 
 exports.getItemsMenu = async(req, res) =>{
@@ -106,7 +125,6 @@ exports.calculateOrderTotal = async(req, res) =>{
 
     try {
         //const menuDetails = JSON.parse(req.query.menuDetails); // Deserializamos el JSON recibido
-        //console.log(menuDetails);
 
         const total = await orderPaymentService.calculateOrderTotal(menuDetails);
         res.json({
@@ -142,6 +160,62 @@ exports.deleteItemMenu = async (req, res) => {
     });
   }
 };
+
+exports.deleteInsumoOrder = async (req, res) => {
+  const { id_order_details, order_id} = req.params;
+
+  try {
+    const data = await orderPaymentService.deleteInsumoOrderServ( id_order_details, order_id );
+    res.json({
+      success: true,
+      data,
+      messages: messages.success.delete,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+      messages: messages.error.notDelete,
+    });
+  }
+};
+exports.updateItemsOrderContr = async (req, res) => {
+  const { id_menu, menuDetails } = req.body;
+  try {
+    const data = await orderPaymentService.deleteItemMenu(id_menu, menuDetails);
+    res.json({
+      success: true,
+      data,
+      messages: messages.success.delete,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+      messages: messages.error.notDelete,
+    });
+  }
+};
+
+exports.updateOrderContr = async (req, res) => {
+  const  {id} = req.params
+  const orderDetails = req.body;
+
+  try {
+    const data = await orderPaymentService.updateOrderSer(id, orderDetails);
+    res.json({
+      success: true,
+      data: data,
+      messages: messages.success.update
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+      messages: messages.error.notUpdate,
+    });
+  }
+}
 
 exports.changeStateOrder = async(req, res) =>{
     const {id_order} = req.params;

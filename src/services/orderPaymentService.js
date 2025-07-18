@@ -5,6 +5,7 @@ const {
   validateParamsOrder,
   validateParamsOrderDetail,
   calculateOrderTotal,
+  existingDetail
 } = require("../utils/utils.js");
 const {
   getTableNumbersUtils,
@@ -24,10 +25,18 @@ const {
   createOrderDetails,
   statusTable,
   getOrders,
-  getOrderDetailsAll
+  getOrderDetailsAll,
+  getOrderIdByTable,
+  getCategoryId,
+  updateOrderDetail,
+  insertOrderDetail,
+  deleteOrderDetail,
+  getOrderAndStatus,
+  setOrderTotal
 } = require("../utils/queries.js");
 
 exports.getTableNumberSer = async () => {
+  const result = [];
   const checkActiveTable = await getTableNumbersUtils();
   if (!checkActiveTable.length)
     throw new Error("No hay una configuración activa en tu negocio");
@@ -35,14 +44,26 @@ exports.getTableNumberSer = async () => {
   const getTables = await statusTable(id_store_info);
 
   if (!getTables.length) throw new Error("Lo siento, no se encontró la mesa ");
+  for(item of getTables) {
+    const { id_tables, table_number, status } = item;
+    const searchOrderId = await getOrderIdByTable(id_tables);
+    //nota: Si searchOrderId.length > 0, significa que encontramos una orden, entonces tomamos searchOrderId[0].id_orders.
+    const id_orders = searchOrderId.length > 0 ? searchOrderId[0].id_orders : null;
 
-  const result = getTables.map(({ id_tables, table_number, status }) => ({
-    id_tables,
-    table_number,
-    status
-  }));
-
+    const data = {
+      id_tables,
+      id_orders,
+      table_number,
+      status,
+    }
+    result.push(data);
+  }
   return result;
+  // const result = getTables.map(({ id_tables, table_number, status }) => ({
+  //   id_tables,
+  //   table_number,
+  //   status
+  // }));
 };
 
 exports.getItemsMenuSer = async (item) => {
@@ -80,30 +101,88 @@ exports.getOrderServ = async () => {
 
   return result;
 };
+
+exports.getItemsByOrderServ = async (order_id, table_id) => {
+  if(!order_id || !table_id) throw new Error("Se necesita los dos parametro validos")
+  const result = [];
+
+  let orderDetail = await getOrderAndStatus(order_id, table_id);
+  if (orderDetail.length == 0) throw new Error("Esta mesa no tiene ordenes activas o no esta disponible por el momento");
+  let searchOrder = await getOrderId(order_id);
+  if (searchOrder.length == 0) throw new Error("No se encontró la orden asociada");
+  const { total, employees_id } = searchOrder[0];
+  let employeeName = await getEmployeeId(employees_id);
+  if(employeeName.length == 0) throw new Error("No se encontró el empleado asociado a la orden");
+  const {full_name} = employeeName[0];
+  let orderDetails = await getOrderDetailsAll(order_id);
+  if (orderDetails.length == 0) throw new Error("No se encontraron detalles de la orden asociada");
+
+  for (item of orderDetails) {
+    const { id_menu, id_order_details, amount, unit_price, description } = item;
+    let searchMenu = await getMenuId(id_menu);
+    if (searchMenu.length == 0) throw new Error("No se encontró el menu asociado a la orden");
+    const { name, id_category } = searchMenu[0];
+    const searchCategoryName = await getCategoryId(id_category);
+    const {type} = searchCategoryName[0];
+    const data = {
+      id_order_details: id_order_details,
+      name: name,
+      id_menu: id_menu,
+      amount: amount,
+      type: type,
+      unit_price: unit_price,
+      description: description,
+    }
+    result.push(data);
+  }
+  return {
+    total,
+    employeeName: full_name,
+    result
+    
+  };
+
+
+}
+
 //mostrar los detalles de cada orden en la tabla de ordenes
 exports.getOrderDetailsServ = async (id) => {
   const result = [];
-  if (!id) throw new Error("Se necesita el identificador del menu para mostrar los detalles");
+  let orderIdSelected = 0;
+  if (!id || id == null) throw new Error("Se necesita el identificador del menu para mostrar los detalles");
   let searchOrder = await getOrderId(id);
   if (searchOrder.length == 0) throw new Error("No se encontró la orden asociada");
-  const { total } = searchOrder[0];
+  const { total, employees_id } = searchOrder[0];
   let orderDetail = await getOrderDetailsAll(id);
+  const {id_order} = orderDetail[0];
+  orderIdSelected = orderDetail[0].id_order;
+  if(orderIdSelected == 0) throw new Error("No se contró la orden asociada")
   if (orderDetail.length == 0) throw new Error("No se encontraron detalles de la orden asociada");
   for (item of orderDetail) {
     const { id_menu, id_order_details, amount, unit_price, description } = item;
     let searchMenu = await getMenuId(id_menu);
     if (searchMenu.length == 0) throw new Error("No se encontró el menu asociado a la orden");
-    const { name } = searchMenu[0];
+    const { name, id_category } = searchMenu[0];
+    const searchCategoryName = await getCategoryId(id_category);
+    const {type} = searchCategoryName[0];
     const data = {
       id_order_details: id_order_details,
       name: name,
+      id_menu: id_menu,
       amount: amount,
+      type: type,
       unit_price: unit_price,
-      description: description
+      description: description,
     }
     result.push(data);
   }
-  return result;
+  return {
+    orderIdSelected,
+    total,
+    employees_id,
+    result
+    
+  };
 }
 
 exports.orderPaymentSer = async (employees_id, id_table, menuDetails) => {
@@ -206,6 +285,97 @@ exports.deleteItemMenu = async (id_menu, menuDetails) => {
 
   return { resultnewItems };
 };
+
+exports.deleteInsumoOrderServ = async (id_order_details, order_id) => {
+  if (!id_order_details || !order_id) throw new Error("Se necesita los dos parametro validos");
+
+  const ordersId = await getOrderId(order_id);
+  if (ordersId.length == 0) throw new Error("No se encontró la orden asociada");
+
+  const existingOrderDetails = await getOrderDetailsAll(order_id);
+  if(existingOrderDetails.length <= 1) throw new Error("No se puede eliminar el ultimo producto de la orden.");
+  if (existingOrderDetails.length === 0) {
+    throw new Error("No se encontró el producto en la orden para poder eliminarlo");
+  }
+  const resultDelete = await deleteOrderDetail(id_order_details, order_id);
+  //actualizar el total de la orden al eliminar un producto
+  await setOrderTotal(order_id);
+
+
+  return resultDelete;
+
+}
+
+exports.updateOrderSer = async (orderId, orderDetails) => {
+  let banderin = true;
+
+  const FindOrderId = await getOrderId(orderId);
+  if (FindOrderId.length === 0) throw new Error("No se encontró la orden asociada");
+
+  if (!Array.isArray(orderDetails) || orderDetails.length === 0 || typeof orderDetails === "undefined") {
+    throw new Error("No se proporcionaron productos para la orden");
+  }
+
+  for (let data of orderDetails) {
+    const {
+      id_order_details,
+      name,
+      amount,
+      type,
+      unit_price,
+      description,
+      id_menu
+    } = data;
+
+    if (id_order_details) {
+      // Actualizar detalle
+      const resultUpdate = await updateOrderDetail(
+        id_order_details,
+        name,
+        type,
+        amount,
+        unit_price,
+        description,
+        id_menu
+      );
+
+      if (resultUpdate.length === 0) {
+        banderin = false;
+        throw new Error(`No se pudo actualizar el detalle de la orden con ID: ${id_order_details}`);
+      }
+
+    } else {
+      // Validación de campos obligatorios para inserción
+      if (!amount || !unit_price || !name || !description || !id_menu) {
+        banderin = false;
+        throw new Error(`Faltan datos para agregar un nuevo detalle a la orden: ${JSON.stringify(data)}`);
+      }
+
+      // Insertar nuevo detalle
+      const resultInsert = await insertOrderDetail(
+        orderId,
+        name,
+        id_menu,
+        type,
+        unit_price,
+        amount,
+        description
+      );
+      
+
+      if (resultInsert.length === 0) {
+        banderin = false;
+        throw new Error(`No se pudo insertar un nuevo detalle a la orden con ID: ${orderId}`);
+      }
+    }
+
+  }
+    //actualizar el total de la orden al editar una orden
+  await setOrderTotal(orderId);
+
+  return banderin;
+};
+
 
 exports.changeStateOrder = async (id_order) => {
   if (!id_order)
