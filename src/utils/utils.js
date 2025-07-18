@@ -1,4 +1,5 @@
 const multer = require('multer');
+const { deleteOrderDetail } = require('../utils/queries.js');
 // Configurar multer para almacenar las imágenes en memoria
 const storageStrategy = multer.memoryStorage();
 const upload = multer({storage: storageStrategy});
@@ -100,7 +101,7 @@ exports.validateParamsAddMenu = async (name, description, price, id_category) =>
   if (typeof name !== 'string' || typeof description !== 'string') {
     throw new Error("Todos los campos deben ser del tipo correcto");
   }
-  if (name.length <= 2 || name.length >= 12) {
+  if (name.length <= 2 || name.length >= 20) {
     throw new Error("El nombre del menu debe tener entre 3 y 11 caracteres ");
   }
      
@@ -230,6 +231,42 @@ exports.validateParamsOrderDetail = async (menuDetails) => {
     }
   }
 };
+
+exports.existingDetail = async (existingOrderDetails, orderDetails) => { 
+  const deletedDetails = [];
+
+  for (const existingDetail of existingOrderDetails) {
+    const shouldKeep = orderDetails.some(
+      (detail) => detail.id_order_details === existingDetail.id_order_details
+    );
+
+    if (!shouldKeep) {
+      const resultDelete = await deleteOrderDetail(existingDetail.id_order_details);
+      if (!resultDelete) {
+        throw new Error(`No se pudo eliminar el detalle con ID: ${existingDetail.id_order_details}`);
+      }
+      deletedDetails.push(existingDetail.id_order_details);
+    }
+  }
+
+  return deletedDetails;
+};
+//como estaba antes
+// exports.existingDetail = async (existingOrderDetails) => {
+//   for (const existingDetail of existingOrderDetails) {
+//     const shouldKeep = orderDetails.some(
+//       (detail) => detail.id_order_details === existingDetail.id_order_details
+//     );
+//     if (!shouldKeep) {
+//       const resultDelete = await deleteOrderDetail(existingDetail.id_order_details);
+//       if (!resultDelete) {
+//         throw new Error(`No se pudo eliminar el detalle de la orden con ID: ${existingDetail.id_order_details}`);
+//       }
+//     }
+//   }
+//   return resultDelete;
+
+// }
 
 exports.calculateOrderTotal = async (menuDetails) => {
   let total = 0;
