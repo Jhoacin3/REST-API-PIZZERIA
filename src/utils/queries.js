@@ -362,6 +362,10 @@ exports.createOrder = async(
     const [data] = await connection.query("SELECT id_orders, total, employees_id, id_tables, state FROM orders WHERE id_orders = ?", [id])
     return data
   }
+  exports.getEmployeeByOrderId = async(id) =>{
+    const [data] = await connection.query("SELECT employees_id FROM orders WHERE employees_id = ?", [id])
+    return data
+  }
   exports.getOrderIdByTable = async(id) =>{
     const [data] = await connection.query("SELECT id_orders FROM orders WHERE (id_tables = ?) AND (state = ?)", [id, "En preparación"])
     return data

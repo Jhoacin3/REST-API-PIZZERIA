@@ -1,5 +1,5 @@
 const { validateParamsId, validParamsEmployee, validParamsEmployeeUp } = require("../utils/utils.js");
-const { getEmployeeByName, getEmployees, getEmployeeId, createEmployee, updateEmployees, deleteEmployee } = require("../utils/queries.js");
+const { getEmployeeByName, getEmployees, getEmployeeId, createEmployee, updateEmployees, deleteEmployee, getEmployeeByOrderId } = require("../utils/queries.js");
 const { SALT_ROUNDS } = require ("../../config/config.js");
 
 const bcrypt = require('bcrypt');
@@ -82,8 +82,11 @@ exports.updateEmployeeServ = async (id, full_name, password, email) => {
 exports.deleteEmployeeServ = async (id) => {
   await validateParamsId(id);
   await getEmployeeId(id);
+  //Validar que el usuario no tenga relaciones en la tabla orders
+   let findEmployee = await getEmployeeByOrderId(id);
+   if(Array.isArray(findEmployee) && findEmployee.length > 0) throw new Error ("El usuario no puede ser eliminado porque ya existe una compra con dicho empleado.");
   let deletedSuccess = await deleteEmployee(id);
-  
+
   if (deletedSuccess.affectedRows != 1)throw new Error("No se pudo eliminar el usuario");
   
   return {
