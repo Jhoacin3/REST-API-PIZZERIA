@@ -153,7 +153,7 @@ exports.validateParamConfig = async (name, photo_url, number_of_tables, enable) 
   if (!name && !number_of_tables ) {
     throw new Error("Es obligatorio el nombre y número de mesas del negocio");
   }
-  if(!Number(enable)){
+  if(enable.length == 0){
     throw new Error("El tipo de dato del switch no es adecuado");
   }
   // if (!Number.isInteger(number_of_tables) || number_of_tables <= 0) {
