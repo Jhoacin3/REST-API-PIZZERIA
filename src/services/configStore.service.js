@@ -59,25 +59,46 @@ exports.createConfigService = async (
   number_of_tables,
   enable
 ) => {
+  let newEnable = 0;
+  let newPhoto = "Sin imagen.";
+  let photoPath;
+  let configCreated;
+
   await validateParamConfig(name, photo_url, number_of_tables, enable);
-  const photoPath = await photoPathUtil(photo_url);
+
   let categories = await getConfig();
+
+  if (enable === "true") {
+    newEnable = 1;
+  }
   const verifieEnable = categories.some((e) => e.enable === 1);
-  if (verifieEnable && Number(enable) === 1) {
+  if (verifieEnable && Number(newEnable) === 1) {
     throw new Error("Ya existe una configuración activa para el negocio");
   }
+  const verifiedName = categories.some(
+    (e) => e.name.toLowerCase().trim() === name.toLowerCase().trim()
+  );
+  if (verifiedName) throw new Error("Ya existe una configuración con este nombre");
 
-  const configCreated = await createConfig(
+  if (photo_url) {
+    photoPath = await photoPathUtil(photo_url);
+  } else {
+    photoPath = newPhoto;
+  }
+
+  configCreated = await createConfig(
     name,
     photoPath,
     number_of_tables,
-    enable
+    newEnable
   );
+
   const result = await createTablesLength(
     number_of_tables,
     configCreated.insertId
-  ); 
+  );
   if (result.length == 0) throw new Error("No se creó las mesas del negocio.");
+
   return {
     id: configCreated.insertId,
     photo_url: `${baseUrl}/uploads/${photoPath}`,
