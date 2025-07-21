@@ -20,4 +20,17 @@ export class ConfigurationService {
       withCredentials: true //permite que la cookie sea guardada en el navegador
     } );
   }
+
+  createConfiguration(data: any): Observable<any> {
+  const { name, number_of_tables, enable, photo_url } = data;
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('number_of_tables', number_of_tables);
+  formData.append('enable', enable);
+  formData.append('photo', photo_url);
+
+    return this.http.post<any>(`${this.baseUrl}/config-store/createConfigStore`, formData, { 
+      withCredentials: true
+    } );
+  }
 }
