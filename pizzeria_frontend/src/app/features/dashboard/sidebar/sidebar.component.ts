@@ -11,6 +11,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
+import { AlertService } from '../../../../app/services/alert.service.ts.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,20 +25,26 @@ import { AuthService } from '../../../core/services/auth.service';
     MatListModule,
     MatIconModule,
     AsyncPipe,
-    RouterModule
-  ]
+    RouterModule,
+  ],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
   isAuthenticated: boolean = false;
   private authSubscription: Subscription | undefined;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
-    this.authSubscription = this.authService.isAuthenticated$.subscribe((authenticated) => {
-      this.isAuthenticated = authenticated;
-    });
+    this.authSubscription = this.authService.isAuthenticated$.subscribe(
+      (authenticated) => {
+        this.isAuthenticated = authenticated;
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -46,16 +53,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
   logout(): void {
-    this.authService.logout().subscribe(() => {
-      this.isAuthenticated = false;
-      this.router.navigate(['/login']);
-    });
+    this.alertService
+      .question('¿Estás seguro de cerrar tu sesión?', '')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.authService.logout().subscribe(() => {
+            this.isAuthenticated = false;
+            this.router.navigate(['/login']);
+          });
+        }
+      });
   }
 
-
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map((result) => result.matches),
       shareReplay()
     );
 }
