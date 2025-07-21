@@ -36,12 +36,24 @@ exports.getFilterById = async (id) => {
 exports.getNameByMenu = async (name) => {
   const [getMenu] = await connection.query("SELECT name FROM menu");
   const isRepeat = getMenu.some(
-    (item) => item.name.toLowerCase() === name.toLowerCase()
+    (item) => item.name.toLowerCase().trim() === name.toLowerCase().trim()
   );
   if (isRepeat) {
     throw new Error("El nombre del menu ya existe");
   }
 };
+
+exports.getNameMenuById = async (name, id_menu) => {
+  const [getMenu] = await connection.query("SELECT name, id_menu FROM menu");
+  const isRepeat = getMenu.some(
+    (item) => item.name.toLowerCase().trim() === name.toLowerCase().trim() &&
+      Number(item.id_menu) !== Number(id_menu)
+  );
+  if (isRepeat) {
+    throw new Error("El nombre del menu ya existe");
+  }
+};
+
 exports.createMenu = async (name, description, price, id_category) => {
   const [data] = await connection.query(
     "INSERT INTO menu (name, description, price, id_category) VALUES (?, ?, ?, ?)",

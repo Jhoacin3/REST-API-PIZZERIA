@@ -1,5 +1,5 @@
 const { validateParamsId, validateParamsAddMenu, verifiedIfExist } = require("../utils/utils.js");
-const {getDataMenu, findCategoryById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById, findExistOrderDetail} = require("../utils/queries.js")
+const {getDataMenu, findCategoryById, getFilterById, getNameByMenu, createMenu, getIdMenu, updateMenu, deleteMenuById, findExistOrderDetail, getNameMenuById} = require("../utils/queries.js")
 
 /**
  * Esta función realiza una consulta a la base de datos para obtener todos los elementos de menú.
@@ -80,7 +80,7 @@ const addMenuService = async (name, description, price, id_category) => {
 const updateMenuService = async (name, description, price, id_category, id) => {
   await validateParamsAddMenu(name, description, price, id_category);
   await validateParamsId(id);
-  await getNameByMenu(name);
+  await getNameMenuById(name, id);
   const idMenus = await getIdMenu();
   let isRepeat=  await verifiedIfExist(idMenus, id);
   if (!isRepeat) {
@@ -115,7 +115,7 @@ const deleteMenuService = async (id) => {
   }
   let findExist = await findExistOrderDetail(id);
   if (findExist.length !== 0) {
-    throw new Error("No se puede borrar un menu donde ya hay ordenes con este menu");
+    throw new Error("No se puede borrar este producto porque ya hay ordenes asociadas.");
   }
   await deleteMenuById(id);
 

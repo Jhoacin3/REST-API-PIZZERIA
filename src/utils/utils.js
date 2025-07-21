@@ -31,7 +31,7 @@ exports.validatesMethodCreate = async (name_rol, getRoles) => {
 
   //Nota: El método some() comprueba si al menos un elemento del array cumple con la condición implementada por la función proporcionada.
   exports.isRepeat = getRoles.some(
-    (role) => role.name_role.toLowerCase() === name_rol.toLowerCase()
+    (role) => role.name_role.toLowerCase().trim() === name_rol.toLowerCase().trim()
   );
   if (isRepeat) {
     throw new Error("El nombre del rol ya existe");
@@ -104,6 +104,7 @@ exports.validateParamsAddMenu = async (name, description, price, id_category) =>
   if (name.length <= 2 || name.length >= 20) {
     throw new Error("El nombre del menu debe tener entre 3 y 11 caracteres ");
   }
+  if(description.length <= 0 || description.length >= 50) throw new Error("La descripción debe ser corta y precisa.")
      
 }
 
@@ -124,7 +125,7 @@ exports.validateParamCategory = async (type, namesCategory) =>{
     throw new Error("El nombre debe ser ser de tipo cadena y debe ser mayor a 5 caracteres");
   }
   // let typenew = type.toLowerCase();
-  let result = namesCategory.some((names) => names.type === type);
+  let result = namesCategory.some((names) => names.type.toLowerCase().trim() === type.toLowerCase().trim());
   if (result) {
     throw new Error("Ya existe una categoria con ese mismo nombre");
   }
