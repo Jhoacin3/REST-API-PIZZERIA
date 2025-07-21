@@ -8,6 +8,7 @@ import { RouterOutlet } from '@angular/router';
 import { MaterialModule } from '../../../../material-module';
 import { response } from 'express';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../../../services/alert.service.ts.service';
 
 @Component({
   selector: 'app-menu-list',
@@ -37,7 +38,8 @@ export class MenuListComponent implements OnInit {
 
   constructor(
     private menuService: MenuService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private alertService: AlertService
   ) {
 
   }
@@ -50,33 +52,32 @@ export class MenuListComponent implements OnInit {
   private getMenusTable(): void {
     this.menuService.getMenuItems().subscribe({
       next: (response) => this.handleResponse(response, 'menuTable'),
-      error: () => this.handleError('Error al cargar el menú.'),
+      error: () => this.alertService.error('', 'Error al cargar el menu.'),
     });
   }
   private getCategoriesSelect(): void {
     this.categoryService.getCategories().subscribe({
       next: (response) => this.handleResponse(response, 'category'),
-      error: () => this.handleError('Error al cargar la categoria.'),
+      error: () => this.alertService.error('', 'Error al cargar la categoria.'),
     });
   }
   //creacion de menu
    createMenu(): void{
     if(!this.menuData.name || !this.menuData.description || !this.menuData.price || !this.menuData.id_category){
-      this.errorMessage = 'Todos los campos son requeridos';
+      this.alertService.error('', "Todos los campos son necesarios");
       return;
     }
     this.menuService.addMenuItem(this.menuData).subscribe({
       next: (response) => {
         if (response.success) {
           this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
-          this.clearForm();
+          this.alertService.success('', response.message);
+          this.getMenusTable(); // Recargar la tabla después de eliminar
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error)
         }
       },
-      error: () => this.handleError('Error al crear el menu.'),
+      error: () => this.alertService.error('', 'Error al crear el menu.'),
 
     })
   }
@@ -87,15 +88,14 @@ export class MenuListComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
-          this.clearForm();
+          this.alertService.success('', response.message);
+          this.getMenusTable(); // Recargar la tabla después de eliminar
+
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error)
         }
       },
-      error: () => this.handleError('Error al crear el menu.'),
-
+      error: () => this.alertService.error('', 'Error al editar el menu.'),
     })
 
   }
@@ -113,25 +113,19 @@ export class MenuListComponent implements OnInit {
     this.menuService.deleteMenuItem(this.id).subscribe({
       next: (response: any) => {
         if (response.success) {
-          // this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
-          // this.getMenusTable(); // Recargar la tabla después de eliminar
-          window.location.reload();
-
+          this.alertService.success('', response.message);
+          this.getMenusTable(); // Recargar la tabla después de eliminar
+          // window.location.reload();
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error)
         }
       },
-      error: () => this.handleError('Error al eliminar el menu.'),
+      error: () => this.alertService.error('', 'Error al eliminar el menu.'),
 
     })
   }
   //FUNCIONES DE APOYO
-  private handleError(message: string): void {
-    this.errorMessage = message;
-    this.successMessage = '';
-  }
+
   trackById(index: number, item: MenuItemModel): number {
     return item.id_menu; // Si `id` es único
   }
@@ -147,19 +141,8 @@ private handleResponse<T>(response: any, type: 'category' | 'menuTable'): void {
         this.menuItems = response.data as MenuItemModel[];
         break;
     }
-    this.successMessage = response.message;
-    this.errorMessage = '';
   } else {
-    this.handleError(response.message);
+    this.alertService.error('', response.message);
   }
 }
-
-  clearForm() {
-        window.location.reload();
-
-    // this.getMenusTable();
-  }
-
-
-
 }

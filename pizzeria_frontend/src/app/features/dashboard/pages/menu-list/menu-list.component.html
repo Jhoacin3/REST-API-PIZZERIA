@@ -1,17 +1,13 @@
 <div class="container">
-  <h1>Menú</h1>
+  <h1>Productos del negocio</h1>
 
 
-  <div *ngIf="successMessage || errorMessage" class="alert"
-    [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
+  <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addMenu"
+    data-bs-whatever="@mdo">Agregar
+  </button>
+  <br>
+  <br>
 
-    <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addMenu"
-      data-bs-whatever="@mdo">Agregar
-    </button>
-
-    <span *ngIf="successMessage">{{ successMessage }}</span>
-    <span *ngIf="errorMessage">{{ errorMessage }}</span>
-  </div>
   <table *ngIf="menuItems.length >= 1" class="table table-striped">
     <thead>
       <tr>
@@ -56,18 +52,6 @@
     </tbody>
   </table>
 
-<!-- Toast de error -->
-<div id="toastMessage" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" [ngClass]="{'show': errorMessage}">
-  <div class="toast-header" [ngClass]="{'bg-danger': errorMessage}">
-    <img src="assets/ic_notification.png" class="rounded me-2" alt="..." width="30" height="30">
-    <strong class="me-auto" [ngClass]="{'text-light': errorMessage}">Mensaje del sistema</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
-  <div class="toast-body">
-    {{ errorMessage }}
-  </div>
-</div>
-
 <!-- Modal de confirmación de eliminación -->
 <div class="modal fade" id="showConfirmateDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -91,35 +75,19 @@
   </div>
 </div>
 
-<!-- <div id="toastMessage" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" [ngClass]="{'show': successMessage || errorMessage}">
-  <div class="toast-header" [ngClass]="{'bg-success': successMessage, 'bg-danger': errorMessage}">
-    <img src="assets/ic_notification.png" class="rounded me-2" alt="..." width="30" height="30">
-    <strong class="me-auto" [ngClass]="{'text-light': successMessage || errorMessage}">Mensaje del sistema</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
-  <div class="toast-body">
-    {{ successMessage || errorMessage }}
-  </div>
-</div> -->
-
   <!-- Formulario desplegable para crear menu -->
 <div class="modal fade" id="addMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo menú</h5>
+        <h1 class="modal-title" id="exampleModalLabel">Crear nuevo producto</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-          {{ errorMessage }}
-        </div>
-        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
-          {{ successMessage }}
-        </div>
+
         <form (ngSubmit)="createMenu()">
           <div class="mb-3">
-            <label class="form-label">Nombre del menú:</label>
+            <label class="form-label">Nombre del producto:</label>
             <input type="text" class="form-control" [(ngModel)]="menuData.name" name="name" id="name" placeholder="Escriba un nombre">
           </div>
 
@@ -143,7 +111,7 @@
 
         <button type="submit" class="btn btn-success" (click)="createMenu()">Crear</button>
         <span> | </span>
-        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
@@ -154,16 +122,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Editar menu seleccionado</h4>
+        <h1 class="modal-title" id="exampleModalLabel">Editar menu seleccionado</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-          {{ errorMessage }}
-        </div>
-        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
-          {{ successMessage }}
-        </div>
+
         <form (ngSubmit)="createMenu()">
           <div class="mb-3">
             <label class="form-label">ID</label>
@@ -171,7 +134,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Nombre del menú:</label>
+            <label class="form-label">Nombre del producto:</label>
             <input type="text" class="form-control" [(ngModel)]="menuItemToEdit.name" name="name" id="name" placeholder="Escriba un nombre">
           </div>
 
@@ -195,7 +158,7 @@
 
         <button type="submit" class="btn btn-success" (click)="editMenu()">Actualizar</button>
         <span> | </span>
-        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
