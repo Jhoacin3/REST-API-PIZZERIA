@@ -3,9 +3,9 @@ import { MaterialModule } from '../../../../material-module';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { CategoryInterface } from '../../../../core/models/category-interface';
 import { CategoryService } from '../../../../core/services/category.service';
+import { AlertService } from '../../../../services/alert.service.ts.service';
 
 @Component({
   selector: 'app-categories-list',
@@ -22,7 +22,10 @@ export class CategoriesListComponent implements OnInit {
   dataUpCategory : any = {};
   //decimos que categoriesItems sera de del modelo instanciado (CategoryInterface)
   categoriesItems: CategoryInterface[] = [];
-  constructor(private categoriesService: CategoryService){}
+  constructor(
+    private categoriesService: CategoryService,
+    private alertService: AlertService
+  ){}
 
   ngOnInit(): void {
     this.getCategoriesTable();
@@ -34,13 +37,12 @@ export class CategoriesListComponent implements OnInit {
         if (response.success) {
           //lo que viene de respuesta en la API me lo guardas en categoriesItems
           this.categoriesItems = response.data;
-          this.successMessage = response.message;
-          this.errorMessage = ''; // Limpiamos posibles errores previos
         }else{
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al cargar la categoria.'),
+      error: () => this.alertService.error("", 'Error al cargar la categoria.'),
+
     })
   }
 
@@ -53,14 +55,13 @@ export class CategoriesListComponent implements OnInit {
       next:(response) =>{
         if(response.success){
           this.banderin = true;
-          this.successMessage = response.message;
-          this.errorMessage ='';
-          window.location.reload();
+          this.alertService.success('', response.message);
+          this.getCategoriesTable();
         }else{
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al crear la categoria.'),
+      error: () => this.alertService.error("", 'Error al crear la categoria.'),
 
     });
   }
@@ -69,17 +70,13 @@ export class CategoriesListComponent implements OnInit {
     this.categoriesService.deleteCategory(this.id).subscribe({
       next: (response: any) => {
         if (response.success) {
-          // this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
-          // this.getMenusTable(); // Recargar la tabla después de eliminar
-          window.location.reload();
-
+          this.alertService.success('', response.message);
+          this.getCategoriesTable();
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al eliminar el categoria.'),
+      error: () => this.alertService.error("", 'Error al eliminar la categoria.'),
     })
   }
   updateCategory(): void{
@@ -87,16 +84,13 @@ export class CategoriesListComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           // this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
-          // this.getMenusTable(); // Recargar la tabla después de eliminar
-          window.location.reload();
-
+          this.alertService.success('', response.message);
+          this.getCategoriesTable();
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al editar la categoria.'),
+      error: () => this.alertService.error("", 'Error al editar la categoria.'),
     })
   }
 
@@ -108,13 +102,4 @@ export class CategoriesListComponent implements OnInit {
  setIdUpdate(id:number, item: any){
   this.dataUpCategory = {...item};
  }
-  private handleError(message: string): void {
-    this.errorMessage = message;
-    this.successMessage = '';
-  }
-
-  clearForm() {
-    this.type = '';
-    this.getCategoriesTable();
-  }
 }

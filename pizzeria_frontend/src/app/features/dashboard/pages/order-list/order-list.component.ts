@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { OrdersInterface } from '../../../../core/models/orders-interface';
 import { OrderDetailsInterface } from '../../../../core/models/order-details-interface';
+import { AlertService } from '../../../../services/alert.service.ts.service';
 
 @Component({
   selector: 'app-order-list',
@@ -20,7 +21,11 @@ export class OrderListComponent implements OnInit {
   orderDetailsRes: OrderDetailsInterface[] = [];
   orderTotal: string = '';
 
-  constructor(private privateaymentService: PaymentService){}
+  constructor(
+    private privateaymentService: PaymentService,
+    private alertService: AlertService
+
+  ){}
   ngOnInit(): void {
     this.getOrderAll();
   }
@@ -29,15 +34,13 @@ export class OrderListComponent implements OnInit {
       next:(response: any) => {
         if(response.success){
           this.ordersInterface = response.data
-          this.successMessage = response.message
-          this.errorMessage = '';
         }else{
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
         
       },
       error:()=> {
-        this.handleError("No se pudo obtener las ordenes, error de red")
+          this.alertService.error('', "No se pudo obtener las ordenes");
       }
     })
   }
@@ -48,23 +51,16 @@ export class OrderListComponent implements OnInit {
         if(response.success){
           this.orderDetailsRes = response.data.result
           this.orderTotal = response.data.total
-          this.successMessage = response.messages
-          this.errorMessage = "";
         }else{
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
 
       },
       error: () => {
-        this.handleError("No se pudo obtener los detalles de la orden, error de red")
+        this.alertService.error('', "No se pudo obtener los detalles de la orden");
       }
 
     })
-  }
-
-  private handleError(message: string): void {
-    this.errorMessage = message;
-    this.successMessage = '';
   }
 
 }

@@ -1,14 +1,10 @@
 <div class="container">
     <h1>Categorias</h1>
-    <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
-
-      <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addCategory"
-      data-bs-whatever="@mdo">Agregar
-      </button>
-
-      <span *ngIf="successMessage">{{ successMessage }}</span>
-      <span *ngIf="errorMessage">{{ errorMessage }}</span>
-    </div>
+    <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addCategory"
+    data-bs-whatever="@mdo">Agregar
+    </button>
+    <br>
+    <br>
 
     <table *ngIf="categoriesItems.length >= 1" class="table table-striped">
         <thead>
@@ -50,19 +46,6 @@
           </tr>
         </tbody>
       </table>
-      
-<!-- Toast de éxito o error -->
-<div id="toastMessage" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive"
-  aria-atomic="true" [ngClass]="{'show': errorMessage}">
-  <div class="toast-header" [ngClass]="{'bg-danger': errorMessage}">
-    <img src="assets/ic_notification.png" class="rounded me-2" alt="..." width="30" height="30">
-    <strong class="me-auto" [ngClass]="{'text-light': errorMessage}">Mensaje del sistema</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
-  <div class="toast-body">
-    {{ errorMessage }}
-  </div>
-</div>
 
 <!-- Modal de confirmación de eliminación -->
 <div class="modal fade" id="showConfirmateDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -96,12 +79,6 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-                  {{ errorMessage }}
-                </div>
-                <div class="alert alert-success" role="alert" *ngIf="banderin === true">
-                  {{ successMessage }}
-                </div>
                   <form (ngSubmit)="createCategories()">
 
                       <div class="mb-3">
@@ -113,7 +90,7 @@
                   </form>
                   <button type="submit" class="btn btn-success" (click)="createCategories()">Crear</button>
                   <span> | </span>
-                  <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
               </div>
 
           </div>
@@ -128,12 +105,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-                  {{ errorMessage }}
-                </div>
-                <div class="alert alert-success" role="alert" *ngIf="banderin === true">
-                  {{ successMessage }}
-                </div>
+
                   <form (ngSubmit)="createCategories()">
 
                     <div class="mb-3">
@@ -150,7 +122,7 @@
                   </form>
                   <button type="submit" class="btn btn-success" (click)="updateCategory()">Editar</button>
                   <span> | </span>
-                  <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
               </div>
 
           </div>

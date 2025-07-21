@@ -1,11 +1,6 @@
 <div class="container">
     <h1>Ordenes</h1>
-    <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
-
-
-      <span *ngIf="successMessage">{{ successMessage }}</span>
-      <span *ngIf="errorMessage">{{ errorMessage }}</span>
-    </div>
+  
 
     <table class="table table-striped">
         <thead>
