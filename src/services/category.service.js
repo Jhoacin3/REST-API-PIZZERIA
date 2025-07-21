@@ -1,5 +1,5 @@
 const {getCategory, findCategoryById, getCategoryName, createCategory, updateCategoryById, findExistCategory, deleteCategoryById} = require("../utils/queries.js")
-const {validateParamsId, validateParamCategory} = require("../utils/utils.js")
+const {validateParamsId, validateParamCategory, validateParamCategoryById} = require("../utils/utils.js")
 
 exports.getCategoriesService = async () => {
   let categories = await getCategory();
@@ -30,7 +30,7 @@ exports.updateCategory = async (id, type) => {
   await validateParamsId(id);
 
   const namesCategory = await getCategoryName();
-  const typenew = await validateParamCategory(type, namesCategory);
+  const typenew = await validateParamCategoryById(type, namesCategory, id);
   let typeUpdated = await updateCategoryById(id, type);
   return {
     type,

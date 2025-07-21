@@ -132,6 +132,21 @@ exports.validateParamCategory = async (type, namesCategory) =>{
   return result;
 }
 
+exports.validateParamCategoryById = async (type, namesCategory, id) =>{
+  if (!type) {
+    throw new Error("Es obligatorio el nombre de la categoria");
+  }
+  if (typeof type !== 'string' || type.length <= 4 || type.length >= 12) {
+    throw new Error("El nombre debe ser ser de tipo cadena y debe ser mayor a 5 caracteres");
+  }
+  // let typenew = type.toLowerCase();
+  let result = namesCategory.some((names) => names.type.toLowerCase().trim() === type.toLowerCase().trim() && Number(names.id_category) !== Number(id));
+  if (result) {
+    throw new Error("Ya existe una categoria con ese mismo nombre");
+  }
+  return result;
+}
+
 exports.validateParamConfig = async (name, photo_url, number_of_tables, enable) =>{
   
   //1 = ACTIVADO(true) // 2 = DESACTIVADO(false)

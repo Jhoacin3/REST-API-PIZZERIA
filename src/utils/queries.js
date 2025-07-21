@@ -103,7 +103,7 @@ exports.getCategoryId = async (id) => {
   return getCategoryId;
 }
 exports.getCategoryName = async () => {
-  const [getCategoryName] = await connection.query("SELECT type FROM category");
+  const [getCategoryName] = await connection.query("SELECT type, id_category FROM category");
 
   return getCategoryName;
 };
