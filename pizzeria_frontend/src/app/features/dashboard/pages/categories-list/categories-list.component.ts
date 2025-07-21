@@ -19,9 +19,18 @@ export class CategoriesListComponent implements OnInit {
   banderin = false;
   type = "";
   id = 0
+
+  // Propiedades para la paginación
+  currentPage: number = 1;
+  itemsPerPage: number = 2;
+  totalPages: number = 0;
+  totalItems: number = 0;
+  pagesToShow: number = 5;
+
   dataUpCategory : any = {};
   //decimos que categoriesItems sera de del modelo instanciado (CategoryInterface)
   categoriesItems: CategoryInterface[] = [];
+  paginatedData: CategoryInterface[] = [];
   constructor(
     private categoriesService: CategoryService,
     private alertService: AlertService
@@ -37,6 +46,7 @@ export class CategoriesListComponent implements OnInit {
         if (response.success) {
           //lo que viene de respuesta en la API me lo guardas en categoriesItems
           this.categoriesItems = response.data;
+          this.calculatePagination();
         }else{
           this.alertService.error('', response.error);
         }
@@ -44,6 +54,44 @@ export class CategoriesListComponent implements OnInit {
       error: () => this.alertService.error("", 'Error al cargar la categoria.'),
 
     })
+  }
+
+      /**
+   * Métodos de Paginación
+   *
+   * @returns {void} No retorna ningún valor.
+   */
+  calculatePagination(): void {
+    this.totalItems = this.categoriesItems.length;
+    this.totalPages = Math.max(
+      1,
+      Math.ceil(this.totalItems / this.itemsPerPage)
+    );
+    this.goToPage(1);
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages) {
+      return;
+    }
+    this.currentPage = page;
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedData = this.categoriesItems.slice(startIndex, endIndex);
+  }
+
+  getPages(): number[] {
+    const pages: number[] = [];
+    const startPage = Math.max(
+      1,
+      this.currentPage - Math.floor(this.pagesToShow / 2)
+    );
+    const endPage = Math.min(this.totalPages, startPage + this.pagesToShow - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
    createCategories(): void{
@@ -57,6 +105,7 @@ export class CategoriesListComponent implements OnInit {
           this.banderin = true;
           this.alertService.success('', response.message);
           this.getCategoriesTable();
+          this.type = '';
         }else{
           this.alertService.error('', response.error);
         }
