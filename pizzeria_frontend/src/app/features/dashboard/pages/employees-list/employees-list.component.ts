@@ -26,8 +26,15 @@ export class EmployeesListComponent implements OnInit {
     password: ''
   }
   employeeUpData:any = {};
-
   employeeItems : EmployeeInterface[] =[];
+  paginatedData : EmployeeInterface[] =[];
+
+  // Propiedades para la paginación
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalPages: number = 0;
+  totalItems: number = 0;
+  pagesToShow: number = 5;
 
   //constructor de la clase
   constructor(private employeService : EmployeeService,
@@ -45,6 +52,7 @@ export class EmployeesListComponent implements OnInit {
       next: (response: any) =>{
         if (response.success) {
           this.employeeItems = response.data;
+          this.calculatePagination();
         }else{
           this.alertService.error('', response.error);
         }
@@ -52,6 +60,44 @@ export class EmployeesListComponent implements OnInit {
       error: () => this.alertService.error("", 'Error al obtener los empleados.'),
 
     })
+  }
+
+  /**
+   * Métodos de Paginación
+   *
+   * @returns {void} No retorna ningún valor.
+   */
+  calculatePagination(): void {
+    this.totalItems = this.employeeItems.length;
+    this.totalPages = Math.max(
+      1,
+      Math.ceil(this.totalItems / this.itemsPerPage)
+    );
+    this.goToPage(1);
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages) {
+      return;
+    }
+    this.currentPage = page;
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedData = this.employeeItems.slice(startIndex, endIndex);
+  }
+
+  getPages(): number[] {
+    const pages: number[] = [];
+    const startPage = Math.max(
+      1,
+      this.currentPage - Math.floor(this.pagesToShow / 2)
+    );
+    const endPage = Math.min(this.totalPages, startPage + this.pagesToShow - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   //crear empleado
