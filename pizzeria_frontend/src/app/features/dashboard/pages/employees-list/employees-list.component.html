@@ -1,14 +1,10 @@
 <div class="container">
     <h1>Empleados</h1>
-    <div *ngIf="successMessage || errorMessage" class="alert" [ngClass]="{'alert-success': successMessage, 'alert-danger': errorMessage}">
-
-        <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addEmployee"
-      data-bs-whatever="@mdo">Agregar
-        </button>
-
-      <span *ngIf="successMessage">{{ successMessage }}</span>
-      <span *ngIf="errorMessage">{{ errorMessage }}</span>
-    </div>
+      <button type="button" class="btn btn-success bi     bi-plus" data-bs-toggle="modal" data-bs-target="#addEmployee"
+    data-bs-whatever="@mdo">Agregar
+      </button>
+      <br>
+      <br>
 
     <table *ngIf="employeeItems.length >= 1" class="table table-striped">
         <thead>
@@ -16,7 +12,7 @@
             <th>id</th>
             <th>Nombre completo</th>
             <th>correo</th>
-            <th>contraseña</th>
+            <!-- <th>contraseña</th> -->
             <th>Acciones</th>
 
           </tr>
@@ -27,7 +23,7 @@
             <td>{{item.id_employees}}</td>
             <td>{{item.full_name}}</td>
             <td>{{item.email}}</td>
-            <td>{{item.password}}</td>
+            <!-- <td>{{item.password}}</td> -->
 
             <section>
               <div class="example-button-row">
@@ -95,16 +91,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo empleado</h5>
+        <h1 class="modal-title" id="exampleModalLabel">Crear nuevo empleado</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-          {{ errorMessage }}
-        </div>
-        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
-          {{ successMessage }}
-        </div>
+
         <form (ngSubmit)="employeeAdd()">
           <div class="mb-3">
             <label class="form-label">Nombre del empleado:</label>
@@ -144,16 +135,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo empleado</h5>
+        <h1 class="modal-title text-center" id="exampleModalLabel">Editar empleado</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
-          {{ errorMessage }}
-        </div>
-        <div class="alert alert-success" role="alert" *ngIf="banderin === true">
-          {{ successMessage }}
-        </div>
+
         <form (ngSubmit)="employeeAdd()">
           <div class="mb-3">
             <label class="form-label">ID</label>
@@ -185,7 +171,7 @@
 
         <button type="submit" class="btn btn-success" (click)="updateEmployee()">Editar</button>
         <span> | </span>
-        <button type="button" class="btn btn-danger" (click)="clearForm()" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>

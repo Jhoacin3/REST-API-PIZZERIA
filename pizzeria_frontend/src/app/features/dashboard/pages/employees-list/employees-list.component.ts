@@ -6,6 +6,7 @@ import { EmployeeInterface } from '../../../../core/models/employee-interface';
 import { EmployeeService } from '../../../../core/services/employee.service';
 import { response } from 'express';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../../../services/alert.service.ts.service';
 
 @Component({
   selector: 'app-employees-list',
@@ -29,7 +30,9 @@ export class EmployeesListComponent implements OnInit {
   employeeItems : EmployeeInterface[] =[];
 
   //constructor de la clase
-  constructor(private employeService : EmployeeService){
+  constructor(private employeService : EmployeeService,
+     private alertService: AlertService
+  ){
 
   }
 
@@ -42,13 +45,11 @@ export class EmployeesListComponent implements OnInit {
       next: (response: any) =>{
         if (response.success) {
           this.employeeItems = response.data;
-          this.successMessage = response.message;
-          this.errorMessage = ''; // Limpiamos posibles errores previos
         }else{
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al crear el empleado.'),
+      error: () => this.alertService.error("", 'Error al obtener los empleados.'),
 
     })
   }
@@ -56,7 +57,7 @@ export class EmployeesListComponent implements OnInit {
   //crear empleado
   employeeAdd(): void {
     if(!this.employeeData.full_name || !this.employeeData.email || !this.employeeData.password){
-      this.errorMessage = 'Todos los campos son requeridos';
+      this.alertService.error('', "Todos los campos son necesarios");
       return;
     }
 
@@ -64,14 +65,13 @@ export class EmployeesListComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
+          this.alertService.success('', response.message);
           this.clearForm();
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al crear el menu.'),
+      error: () => this.alertService.error('', "Error al crear el empleado"),
     })
   }
 
@@ -80,15 +80,13 @@ export class EmployeesListComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           // this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
+          this.alertService.success('', response.message);
           window.location.reload();
-
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al eliminar el empleado')
+      error: () => this.alertService.error('', "Error al eliminar el empleado"),
     })
   }
   updateEmployee():void{
@@ -96,15 +94,13 @@ export class EmployeesListComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           // this.banderin = true
-          this.successMessage = response.message;
-          this.errorMessage = '';
+          this.alertService.success('', response.message);
           window.location.reload();
-
         } else {
-          this.handleError(response.error);
+          this.alertService.error('', response.error);
         }
       },
-      error: () => this.handleError('Error al editar el empleado')
+      error: () => this.alertService.error('', "Error al editar el empleado"),
     })
   }
 
@@ -116,11 +112,6 @@ export class EmployeesListComponent implements OnInit {
    setIdUpdate(id: number, item: any){
     this.employeeUpData = {...item};
    }
-
-   private handleError(message: string): void {
-    this.errorMessage = message;
-    this.successMessage = '';
-  }
 
   clearForm() {
     this.employeeData = {
