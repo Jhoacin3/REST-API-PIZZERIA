@@ -51,23 +51,18 @@
       </tr>
     </tbody>
   </table>
+<div *ngIf="menuItems.length === 0">
+  <p class="text-center text-gray-600 dark:text-gray-600 mt-4">
+    No hay datos para mostrar.
+  </p>
+</div>
 
-     <div *ngIf="menuItems.length === 0">
-        <p class="text-center text-gray-600 dark:text-gray-600 mt-4">
-          No hay datos para mostrar.
-        </p>
-      </div>
-
-     <nav aria-label="Page navigation example" *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+<nav aria-label="Page navigation example" *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
   <ul class="pagination">
     <li class="page-item" [class.disabled]="currentPage === 1">
       <a class="page-link" href="javascript:void(0)" (click)="goToPage(currentPage - 1)">Atrás</a>
     </li>
-    <li
-      class="page-item"
-      *ngFor="let page of getPages()"
-      [class.active]="page === currentPage"
-    >
+    <li class="page-item" *ngFor="let page of getPages()" [class.active]="page === currentPage">
       <a class="page-link" href="javascript:void(0)" (click)="goToPage(page)">
         {{ page }}
       </a>
@@ -77,11 +72,11 @@
     </li>
   </ul>
 </nav>
-      
-      <div class="text-center text-sm text-gray-600 dark:text-gray-600 mt-2" *ngIf="paginatedData.length > 0">
-        Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ (currentPage - 1) * itemsPerPage + paginatedData.length
-        }} de {{ totalItems }} registros.
-      </div>
+
+<div class="text-center text-sm text-gray-600 dark:text-gray-600 mt-2" *ngIf="paginatedData.length > 0">
+  Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ (currentPage - 1) * itemsPerPage + paginatedData.length
+  }} de {{ totalItems }} registros.
+</div>
 
 <!-- Modal de confirmación de eliminación -->
 <div class="modal fade" id="showConfirmateDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

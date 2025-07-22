@@ -33,4 +33,10 @@ export class ConfigurationService {
       withCredentials: true
     } );
   }
+
+  deleteConfig(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/config-store/deleteConfiguration/${id}`, { 
+      withCredentials: true
+    } );
+  }
 }

@@ -17,6 +17,7 @@ export class ConfigurationListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   employeeData: ConfigurationInterface[] = [];
+  paginatedData: ConfigurationInterface[] = [];
   //OBJETO PARA ALMACENAR LOS DATOS DEL FORMULARIO AL CREAR UNA NUEVA CONFIGURACION
   createConfigInterface = {
     name: '',
@@ -24,6 +25,13 @@ export class ConfigurationListComponent implements OnInit {
     number_of_tables: 0,
     enable: false
   };
+    // Propiedades para la paginación
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalPages: number = 0;
+  totalItems: number = 0;
+  pagesToShow: number = 5;
+  id = 0;
 
   constructor (
     private configurationModel: ConfigurationService,
@@ -40,14 +48,11 @@ export class ConfigurationListComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           this.employeeData = response.data;
-          this.successMessage = response.message
-          this.errorMessage = ""
-          // this.clearForm()
         }else{
           this.handleError(response.error)
         }
       },
-      error: () => this.handleError('Error al cargar el menú.'),
+      error: () => this.handleError('Error al cargar las configuraciones.'),
     })
   }
 
@@ -71,6 +76,10 @@ export class ConfigurationListComponent implements OnInit {
       this.errorMessage = message;
       this.successMessage = '';
     }
+      // Método para establecer el id del menú a eliminar
+  setIdToDelete(id: number): void {
+    this.id = id;
+  }
 
     onFileSelected(event: any) {
   const file = event.target.files[0];
@@ -83,6 +92,19 @@ export class ConfigurationListComponent implements OnInit {
   }
   this.createConfigInterface.photo_url = file;
 }
+  deleteConfiguration(): void{
+    this.configurationModel.deleteConfig(this.id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.alertService.success('', response.message);
+          this.getConfigs();
+        } else {
+          this.alertService.error('', response.error);
+        }
+      },
+      error: () => this.alertService.error("", 'Error al eliminar la configuración'),
+    });
+  }
 
   clearForm() {
     this.createConfigInterface = {   
