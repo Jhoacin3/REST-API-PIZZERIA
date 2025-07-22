@@ -319,6 +319,21 @@ exports.getTableId = async (id_tables, store_id) => {
   );
   return data;
 };
+exports.getTableByStoreId = async (store_id) => {
+  const [data] = await connection.query(
+    "SELECT id_tables, status  FROM tables WHERE store_id = ?",
+    [store_id]
+  );
+  return data;
+};
+
+exports.deleteConfiguration = async (store_id) => {
+  // Eliminar mesas asociadas
+  await connection.query("DELETE FROM tables WHERE store_id = ?", [store_id]);
+  // Eliminar la configuración
+  const [data] = await connection.query("DELETE FROM store_info WHERE id_store_info = ?", [store_id]);
+  return data;
+};
 exports.statusTable = async (store_id) => {
   const [data] = await connection.query(
     "SELECT id_tables,table_number,status  FROM tables WHERE store_id = ?",

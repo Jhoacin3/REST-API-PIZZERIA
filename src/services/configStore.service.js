@@ -1,5 +1,5 @@
 const {validateParamsId, validateParamConfig, photoPathUtil} = require("../utils/utils.js")
-const {getConfig,getConfigId, createConfig, upateConfig, createTablesLength, getActiveConfig} = require("../utils/queries.js");
+const {getConfig,getConfigId, createConfig, upateConfig, createTablesLength, getActiveConfig, getTableByStoreId, deleteConfiguration} = require("../utils/queries.js");
 const e = require("express");
 const baseUrl = "http://localhost:3000";
 const path = require('path');
@@ -53,6 +53,34 @@ exports.getConfigActiveService = async () => {
   }
 };
 
+exports.deleteConfigurationService = async (id_config) => {
+  if (!id_config)
+    throw new Error("No se proporcionó ela configuración para la eliminación");
+
+  //validando que exista el ID de la config.
+  let findConfig = await getConfigId(id_config);
+  if (findConfig.length <= 0)
+    throw new Error("No se encontró la configuración.");
+  // Validar que la configuración no esté activa.
+  if (findConfig[0].enable === 1)
+    throw new Error("No se puede eliminar porque esta configuración está activa actualmente.");
+  // Validar que no tenga una orden que esté con status en "Pendiente"
+  let findConfigByStatus = await getTableByStoreId(findConfig[0].id_store_info);
+  //iterando sobre el array de objetos buscando si las mesas tienen status "pendientes".
+  if (findConfigByStatus.length <= 0)
+    throw new Error("No se encontró mesas de la configuración.");
+  const findStatus = "Pendiente";
+  let findStatusFromTables = findConfigByStatus.some(
+    (item) => item.status.toLowerCase().trim() === findStatus.toLowerCase().trim()
+  );
+  if (findStatusFromTables)
+    throw new Error("No se puede borrar porque existen ordenes en procesos.");
+
+  // Proceso de eliminación
+  await deleteConfiguration(id_config);
+  return { success: true, id: id_config };
+};
+
 exports.createConfigService = async (
   name,
   photo_url,
@@ -67,6 +95,7 @@ exports.createConfigService = async (
   await validateParamConfig(name, photo_url, number_of_tables, enable);
 
   let categories = await getConfig();
+  if(categories.length >= 6) throw new Error("Solo se permite crear 5 configuraciones.")
 
   if (enable === "true") {
     newEnable = 1;

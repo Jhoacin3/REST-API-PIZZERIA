@@ -32,6 +32,21 @@ exports.getConfigStoreActive = async (req, res) => {
     });
   }
 };
+exports.deleteConfiguration = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await configStoreService.deleteConfigurationService(id);
+    res.json({
+      success: true,
+      message: messages.success.delete,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 exports.createConfig = async (req, res) => {
   const {name, number_of_tables, enable} = req.body;
