@@ -124,6 +124,11 @@ export class OrderPaymentComponent implements OnInit{
 
   }
 
+  deleteInsumo(id:number):void{
+    this.menuDetails = this.menuDetails.filter((product) => product.id_menu !== id);
+    this.getTotalOrder();
+  }
+
   private handleError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';
