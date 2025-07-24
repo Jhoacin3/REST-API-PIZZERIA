@@ -267,6 +267,11 @@ exports.existingDetail = async (existingOrderDetails, orderDetails) => {
 
   return deletedDetails;
 };
+//convertir fecha en cadena y retornarla correctamente (ejemplo 01 de julio del 2025)
+exports.formatDate = (date) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(date).toLocaleDateString('es-MX', options);
+}
 //como estaba antes
 // exports.existingDetail = async (existingOrderDetails) => {
 //   for (const existingDetail of existingOrderDetails) {

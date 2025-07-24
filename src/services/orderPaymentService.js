@@ -5,7 +5,8 @@ const {
   validateParamsOrder,
   validateParamsOrderDetail,
   calculateOrderTotal,
-  existingDetail
+  existingDetail,
+  formatDate
 } = require("../utils/utils.js");
 const {
   getTableNumbersUtils,
@@ -87,12 +88,14 @@ exports.getOrderServ = async () => {
   for (item of findOrderAll) {
     const { employees_id, id_orders, id_tables, date, total, state } = item;
     const employee = await getEmployeeId(employees_id);
+    //conversión de fechas en string
+    let newDate = await formatDate(date)
     const { full_name } = employee[0];
     const data = {
       id_order: id_orders,
       employee: full_name,
       id_tables: id_tables,
-      date: date,
+      date: newDate,
       total: total,
       state: state
     }
