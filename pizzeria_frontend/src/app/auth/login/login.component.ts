@@ -6,56 +6,52 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material-module';
 import { CreateUserInterface } from '../.././core/models/create-user-interface';
 import { response } from 'express';
+import { AlertService } from '../../services/alert.service.ts.service';
 
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterOutlet, FormsModule,CommonModule, MaterialModule],
+  imports: [RouterOutlet, FormsModule, CommonModule, MaterialModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  errorMessage = '';
-  successMessage = '';
 
-  constructor(private authService: AuthService, private router: Router){}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private alertService: AlertService
+  ) {}
 
-    // Método para iniciar sesión
-  login(): void{
-    if(!this.email || !this.password){
-      this.errorMessage = 'Por favor, ingrese su email y contraseña';
+  // Método para iniciar sesión
+  login(): void {
+    if (!this.email || !this.password) {
+      this.alertService.error('', 'Por favor, ingrese su email y contraseña');
       return;
     }
-    const user : CreateUserInterface ={
+    const user: CreateUserInterface = {
       email: this.email,
-      password: this.password
-    }
+      password: this.password,
+    };
 
     this.authService.login(user).subscribe({
       next: (response: any) => {
-        if(response.success){
-          this.successMessage = response.message;
-          this.errorMessage = '';
-          this.router.navigate(['/home']) 
-        }else{
-          this.handleError(response.error);
+        if (response.success) {
+          this.alertService.successLogin('', response.message).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/home']);
+            }
+            this.router.navigate(['/home']);
+          });
+        } else {
+          this.alertService.error('', response.error);
         }
-
       },
-      error: () => this.handleError('Error al iniciar sesión')
-    })
+      error: () => this.alertService.error('', 'Error al iniciar sesión, intente de nuevo.'),
+    });
   }
-
-  private handleError(message: string): void {
-    this.errorMessage = message;
-    this.successMessage = '';
-  }
-
-
-
-
 }

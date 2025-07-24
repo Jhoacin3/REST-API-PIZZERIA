@@ -23,6 +23,16 @@ export class AlertService {
       timerProgressBar: true
     });
   }
+  successLogin(title: string, text: string = ''): Promise<SweetAlertResult> {
+    return Swal.fire({
+      icon: 'success',
+      title: title || '¡Bienvenido de vuelta!',
+      text: text,
+      confirmButtonText: 'Aceptar',
+      timer: 3000, // Cierra automáticamente después de 3 segundos
+      timerProgressBar: true
+    });
+  }
 
   /**
    * Muestra una alerta de error.
