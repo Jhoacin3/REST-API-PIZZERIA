@@ -5,7 +5,12 @@
   "scripts": {
     "start": "cross-env nodemon src/server.js",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "create:db": "node createDatabase.js",
+    "migrate": "sequelize-cli db:migrate",
+    "seed": "sequelize-cli db:seed:all",
+    "setup": "npm run create:db && npm run migrate && npm run seed",
+    "init:db": "node src/createDatabase.js"
   },
   "keywords": [],
   "author": "",
