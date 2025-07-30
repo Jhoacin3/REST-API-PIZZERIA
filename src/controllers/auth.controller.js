@@ -12,7 +12,7 @@ exports.render = async (req, res) => {
 exports.validateSession = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) {
-    return res.status(401).json({ authenticated: false, message: "No token provided" });
+    return res.status(200).json({ authenticated: false, message: "No token provided" });
   }
 
   try {
@@ -22,7 +22,7 @@ exports.validateSession = (req, res) => {
       user: data 
     });
   } catch (error) {
-    return res.status(401).json({ 
+    return res.status(200).json({ 
       authenticated: false, 
       message: "Invalid token" 
     });
@@ -47,7 +47,7 @@ exports.loginController = async (req, res) => {
       { id: access.id, username: access.name },
       process.env.JWT_SECRET, //token hasheado y seguro
       {
-        expiresIn: "1h", //expiración del token--verificar
+        expiresIn: "10h", //expiración del token--verificar
         // secure: process.env.NODE_ENV === 'production', //la cookie solo se puede acceder en https
         // sameSite: 'strict' //la cookie solo se puede acceder en mi dominio
       }

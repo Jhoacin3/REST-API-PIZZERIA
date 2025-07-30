@@ -22,33 +22,18 @@ const port = process.env.NODE_ENV === 'test' ? 3000 : process.env.PORT || 4000;
 // Middleware general
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:4200', // Solo permite este origen
+    credentials: true,  // Permite envío de cookies y autenticación
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos HTTP permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeceras permitidas
+}));
+
 // Archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Motor de plantillas
 app.set('view engine', 'ejs');
-
-// **Middleware Global**: Protección de rutas privadas
-app.use((req, res, next) => {
-    const publicRoutes = [
-        '/apiPizza/auth/login',
-        '/apiPizza/auth/register',
-        '/apiPizza/auth/logout',
-        '/apiPizza/employees/getEmployees',
-        '/apiPizza/menu/getMenu',
-        '/apiPizza/categories/getCategory',
-        '/apiPizza/orderPayment/getTableNumbers'
-    ];
-
-    // Si la ruta es pública, permitir acceso sin token
-    if (publicRoutes.includes(req.path)) {
-        return next();
-    }
-
-    // Verificar token para todas las demás rutas
-    verifyToken(req, res, next);
-});
 
 // Registro de rutas
 app.use('/apiPizza/roles', rolRouter);
