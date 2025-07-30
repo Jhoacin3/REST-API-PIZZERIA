@@ -49,9 +49,23 @@ DB_PASSWORD=
  JWT_SECRET=
 ```
 > [!IMPORTANT]
-> El script completo de creación de la base de datos está disponible con el nombre de: "database"
-> 
-> Este proyecto utiliza una base de datos MySQL para gestionar una pizzería. La estructura incluye tablas para: 
+> El siguiente comando creará la base de datos (si no existe), las tablas con relaciones y seeders establecidos.
+```
+npm run init:db
+```
+Para ejecutar migraciones:
+```
+npx sequelize-cli db:migrate
+```
+Para ejecutar todos los seeders:
+```
+npx sequelize-cli db:seed:all
+```
+Para deshacer todas las migraciones:
+```
+npx sequelize-cli db:migrate:undo:all
+```
+Este proyecto utiliza una base de datos MySQL para gestionar una pizzería. La estructura incluye tablas para: 
 
 - Empleados (employees)
 - Inventario (inventories)
@@ -60,8 +74,9 @@ DB_PASSWORD=
 - Mesas (Tables)
 - Órdenes (orders)
 - Detalles de órdenes (order_details)
+
 ## Ejecución del servidor
-Para iniciar el servidor en modo desarrollo comando:
+Para iniciar el servidor en modo desarrollo:
 ```
 npm run start
 ```
