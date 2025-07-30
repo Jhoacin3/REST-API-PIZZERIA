@@ -23,7 +23,7 @@
                         <i class="bi bi-trash"></i>
                     </button>
                     <span> | </span>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showUpdateConfig" (click)="editConfig(config)">
                         <i class="bi bi-pencil"></i>
                     </button>
                 </small>
@@ -35,74 +35,127 @@
     </div>
 
     <!-- Formulario desplegable para crear config -->
-        <div class="modal fade" id="addConfig" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="exampleModalLabel">Crear configuración</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form (ngSubmit)="createConfigurations()">
+    <div class="modal fade" id="addConfig" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="exampleModalLabel">Crear configuración</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form (ngSubmit)="createConfigurations()">
+    
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Nombre del negocio:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                [(ngModel)]="createConfigInterface.name" required placeholder="Escriba un nombre">
+                        </div>
+    
+                        <input class="form-control" type="file" id="formFile" name="photo_url"
+                            (change)="onFileSelected($event)">
+    
+                        <div class="mb-3">
+                            <label for="number_of_tables" class="form-label">Número de mesas:</label>
+                            <!-- <input type="number" class="form-control" id="number_of_tables" name="number_of_tables" [(ngModel)]="createConfigInterface.number_of_tables"> -->
+    
+                            <input type="number" class="form-control" [(ngModel)]="createConfigInterface.number_of_tables"
+                                name="number_of_tables" id="number_of_tables">
+                        </div>
+    
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="enable"
+                                [(ngModel)]="createConfigInterface.enable">
+                            <label class="form-check-label" for="enable">Desactivar/Activar
+                                configuración</label>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        (click)="createConfigurations()" data-bs-whatever="@mdo">Listo
+                    </button>
+                    <span> | </span>
+                    <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        data-bs-whatever="@mdo">Cancelar
+                    </button>
+                </div>
+    
+            </div>
+        </div>
+    </div>
 
-                            <div class="mb-3">
-                                <label for="formGroupExampleInput" class="form-label">Nombre del negocio:</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                    [(ngModel)]="createConfigInterface.name" required
-                                    placeholder="Escriba un nombre">
-                            </div>
+        <!-- Formulario desplegable para editar config -->
+    <div class="modal fade" id="showUpdateConfig" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="exampleModalLabel">Editar configuración</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form (ngSubmit)="updateConfig()">
+    
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Nombre del negocio:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                [(ngModel)]="selectedConfigUp.name" required placeholder="Escriba un nombre">
+                        </div>
+                        
+                        <div *ngIf="selectedConfigUp.photo_url">
+                        <label>Imagen actual:</label>
+                        <img [src]="selectedConfigUp.photo_url" alt="Imagen actual" class="img-thumbnail mb-2" style="max-width: 100px;">
+                        </div>
+                        <input class="form-control" type="file" id="formFile" name="photo_url" (change)="onFileByUpSelected($event)">
+    
+                        <div class="mb-3">
+                            <label for="number_of_tables" class="form-label">Número de mesas:</label>
+                            <!-- <input type="number" class="form-control" id="number_of_tables" name="number_of_tables" [(ngModel)]="createConfigInterface.number_of_tables"> -->
 
-                            <input class="form-control" type="file" id="formFile" name="photo_url" (change)="onFileSelected($event)">
+                            <input type="number" class="form-control" [(ngModel)]="selectedConfigUp.number_of_tables"
+                                name="number_of_tables" id="number_of_tables">
+                        </div>
+    
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="enable"
+                                [(ngModel)]="selectedConfigUp.enable">
+                            <label class="form-check-label" for="enable">Desactivar/Activar
+                                configuración</label>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        (click)="updateConfig()" data-bs-whatever="@mdo">Listo
+                    </button>
+                    <span> | </span>
+                    <button type="button" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        data-bs-whatever="@mdo">Cancelar
+                    </button>
+                </div>
+    
+            </div>
+        </div>
+    </div>
 
-                            <div class="mb-3">
-                                <label for="number_of_tables" class="form-label">Número de mesas:</label>
-                                <!-- <input type="number" class="form-control" id="number_of_tables" name="number_of_tables" [(ngModel)]="createConfigInterface.number_of_tables"> -->
-
-                                <input type="number" class="form-control" [(ngModel)]="createConfigInterface.number_of_tables" name="number_of_tables" id="number_of_tables">
-                            </div>
-
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" 
-                                name="enable" [(ngModel)]="createConfigInterface.enable">
-                                <label class="form-check-label" for="enable">Desactivar/Activar
-                                    configuración</label>
-                            </div>
-                        </form>
-                        <button type="button" class="btn btn-success " data-bs-toggle="modal"
-                            data-bs-target="#exampleModal" (click)="createConfigurations()" data-bs-whatever="@mdo">Listo
-                        </button>
-                        <span> | </span>
-                        <button type="button" class="btn btn-danger " data-bs-toggle="modal"
-                            data-bs-target="#exampleModal" data-bs-whatever="@mdo">Cancelar
-                        </button>
-                    </div>
-
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="showConfirmateDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h2 class="modal-title text-center text-light" id="staticBackdropLabel">Confirmar Eliminación</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2 class="text-center">
+                        <img src="assets/ic_warning.png" width="50" height="50">
+                        <br>
+                        ¿Estas seguro que deseas eliminarlo?
+                    </h2>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" (click)="deleteConfiguration()">Aceptar</button>
                 </div>
             </div>
         </div>
-
-    <!-- Modal de confirmación de eliminación -->
-<div class="modal fade" id="showConfirmateDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-danger">
-        <h2 class="modal-title text-center text-light" id="staticBackdropLabel">Confirmar Eliminación</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <h2 class="text-center">
-          <img src="assets/ic_warning.png" width="50" height="50">
-          <br>
-          ¿Estas seguro que deseas eliminarlo?
-        </h2>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-success" (click)="deleteConfiguration()">Aceptar</button>
-      </div>
     </div>
-  </div>
-</div>
 
     
     <router-outlet />

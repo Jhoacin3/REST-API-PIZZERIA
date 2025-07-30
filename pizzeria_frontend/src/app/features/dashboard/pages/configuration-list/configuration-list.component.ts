@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import {ConfigurationInterface  } from '../../../../core/models/configuration-interface';
+import { ConfigurationInterface } from '../../../../core/models/configuration-interface';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
-import {MaterialModule} from '../../../../material-module';
+import { MaterialModule } from '../../../../material-module';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../../../services/alert.service.ts.service';
 
@@ -11,21 +11,22 @@ import { AlertService } from '../../../../services/alert.service.ts.service';
   selector: 'app-configuration-list',
   imports: [CommonModule, RouterOutlet, MaterialModule, FormsModule],
   templateUrl: './configuration-list.component.html',
-  styleUrl: './configuration-list.component.css'
+  styleUrl: './configuration-list.component.css',
 })
 export class ConfigurationListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   employeeData: ConfigurationInterface[] = [];
+  selectedConfigUp: any = {};
   paginatedData: ConfigurationInterface[] = [];
   //OBJETO PARA ALMACENAR LOS DATOS DEL FORMULARIO AL CREAR UNA NUEVA CONFIGURACION
   createConfigInterface = {
     name: '',
     photo_url: '',
     number_of_tables: 0,
-    enable: false
+    enable: false,
   };
-    // Propiedades para la paginación
+  // Propiedades para la paginación
   currentPage: number = 1;
   itemsPerPage: number = 5;
   totalPages: number = 0;
@@ -33,12 +34,11 @@ export class ConfigurationListComponent implements OnInit {
   pagesToShow: number = 5;
   id = 0;
 
-  constructor (
+  constructor(
     private configurationModel: ConfigurationService,
     private alertService: AlertService
-    
-  ){}
-  
+  ) {}
+
   ngOnInit(): void {
     this.getConfigs();
   }
@@ -46,53 +46,106 @@ export class ConfigurationListComponent implements OnInit {
   private getConfigs(): void {
     this.configurationModel.getConfig().subscribe({
       next: (response: any) => {
-        if(response.success){
-          this.employeeData = response.data;
-        }else{
-          this.handleError(response.error)
+        if (response.success) {
+          this.employeeData = response.data.map(
+            (config: ConfigurationInterface) => {
+              if (config.photo_url && config.photo_url.includes(':3000')) {
+                config.photo_url = config.photo_url.replace(':3000', ':4000');
+              }
+              return config;
+            }
+          );
+        } else {
+          this.handleError(response.error);
         }
       },
       error: () => this.handleError('Error al cargar las configuraciones.'),
-    })
+    });
   }
 
-  createConfigurations():void{
-    this.configurationModel.createConfiguration(this.createConfigInterface).subscribe({
-      next:(response) =>{
-        if(response.success){
+  createConfigurations(): void {
+    this.configurationModel
+      .createConfiguration(this.createConfigInterface)
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.alertService.success('', response.message);
+            this.clearForm();
+          } else {
+            this.alertService.error('', response.error);
+          }
+        },
+        error: () =>
+          this.alertService.error('', 'Error al crear la configuración'),
+      });
+  }
+
+  editConfig(config: ConfigurationInterface): void {
+    if (!config.id_store_info) {
+      this.alertService.error(
+        '',
+        'Es necesario el identificador de la configuración.'
+      );
+      return;
+    }
+    this.selectedConfigUp = { ...config };
+  }
+
+  updateConfig(): void {
+    this.configurationModel.editConfiguration(this.selectedConfigUp).subscribe({
+      next: (response) => {
+        if (response.success) {
           this.alertService.success('', response.message);
           this.clearForm();
-        }else{
+        } else {
           this.alertService.error('', response.error);
         }
       },
-      error: () => this.alertService.error("", 'Error al crear la configuración'),
-    })
-
+      error: () =>
+        this.alertService.error('', 'Error al editar la configuración'),
+    });
   }
 
-   //FUNCIONES DE APOYO
-    private handleError(message: string): void {
-      this.errorMessage = message;
-      this.successMessage = '';
-    }
-      // Método para establecer el id del menú a eliminar
+  //FUNCIONES DE APOYO
+  private handleError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
+  }
+  // Método para establecer el id del menú a eliminar
   setIdToDelete(id: number): void {
     this.id = id;
   }
 
-    onFileSelected(event: any) {
-  const file = event.target.files[0];
-  //validar que sea solamente imagen JPG o PNG
-  if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    //validar que sea solamente imagen JPG o PNG
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+      this.createConfigInterface.photo_url = file;
+    } else {
+      this.alertService.error(
+        '',
+        'Por favor, seleccione un archivo de imagen válido (JPG o PNG).'
+      );
+      this.createConfigInterface.photo_url = '';
+    }
     this.createConfigInterface.photo_url = file;
-  } else {
-    this.alertService.error('', 'Por favor, seleccione un archivo de imagen válido (JPG o PNG).');
-    this.createConfigInterface.photo_url = '';
   }
-  this.createConfigInterface.photo_url = file;
+onFileByUpSelected(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    // Validar que sea imagen JPG o PNG
+    if (file.type === 'image/jpeg' || file.type === 'image/png') {
+      this.selectedConfigUp.photo_url = file;
+    } else {
+      this.alertService.error(
+        '',
+        'Por favor, seleccione un archivo de imagen válido (JPG o PNG).'
+      );
+      // No cambies la imagen si el archivo no es válido
+    }
+  }
 }
-  deleteConfiguration(): void{
+  deleteConfiguration(): void {
     this.configurationModel.deleteConfig(this.id).subscribe({
       next: (response) => {
         if (response.success) {
@@ -102,18 +155,18 @@ export class ConfigurationListComponent implements OnInit {
           this.alertService.error('', response.error);
         }
       },
-      error: () => this.alertService.error("", 'Error al eliminar la configuración'),
+      error: () =>
+        this.alertService.error('', 'Error al eliminar la configuración'),
     });
   }
 
   clearForm() {
-    this.createConfigInterface = {   
-    name: '',
-    photo_url: '',
-    number_of_tables: 0,
-    enable: false
+    this.createConfigInterface = {
+      name: '',
+      photo_url: '',
+      number_of_tables: 0,
+      enable: false,
     };
     this.getConfigs();
   }
-
 }
