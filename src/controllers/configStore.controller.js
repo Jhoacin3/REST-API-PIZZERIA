@@ -75,11 +75,11 @@ exports.createConfig = async (req, res) => {
 
 exports.updateConfig = async (req, res) => {
   const {name, number_of_tables,enable} = req.body;
-  const { id } = req.params;
+  const { id_store_info } = req.params;
   const photo = req.file;
 
   try {
-    const {id_update, photo_url} = await configStoreService.updateConfigService(id,name, photo, number_of_tables, enable);
+    const {id_update, photo_url} = await configStoreService.updateConfigService(id_store_info,name, photo, number_of_tables, enable);
     res.json({
       success: true,
       data:{

@@ -136,6 +136,7 @@ exports.createConfigService = async (
 
 exports.updateConfigService = async (id,name, photo_url, number_of_tables, enable) => {
   await validateParamsId(id);
+  let photoPath;
   await validateParamConfig(name, photo_url, number_of_tables, enable);
   let categories = await getConfig();
 
@@ -146,8 +147,11 @@ exports.updateConfigService = async (id,name, photo_url, number_of_tables, enabl
     throw new Error("Ya existe otra configuración activa para el negocio");
   }
   const configDataId = await getConfigId(id);
-  const photoPath = await photoPathUtil(photo_url);
-
+    if (photo_url) {
+    photoPath = await photoPathUtil(photo_url);
+  } else {
+    photoPath = "Sin imagen";
+  }
   const upatedConfig = await upateConfig(
     id,
     name,
