@@ -11,13 +11,13 @@ module.exports = {
 // 👉 Sequelize te da acceso a los tipos de datos como STRING, INTEGER, ENUM, etc.
     await queryInterface.createTable('employees', {
 
-      id: {
+      id_employees: {
         allowNull: false,              // No permite valores nulos
         autoIncrement: true,           // Se incrementa automáticamente (1, 2, 3…)
         primaryKey: true,              // Es clave primaria
         type: Sequelize.INTEGER        // Tipo de dato entero
       },
-      fullName: {
+      full_name: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          len: [8, 100] // Minimum length of 8 characters
+          len: [8, 300] // Minimum length of 8 characters
         }
       }
     },);
