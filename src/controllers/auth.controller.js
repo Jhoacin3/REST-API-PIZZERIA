@@ -43,6 +43,8 @@ exports.loginController = async (req, res) => {
     if (!access) {
       return res.status(401).json({ success: false, message: "Credenciales inválidas" });
     }
+    //validar que el administrador tenga mesas establecidas.
+    let tablesActives = await authService.findTablesActives(access.id)
     const token = JWT.sign(
       { id: access.id, username: access.name },
       process.env.JWT_SECRET, //token hasheado y seguro
@@ -59,6 +61,7 @@ exports.loginController = async (req, res) => {
       .json({
         success: true,
         data: access,
+        tablesActive: tablesActives.tablesActive,
         message: messages.auth.loginTrue,
       });
 

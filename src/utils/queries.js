@@ -319,6 +319,15 @@ exports.getTableId = async (id_tables, store_id) => {
   );
   return data;
 };
+exports.getTablesActives = async(id_employee) =>{
+  const [data] = await connection.query(
+    "SELECT enable FROM store_info"
+  );
+  return data;
+}
+
+
+
 exports.getTableByStoreId = async (store_id) => {
   const [data] = await connection.query(
     "SELECT id_tables, status  FROM tables WHERE store_id = ?",

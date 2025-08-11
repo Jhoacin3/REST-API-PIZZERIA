@@ -1,6 +1,7 @@
 const { validateParamsId, validParamsEmployee, validateEmailExists } = require("../utils/utils.js");
-const {getEmployees} = require("../utils/queries.js");
+const {getEmployees,getTablesActives} = require("../utils/queries.js");
 const bcrypt = require('bcrypt');
+const { config } = require("dotenv");
 
 
 
@@ -19,5 +20,31 @@ exports.loginService = async (email, password) => {
   return {
     id: validateEmail.id_employees,
     name: validateEmail.full_name,
+  };
+};
+
+exports.findTablesActives = async (id_employee) => {
+  let tablesActive = true;
+  if (!id_employee)
+    throw new Error(
+      "Es necesario el empleado para buscar las mesas del negocio."
+    );
+
+  //buscar si existe mesas activas del negocio.
+  let findTablesActives = await getTablesActives(id_employee);
+  if (!Array.isArray(findTablesActives) || findTablesActives.length === 0) {
+    tablesActive = false;
+    return {
+      tablesActive: tablesActive,
+    };
+  }
+  let verifiedActiveConfig = findTablesActives.some(
+    (config) => config.enable === 1
+  );
+  if (!verifiedActiveConfig) {
+    tablesActive = false;
+  }
+  return {
+    tablesActive: tablesActive,
   };
 };
