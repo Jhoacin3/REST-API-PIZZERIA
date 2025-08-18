@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="modal-body">
+    <h2 class="text-center">Establece tu primera configuración</h2>
+    <form [formGroup]="configurationForm" (ngSubmit)="createConfigurations()">
+    <div class="mb-3">
+        <label for="name" class="form-label">Nombre del negocio:</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Escriba un nombre" 
+            required
+        />
+    </div>
+
+    <input 
+        class="form-control" 
+        type="file" 
+        id="formFile" 
+        (change)="onFileSelected($event)" 
+    />
+    
+    <label>Imagen seleccionada:</label>
+    <div *ngIf="previewPhoto" class="image-preview">
+        <img 
+            [src]="previewPhoto" 
+            alt="Vista previa de la imagen" 
+            class="img-thumbnail mb-2" 
+            style="max-width: 100px" 
+        />
+    </div>
+
+    <div class="mb-3">
+        <label for="number_of_tables" class="form-label">Número de mesas:</label>
+        <input 
+            type="number" 
+            class="form-control" 
+            id="number_of_tables" 
+            formControlName="number_of_tables" 
+        />
+    </div>
+
+    <div class="form-check form-switch">
+        <input 
+            class="form-check-input" 
+            type="checkbox" 
+            formControlName="enable" 
+            id="enable" 
+        />
+        <label class="form-check-label" for="enable">Desactivar/Activar configuración</label>
+    </div>
+</form>
+
+<button 
+    type="button" 
+    class="btn btn-success" 
+    data-bs-toggle="modal" 
+    data-bs-target="#exampleModal" 
+    (click)="createConfigurations()" 
+    data-bs-whatever="@mdo"
+    [disabled]="configurationForm.invalid"
+>
+    Listo
+</button>
+  </div>
+</div>
+<router-outlet />

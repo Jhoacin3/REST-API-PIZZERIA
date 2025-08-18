@@ -40,14 +40,24 @@ export class LoginComponent {
 
     this.authService.login(user).subscribe({
       next: (response: any) => {
-        if (response.success) {
+        console.log(response)
+        if (response.success && response.tablesActive) {
           this.alertService.successLogin('', response.message).then((result) => {
             if (result.isConfirmed) {
               this.router.navigate(['/home']);
             }
             this.router.navigate(['/home']);
           });
-        } else {
+        }else if (response.success && !response.tablesActive){
+            this.alertService.info('Haz iniciado sesión pero...', "Parece que no haz establecido una configuración para tu negocio, ¡hagamoslo ahora!").then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/configuration-store']);
+            }
+            this.router.navigate(['/configuration-store']);
+          });
+
+        } 
+        else {
           this.alertService.error('', response.error);
         }
       },

@@ -13,6 +13,9 @@ import { OrderPaymentComponent } from './features/dashboard/pages/order-payment/
 import { OrderListComponent } from './features/dashboard/pages/order-list/order-list.component';
 import { UpdateOrderPaymentComponentHtmlComponent } from './features/dashboard/pages/update-order-payment.component.html/update-order-payment.component.html.component';
 
+import { ConfigurationStoreComponent } from './features/shared/first-configuration-store/configuration.store.component';
+import { unsavedChangesGuard } from './core/guards/unsaved-changes.guard';
+
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redirige a /login por defecto
     { path: 'home', component: HomeComponent, canActivate: [authGuard] }, // Ruta para el home
@@ -26,6 +29,7 @@ export const routes: Routes = [
 
     { path: 'tables', component: TablesListComponent, canActivate: [authGuard] }, // Ruta para el mesas
     { path: 'orderPayment', component: OrderPaymentComponent, canActivate: [authGuard] },
+    { path: 'configuration-store', component: ConfigurationStoreComponent, canActivate: [authGuard], canDeactivate: [unsavedChangesGuard]},
 
 
     
