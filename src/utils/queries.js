@@ -196,6 +196,58 @@ exports.createTablesLength = async(number_of_tables,store_id) =>{
   );
   return data
 }
+//Se actualizan las cantidades de mesas establecidas por el negocio
+exports.updateTablesLengthById = async (number_of_tables, store_id) => {
+  // Obtener el número actual de mesas
+  const [currentTables] = await connection.query(
+    "SELECT table_number FROM tables WHERE store_id = ? ORDER BY table_number",
+    [store_id]
+  );
+  const currentCount = currentTables.length;
+
+  if (number_of_tables > currentCount) {
+    // Agregar mesas nuevas
+    let status = "Disponible";
+    const newTables = [];
+    for (let i = currentCount + 1; i <= number_of_tables; i++) {
+      newTables.push([store_id, i, status]);
+    }
+    if (newTables.length > 0) {
+      await connection.query(
+        "INSERT INTO tables (store_id, table_number, status) VALUES ?",
+        [newTables]
+      );
+    }
+  } else if (number_of_tables < currentCount) {
+    // Eliminar mesas sobrantes
+    // Validar que no existan referencias de mesas en la tabla de ordenes
+    for (let i = number_of_tables + 1; i <= currentCount; i++) {
+      // Buscar el id_tables de la mesa a eliminar
+      const [tableRows] = await connection.query(
+        "SELECT id_tables FROM tables WHERE store_id = ? AND table_number = ?",
+        [store_id, i]
+      );
+      if (tableRows.length > 0) {
+        const id_tables = tableRows[0].id_tables;
+        // Verificar si existen órdenes asociadas a esta mesa
+        const [orders] = await connection.query(
+          "SELECT id_orders FROM orders WHERE id_tables = ?",
+          [id_tables]
+        );
+        if (orders.length > 0) {
+          throw new Error(`No se puede eliminar la mesa número ${i} porque tiene órdenes asociadas.`);
+        }
+        // Si no hay órdenes, eliminar la mesa
+        await connection.query(
+          "DELETE FROM tables WHERE id_tables = ?",
+          [id_tables]
+        );
+      }
+    }
+  }
+  // Si es igual, no hace nada
+  return { updated: true };
+};
 
 exports.createOrderDetails = async (
   id_order,

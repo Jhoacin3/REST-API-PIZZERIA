@@ -1,5 +1,5 @@
 const {validateParamsId, validateParamConfig, photoPathUtil} = require("../utils/utils.js")
-const {getConfig,getConfigId, createConfig, upateConfig, createTablesLength, getActiveConfig, getTableByStoreId, deleteConfiguration} = require("../utils/queries.js");
+const {getConfig,getConfigId, createConfig, upateConfig, createTablesLength,updateTablesLengthById, getActiveConfig, getTableByStoreId, deleteConfiguration} = require("../utils/queries.js");
 const e = require("express");
 const baseUrl = "http://localhost:3000";
 const path = require('path');
@@ -159,6 +159,11 @@ exports.updateConfigService = async (id,name, photo_url, number_of_tables, enabl
     number_of_tables,
     enable
   );
+    const result = await updateTablesLengthById(
+    number_of_tables,
+    id
+  );
+  if (result.length == 0) throw new Error("No se creó las mesas del negocio.");
 
   return {
     id_update: upatedConfig.insertId,
